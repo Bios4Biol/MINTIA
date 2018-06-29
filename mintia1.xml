@@ -1,0 +1,76 @@
+<tool id="tests_sarah" name="DNA inserts reconstruction" version="0.0.1">
+    <description>on MiSeq or proton data</description>
+    <command interpreter="bash">
+	    TESTS.sh zipin=$zipin vectorSeq=$vectorSeq out_zip=$out_zip out_html=$out_html
+    </command>
+    <inputs>
+        <param name="zipin" type="data" format="zip" label="Zip archive of fastq.gz file(s)" />
+        <param format="fasta" name="vectorSeq" type="data" label="Fasta file containing vector sequence"/>
+    </inputs>
+    <outputs>
+        <data name="out_zip" format="zip" label="DNA inserts reconstruction zip" />
+        <data name="out_html" format="html" label="DNA inserts reconstruction report" />
+    </outputs>
+    <tests>
+    </tests>
+<help>
+
+.. class:: infomark
+
+**Command line:**
+
+mintia_assembly.pl --input FILE[S] --vectorSeq FILE --dirOutputs STR
+
+
+**Pipeline:**
+
+This tool is the first step of the fosmid assembly and annotation pipeline. It assembles raw reads, looks for and removes the cloning vector, and extracts the longest and the most covered contigs. It has been build to handle two types of raw reads as inputs : single (454, ion torrent reads,...) or paired (Illumina,...) reads. This tools is not able to process PacBio or Oxford Nanopore reads.
+
+
+**Raw read fastq file organization and naming**
+
+The raw read files are organized in one directory, one file per sample. In this directory, each fastq file has to be gzipped. All the sample files must be zipped in an unique directory. The input directory must be named "MiSeq.zip" (Paired.zip) for paired files, and "Proton.zip" (Single.zip) for single read files. Even if you have only one fastq file, this gz fastq file should also be in a zipped directory. Please could you not add subdirectories in your compressed directory. When you upload your inputs files, choose the "zip" format.
+
+
+**Assembly and post processing steps :**
+
+1 ) 100x before assembling read Sub-selection. 
+
+2 ) SPAdes (more information on http://bioinf.spbau.ru/en/spades) assembly. 
+
+3 ) vector detection : the vector is searched and masked in the assembled contigs using cross-match (http://www.phrap.org/phredphrapconsed.html).
+
+4 ) contig filtering : the result file only includes contigs containing the vector and having a average depth of XXX.
+
+
+**Warning**
+
+Input fastq files name for paired data should contain "R1.f*" (R1.fq.. or R1.fastq...) and "R2.f*" to be identify as paired data by this tool.
+
+
+**Outputs :**
+
+The outputs are presented in a table containing one line per assembled sample. Each line contains the name of the sample, the number of resulting contigs, the length of the longest contig, the total length of the contigs and a link to the contig fasta file.
+
+Underneath the table there is a link to to complete result file containing all the resulting fasta files organized in directories named after the samples.
+
+
+----
+    
+Version Galaxy Tool : V1.1
+
+Versions of bioinformatics tools used : The assembly is perform by SPAdes.
+
+----
+
+Contacts : support.sigenae@inra.fr
+
+Please cite : Depending on the help provided you can cite us in acknowledgements, references or both.
+
+Examples :
+Acknowledgements : We wish to thank the SIGENAE group for ....
+References : X. SIGENAE [http://www.sigenae.org/]
+</help>
+</tool>
+
+
