@@ -168,9 +168,9 @@ sub read_crossmatch {
 sub run_crossmatch {
   my ($seq1, $seq2, $outputDir) = @_;
 
-  my $tmp1 = File::Temp->new(TEMPLATE=>'tmp1XXXXXXX', DIR=>$outputDir, SUFFIX=>'.fa', UNLINK=>1);
-  my $tmp2 = File::Temp->new(TEMPLATE=>'tmp2XXXXXXX', DIR=>$outputDir, SUFFIX=>'.fa', UNLINK=>1);
-  my $resC = File::Temp->new(TEMPLATE=>'resCXXXXXXX', DIR=>$outputDir, SUFFIX=>'.fa', UNLINK=>1);
+  my $tmp1 = File::Temp->new(TEMPLATE=>'tmp1XXXXXXX', DIR=>$outputDir, SUFFIX=>'.fa', UNLINK=>0);
+  my $tmp2 = File::Temp->new(TEMPLATE=>'tmp2XXXXXXX', DIR=>$outputDir, SUFFIX=>'.fa', UNLINK=>0);
+  my $resC = File::Temp->new(TEMPLATE=>'resCXXXXXXX', DIR=>$outputDir, SUFFIX=>'.fa', UNLINK=>0);
 
   open(TMP1, ">$tmp1") || die "Error: Enabled to create $tmp1\n";
   open(TMP2, ">$tmp2") || die "Error: Enabled to create $tmp2\n";
@@ -180,14 +180,14 @@ sub run_crossmatch {
   close(TMP2);
 
   # Processing the sequences
-	`($CROSS_MATCH $tmp1 $tmp2 -minmatch 10 -minscore 20 > $resC) >& /dev/null`;
-	my @a_res = read_crossmatch($resC);
+  `($CROSS_MATCH $tmp1 $tmp2 -minmatch 10 -minscore 20 > $resC) >& /dev/null`;
+  my @a_res = read_crossmatch($resC);
 
   # Processing crossmatch result
   my $newcoord = 0;
   for(my $i=0; $i<=$#a_res; $i++) {
     # Check if the overlap is at the end of seq1 and at the start of seq2
-		if ((length($seq1)-$a_res[$i][1]) < 10) {
+	if ((length($seq1)-$a_res[$i][1]) < 10) {
       $newcoord = $a_res[$i][0];
     }
   }
@@ -236,8 +236,9 @@ sub remove_vector {
     else {
       $start1 = $$ref_a_coord[$i][1]+1;
       $stop1  = $$ref_a_coord[$i][0];
-		  $case  += 4;
+	  $case  += 4;
     }
+    print LOG "AAA:$case\n";
   }
   # XXXXX----------------
   if   ($case == 1) { return substr($seq,$start,$len-$start+1); }
@@ -358,32 +359,32 @@ MAIN:
 	my $outputDir   = undef;
 	my $outputZip   = "mintia_assembly.zip";
 	my $outputHtml  = "mintia_assembly.html";
-  my $outputLog   = "mintia.log";
-  my $threads     = 8;
-  my $version     = 0;
+	my $outputLog   = "mintia.log";
+	my $threads     = 8;
+	my $version     = 0;
 	my $help        = 0;
 
-  # Data store in hash like:
-  # %h_sample = (
+	# Data store in hash like:
+	# %h_sample = (
 	#    samplename1 => {
-  #          R1 => 'PATH_TO_R1_INPUT_FQ_FILE',
-  #          R2 => 'PATH_TO_R2_INPUT_FQ_FILE',      # if paired
-  #          R1_F => 'PATH_TO_R1_FILTERED_FQ_FILE',
-  #          R2_F => 'PATH_TO_R2_FILTERED_FQ_FILE', # if paired
-  #          nbScaffold => int,
-  #          scaffold => {
-  #            ID1 => {
-  #              len => int,
-  #              cov => int,
-  #              seq => str,
-  #              newseq => str
-  #            }
-  #            [...]
-  #          }
+	#          R1 => 'PATH_TO_R1_INPUT_FQ_FILE',
+	#          R2 => 'PATH_TO_R2_INPUT_FQ_FILE',      # if paired
+	#          R1_F => 'PATH_TO_R1_FILTERED_FQ_FILE',
+	#          R2_F => 'PATH_TO_R2_FILTERED_FQ_FILE', # if paired
+	#          nbScaffold => int,
+	#          scaffold => {
+	#            ID1 => {
+	#              len => int,
+	#              cov => int,
+	#              seq => str,
+	#              newseq => str
+	#            }
+	#            [...]
+	#          }
 	#    }
-  #    [...]
-  # )
-  my %h_sample  = ();
+	#    [...]
+	# )
+  	my %h_sample  = ();
 	my %h_sampleR = ();  ## Same hash use for store removed scaffold
 
 	GetOptions(
@@ -396,22 +397,22 @@ MAIN:
 		'd|dirOutputs=s'        => \$outputDir,
 		'Z|zipOutput=s'         => \$outputZip,
 		'H|htmlOutput=s'        => \$outputHtml,
-    'L|logOutput=s'         => \$outputLog,
-    't|threads=i'           => \$threads,
-    'version'               => \$version,
+		'L|logOutput=s'         => \$outputLog,
+		't|threads=i'           => \$threads,
+		'version'               => \$version,
 		'h|help'                => \$help
 	);
 	pod2usage(
 		-verbose => 99,
 		-sections => "SYNOPSIS|DESCRIPTION|OPTIONS|VERSION"
 	) if($help);
-  pod2usage(
-    -verbose => 99,
-  	-sections => "VERSION"
+	pod2usage(
+		-verbose => 99,
+		-sections => "VERSION"
 	) if($version);
-  $version = `$0 --version`;
-  $version =~ s/^Ver.*:\s+(\S+)\s+/$1/;
-  pod2usage("$0: '-i, --input' is required.")      if($#a_inputSeq == -1);
+	$version = `$0 --version`;
+	$version =~ s/^Ver.*:\s+(\S+)\s+/$1/;
+	pod2usage("$0: '-i, --input' is required.")      if($#a_inputSeq == -1);
 	foreach my $i (@a_inputSeq) {
 		pod2usage("$0: $i doesn't exist.")   if !(-e $i);
 		pod2usage("$0: $i is not readable.") if !(-r $i);
@@ -421,72 +422,72 @@ MAIN:
 	pod2usage("$0: $vectorSeq is not readable.")     if !(-r $vectorSeq);
 	pod2usage("$0: '-d, --dirOutputs' is required.") if !defined($outputDir);
 
-  if(! -e $outputDir) { mkdir $outputDir || die "Error: Enabled to create output dir $outputDir."; }
-  open(LOG, ">$outputDir/$outputLog")    || die "Error: Enabled to create $outputDir/$outputLog";
+	if(! -e $outputDir) { mkdir $outputDir || die "Error: Enabled to create output dir $outputDir."; }
+	open(LOG, ">$outputDir/$outputLog")    || die "Error: Enabled to create $outputDir/$outputLog";
 
 	#Check input fastq file(s)
-  print LOG "## Inputs...";
+	print LOG "## Inputs...";
 	foreach my $i (@a_inputSeq) {
-    #Find sample name
+    	#Find sample name
 		my $sn = basename($i);
 		if($sn =~ /^(.*)R[12].f[ast]*q[.gz]*$/) { $sn = $1; $sn =~s/[\.\_]$//; }
-    elsif($sn =~/^(.*).f[ast]*q[.gz]*$/)    { $sn = $1; }
-    else {
-      pod2usage("Error: enable to extract sample name from $i (must contain .f[ast]q[.gz]).")
-    }
-    #Build $h_sample
-    if(exists($h_sample{$sn}{"R1"})) {
-      if(exists($h_sample{$sn}{"R2"})) {
+    	elsif($sn =~/^(.*).f[ast]*q[.gz]*$/)    { $sn = $1; }
+		else {
+    	  pod2usage("Error: enable to extract sample name from $i (must contain .f[ast]q[.gz]).")
+	    }
+		#Build $h_sample
+		if(exists($h_sample{$sn}{"R1"})) {
+			if(exists($h_sample{$sn}{"R2"})) {
 			     pod2usage("Error: more than 2 fastq files related to $sn.");
-      }
-      else { $h_sample{$sn}{"R2"} = $i; }
-    }
-    else { $h_sample{$sn}{"R1"} = $i; }
+			}
+		else { $h_sample{$sn}{"R2"} = $i; }
+		}
+		else { $h_sample{$sn}{"R1"} = $i; }
 	}
-  print LOG (keys %h_sample) . " sample(s) found:\n";
-  foreach my $k (sort keys(%h_sample)) {
-    print LOG " - $k: ";
-    if(exists($h_sample{$k}{"R2"})) { print LOG "paired-end\n" }
-    else                            { print LOG "single-read\n" }
-  }
+	print LOG (keys %h_sample) . " sample(s) found:\n";
+	foreach my $k (sort keys(%h_sample)) {
+    	print LOG " - $k: ";
+    	if(exists($h_sample{$k}{"R2"})) { print LOG "paired-end\n" }
+    	else                            { print LOG "single-read\n" }
+	}
 
-  #Filter using Max depth by sample
-  print LOG "\n## Read filter using max depth ($coverage)\n";
-  my $maxLen = $coverage*$fosmidLen;
-  foreach my $k (sort keys(%h_sample)) {
-    my $zip = "cat ";
-    my $filetype = `file -bsiL $h_sample{$k}{"R1"}`;
-    if($filetype =~ /application\/x\-gzip/) { $zip = "gunzip -c "; }
-    open(READ1, "$zip $h_sample{$k}{'R1'} |") || die "Error: Enabled to open $h_sample{$k}{'R1'}.";
+	#Filter using Max depth by sample
+	print LOG "\n## Read filter using max depth ($coverage)\n";
+	my $maxLen = $coverage*$fosmidLen;
+	foreach my $k (sort keys(%h_sample)) {
+		my $zip = "cat ";
+		my $filetype = `file -bsiL $h_sample{$k}{"R1"}`;
+	    if($filetype =~ /application\/x\-gzip/) { $zip = "gunzip -c "; }
+    	open(READ1, "$zip $h_sample{$k}{'R1'} |") || die "Error: Enabled to open $h_sample{$k}{'R1'}.";
 
-    if(exists($h_sample{$k}{"R2"})) {
-      $zip = "cat ";
-      $filetype = `file -bsiL $h_sample{$k}{'R2'}`;
-      if($filetype =~ /application\/x\-gzip/) { $zip = "gunzip -c "; }
-      open(READ2, "$zip $h_sample{$k}{'R2'} |") || die "Error: Enabled to open $h_sample{$k}{'R2'}.";
-    }
+		if(exists($h_sample{$k}{"R2"})) {
+		  $zip = "cat ";
+		  $filetype = `file -bsiL $h_sample{$k}{'R2'}`;
+		  if($filetype =~ /application\/x\-gzip/) { $zip = "gunzip -c "; }
+		  open(READ2, "$zip $h_sample{$k}{'R2'} |") || die "Error: Enabled to open $h_sample{$k}{'R2'}.";
+		}
 
-    #outputDir
-    open(READ1FILTER, ">$outputDir/$k"."_R1.fq") || die "Error: Enabled to create $outputDir/$k"."_R1.fq";
-    $h_sample{$k}{"R1_F"} = "$outputDir/$k"."_R1.fq";
-    if(exists($h_sample{$k}{"R2"})) {
-      open(READ2FILTER, ">$outputDir/$k"."_R2.fq") || die "Error: Enabled to create $outputDir/$k"."_R2.fq";
-      $h_sample{$k}{"R2_F"} = "$outputDir/$k"."_R2.fq";
-    }
+		#outputDir
+		open(READ1FILTER, ">$outputDir/$k"."_R1.fq") || die "Error: Enabled to create $outputDir/$k"."_R1.fq";
+		$h_sample{$k}{"R1_F"} = "$outputDir/$k"."_R1.fq";
+		if(exists($h_sample{$k}{"R2"})) {
+		  open(READ2FILTER, ">$outputDir/$k"."_R2.fq") || die "Error: Enabled to create $outputDir/$k"."_R2.fq";
+		  $h_sample{$k}{"R2_F"} = "$outputDir/$k"."_R2.fq";
+		}
 
-    my $curLen          = 0;
+    	my $curLen          = 0;
 		my $totalLen        = 0;
-    my $nbFragment      = 0;
+	    my $nbFragment      = 0;
 		my $nbFragmentTotal = 0;
 		my ($r1head, $r1seq, $r1sep, $r1qual);
 		my ($r2head, $r2seq, $r2sep, $r2qual);
-    while(! eof READ1) {
-      $r1head = <READ1>; $r1seq = <READ1>; $r1sep = <READ1>; $r1qual = <READ1>;
-      #Validate Fastq R1
-      if($r1head!~/^@/ || $r1seq!~/^[ATGCNatgcn]*$/ || $r1sep!~/^\+/) {
+		while(! eof READ1) {
+			$r1head = <READ1>; $r1seq = <READ1>; $r1sep = <READ1>; $r1qual = <READ1>;
+			#Validate Fastq R1
+			if($r1head!~/^@/ || $r1seq!~/^[ATGCNatgcn]*$/ || $r1sep!~/^\+/) {
 				print "$r1head\n$r1seq\n$r1sep\n";
-        pod2usage("Error: $h_sample{$k}{'R1'} is not a valid fastq file.")
-      }
+				pod2usage("Error: $h_sample{$k}{'R1'} is not a valid fastq file.")
+			}
 			if(exists($h_sample{$k}{'R2'})) {
 				$r2head = <READ2>; $r2seq = <READ2>; $r2sep = <READ2>; $r2qual = <READ2>;
 				#Validate Fastq R2
@@ -497,7 +498,7 @@ MAIN:
 			if($curLen<$maxLen) {
 				$nbFragment++;
 				$curLen+=length($r1seq)-1;
-	      print READ1FILTER "$r1head$r1seq$r1sep$r1qual";
+	    		print READ1FILTER "$r1head$r1seq$r1sep$r1qual";
 				if(exists($h_sample{$k}{'R2'})) {
 					$curLen+=length($r2seq)-1;
 					print READ2FILTER "$r2head$r2seq$r2sep$r2qual";
@@ -506,40 +507,40 @@ MAIN:
 			$nbFragmentTotal++;
 			$totalLen+=length($r1seq)-1;
 			$totalLen+=length($r2seq)-1 if(exists($h_sample{$k}{'R2'}));
-    }
-    close READ1;
-    close READ1FILTER ;
-    if(exists($h_sample{$k}{'R2'})) {
-      close READ2;
-      close READ2FILTER;
-    }
-    print LOG " - $k: $nbFragment/$nbFragmentTotal reads take into account\n";
+		}
+    	close READ1;
+    	close READ1FILTER ;
+    	if(exists($h_sample{$k}{'R2'})) {
+      		close READ2;
+     		close READ2FILTER;
+    	}
+    	print LOG " - $k: $nbFragment/$nbFragmentTotal reads take into account\n";
 		$h_sample{$k}{'nbFragment'} = $nbFragmentTotal;
 		$h_sample{$k}{'totalLen'}   = $totalLen;
 		if($curLen != $totalLen) {
 			$h_sample{$k}{'nbFragment_F'} = $nbFragment;
 			$h_sample{$k}{'totalLen_F'}   = $curLen;
 		}
-  }
+  	}
 
-  #SPADES
-  print LOG "\n## Run SPADES\n";
-  foreach my $k (sort keys(%h_sample)) {
-    print LOG " - $k...";
-    if(exists($h_sample{$k}{'R2_F'})) {
-      #`$SPADES -1 $h_sample{$k}{'R1_F'} -2 $h_sample{$k}{'R2_F'} -t $threads --careful -o $outputDir/$k`;
-    }
-    else {
-      #`$SPADES -s $h_sample{$k}{'R1_F'} -t $threads --careful -o $outputDir/$k`;
-    }
-    print LOG "done\n";
-  }
+	#SPADES
+	print LOG "\n## Run SPADES\n";
+	foreach my $k (sort keys(%h_sample)) {
+		print LOG " - $k...";
+		if(exists($h_sample{$k}{'R2_F'})) {
+		  `$SPADES -1 $h_sample{$k}{'R1_F'} -2 $h_sample{$k}{'R2_F'} -t $threads --careful -o $outputDir/$k`;
+		}
+		else {
+		  `$SPADES -s $h_sample{$k}{'R1_F'} -t $threads --careful -o $outputDir/$k`;
+		}
+		print LOG "done\n";
+	}
 
   #CROSS MATCH (on the scaffolds.fasta generated by SPADES)
   print LOG "\n## Run Crossmatch\n";
   foreach my $k (sort keys(%h_sample)) {
     print LOG " - $k...";
-    #`($CROSS_MATCH $outputDir/$k/scaffolds.fasta $vectorSeq -minmatch 9 -minscore 30 -screen > $outputDir/$k/crossmatch-scaffolds.stdout) >& $outputDir/$k/crossmatch-scaffolds.stderr`;
+    `($CROSS_MATCH $outputDir/$k/scaffolds.fasta $vectorSeq -minmatch 9 -minscore 30 -screen > $outputDir/$k/crossmatch-scaffolds.stdout) >& $outputDir/$k/crossmatch-scaffolds.stderr`;
     print LOG "done\n";
   }
 
@@ -925,7 +926,7 @@ MAIN:
 	print HTML "<th nowrap style='text-align:center'>Length (>$minCtgLen)</th>\n";
 	print HTML "<th nowrap style='text-align:center'>Coverage (>$minCtgDepth)</th>\n";
 	print HTML '
-								<th nowrap style="text-align:center;width:275px;">XXed block</th>
+								<th nowrap style="text-align:center;width:275px;">Vector position</th>
 								<th nowrap style="text-align:center">Clean length</th>
             	</tr>
         		</thead>
@@ -982,13 +983,16 @@ MAIN:
             	<tr>
                 <th>Sample</th>
                 <th nowrap style="text-align:center">Scaffold sequence</th>
-								<th nowrap style="text-align:center">XXed block</th>
+								<th nowrap style="text-align:center">Vector position</th>
 								<th nowrap style="text-align:center">Clean scaffold sequence</th>
         			</tr>
         		</thead>
         		<tbody>
 ';
-	my $download = "var dwnl = [";
+	my $download      = "var dwnl = [";
+	my $allfasta      = "var allfasta = \"";
+	my $allgff        = "var allgff = \"";
+	my $allcleanfasta = "var allclean = \"";
 	my $dwnlid=0;
 	foreach my $k1 (sort keys(%h_sample)) {
 		print HTML "<tr><td class='valn' >$k1</td>\n";
@@ -1002,6 +1006,7 @@ MAIN:
 		}
 		if($dwnlid != 0) { $download .= ",";}
 		$download .= "\"$seq\"";
+		$allfasta .= "$seq";
 		print HTML "<td style=\"text-align:right\"><button id=\"dwnl-$dwnlid\" file=\"$k1.fasta\" class=\"btn btn-sm btn-outline-secondary\">
 								Fasta (".(keys %{$h_sample{$k1}{"scaffolds"}}).")</button></td>\n";
 
@@ -1024,6 +1029,7 @@ MAIN:
 		}
 		if($dwnlid != 0) { $download .= ",";}
 		$download .= "\"$seq\"";
+		$allgff .= "$seq";
 		print HTML "<td style=\"text-align:right\"><button id=\"dwnl-$dwnlid\" file=\"$k1.gff\" class=\"btn btn-sm btn-outline-secondary\">
 								GFF</button></td>\n";
 
@@ -1036,6 +1042,7 @@ MAIN:
 		}
 		if($dwnlid != 0) { $download .= ",";}
 		$download .= "\"$seq\"";
+		$allcleanfasta .= "$seq";
 		print HTML "<td style=\"text-align:right\"><button id=\"dwnl-$dwnlid\" file=\"$k1.clean.fasta\" class=\"btn btn-sm btn-outline-secondary\">
 								Fasta (".(keys %{$h_sample{$k1}{"scaffolds"}}).")</button></td>\n";
 		print HTML "</tr>\n";
@@ -1043,7 +1050,19 @@ MAIN:
 	}
 	$download .= "];";
 	print HTML "\n<script>$download</script>\n";
-	print HTML '
+	print HTML "\n<script>$allfasta\"</script>\n";
+	print HTML "\n<script>$allgff\"</script>\n";
+	print HTML "\n<script>$allcleanfasta\"</script>\n";
+	print HTML '		<tr>
+							<td></td>';
+	print HTML "\n<td style=\"text-align:center\"><button id=\"allfasta\" file=\"all.fasta\" class=\"btn btn-sm btn-outline-secondary\">
+								All Fasta</button></td>\n";
+	print HTML "<td style=\"text-align:center\"><button id=\"allgff\" file=\"all.gff\" class=\"btn btn-sm btn-outline-secondary\">
+								All GFF</button></td>\n";
+	print HTML "<td style=\"text-align:center\"><button id=\"allcleanfasta\" file=\"allcleaned.fasta\" class=\"btn btn-sm btn-outline-secondary\">
+								All cleaned Fasta</button></td>\n";
+	print HTML '								
+						</tr>
 						</tbody>
 					</table>
         </main>
@@ -1275,6 +1294,18 @@ print HTML ']
 		<!-- Download -->
 		$(\'[id^=dwnl]\').click(function(){
 			download($(this).attr(\'file\'), dwnl[$(this).attr(\'id\').split(\'-\')[1]]);
+		});
+		<!-- Download ALL fasta -->
+		$(\'[id=allfasta]\').click(function(){
+			download($(this).attr(\'file\'), allfasta);
+		});
+		<!-- Download ALL gff -->
+		$(\'[id=allgff]\').click(function(){
+			download($(this).attr(\'file\'), allgff);
+		});
+		<!-- Download ALL cleaned fasta -->
+		$(\'[id=allcleanfasta]\').click(function(){
+			download($(this).attr(\'file\'), allcleanfasta);
 		});
 
 		function download(filename, text) {
