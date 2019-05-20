@@ -6,9 +6,9 @@
 
 ## Table of content
 - Installation
-	- [Tools dependancies](#Tools dependancies)
+	- [Tools dependancies](#tools-dependancies)
 
 ## Installation
 This MINITA repository is for command line user.
 
-### <a name="Tools dependancies">Tools dependancies</a>
+### Tools dependancies
