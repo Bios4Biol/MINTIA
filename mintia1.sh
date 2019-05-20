@@ -51,16 +51,14 @@ TFILE="/galaxydata/galaxy-preprod/my_workspace/MINTIA1.$$.tmp"
 mkdir $TFILE; cd $TFILE/; chmod -R 777 $TFILE/; mkdir DATA/; chmod -R 777 DATA/; cp $zipin $TFILE/DATA.zip; unzip $TFILE/DATA.zip -d $TFILE/DATA/; 
 mkdir $TFILE/RESULTS/; chmod -R 777 $TFILE/RESULTS/;
 cd $TFILE/DATA/*/; ln -s /galaxydata/galaxy-preprod/my_tools/MINTIA1/mintia_assembly.pl .;
-echo "perl mintia_assembly.pl --input '$TFILE'/DATA/*/*.fastq* --vectorSeq '$vectorSeq' --dirOutputs '$TFILE'/RESULTS";
+echo "perl mintia_assembly.pl --input '$TFILE'/DATA/*/* --vectorSeq '$vectorSeq' --dirOutputs '$TFILE'/RESULTS";
 #TODO with version 18 : path to scripts to define with a variable
-perl /galaxydata/galaxy-preprod/my_tools/MINTIA1/mintia_assembly.pl --input $TFILE/DATA/*/*.fastq* --vectorSeq $vectorSeq --dirOutputs $TFILE/RESULTS  1>/dev/null;
+perl /galaxydata/galaxy-preprod/my_tools/MINTIA1/mintia_assembly.pl --input $TFILE/DATA/*/* --vectorSeq $vectorSeq --dirOutputs $TFILE/RESULTS  1>/dev/null;
 
 if [ $? -ne 0 ]; then
-  echo "failed: perl '$__tool_directory__/mintia_assembly.pl' --input *.fastq* --vectorSeq $vectorSeq --dirOutputs $TFILE/RESULTS/ "
+  echo "failed: perl '$__tool_directory__/mintia_assembly.pl' --input *.* --vectorSeq $vectorSeq --dirOutputs $TFILE/RESULTS/ "
   exit 1
 fi
-
-echo "toto";
 
 #Prepare results files as Galaxy outputs
 cd $TFILE; mkdir FINAL/; chmod -R 777 FINAL/; 
