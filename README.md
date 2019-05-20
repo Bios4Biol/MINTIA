@@ -5,10 +5,26 @@
 	MINTIA...
 
 ## Table of content
-- Installation
+- [Installation](#installation)
 	- [Tools dependancies](#tools-dependancies)
+- [Download databanks](#download-databanks)
+- [License](#license)
+- [Copyright](#copyright)
+- [Contact](#contact)
 
 ## Installation
 This MINITA repository is for command line user.
 
 ### Tools dependancies
+
+## Download databanks
+Reference database are needed to...
+
+## License
+GNU GPL v3
+
+## Copyright
+2019 INRA
+
+## Contact
+support.sigenae@inra.fr
