@@ -7,7 +7,7 @@
 ## Table of content
 - [Installation](#installation)
 	- [Tools dependancies](#tools-dependancies)
-- [Download databanks](#download-databanks)
+	- [Databanks](#databanks)
 - [License](#license)
 - [Copyright](#copyright)
 - [Contact](#contact)
@@ -17,7 +17,7 @@ This MINITA repository is for command line user.
 
 ### Tools dependancies
 
-## Download databanks
+### Databanks
 Reference database are needed to...
 
 ## License
