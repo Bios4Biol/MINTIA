@@ -2113,6 +2113,7 @@ sub annotate {
 	print LOG " ==> Create $prokkaPRO...done\n";
 	
 	if($ncbi) {
+		print LOG " ==> Create submission file(s) by fosmid.......";
 		open(PROKKAGBK, "$outputDir/prokka_tmp_.gbk") || die "Error: Unabled to open $outputDir/prokka_tmp_.gbk";
 		while(my $line=<PROKKAGBK>) {
 			if($line =~ /^LOCUS/) {
@@ -2132,6 +2133,7 @@ sub annotate {
 			else { print NCBI $line; }
 		}
 		close(PROKKAGBK);
+		print LOG "done\n";
 	}
 		
 	####
