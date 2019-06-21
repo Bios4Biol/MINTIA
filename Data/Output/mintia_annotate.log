@@ -1,0 +1,13 @@
+## Check input fasta file
+## Run metagene
+ - bioindent1.C1a: 42 ORF(s) found
+ - bioindent2.C1: 41 ORF(s) found
+ ==> Create Data/Output//metagene.fasta........done
+ ==> Create Data/Output//metagene-prot.fasta...done
+ ==> Create Data/Output//metagene.bed..........done
+## Run functional and taxonomic annotation
+ - Run diamond-blastx Data/Input/bioindentCONCAT.fasta against NR........done
+ - Run diamond-blastx Data/Input/bioindentCONCAT.fasta against Uniprot...done
+ - Run diamond-blastx Data/Output//metagene.fasta against NR........done
+ - Run diamond-blastx Data/Output//metagene.fasta against Uniprot...done
+## Create HTML report...done
