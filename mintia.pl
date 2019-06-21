@@ -146,11 +146,11 @@
 
  Run functional and taxonomic annotations
  
-=item B<-e, --evalue>
+=item B<-e, --evalue> FLOAT
 
  Maximum diamond e-value to report alignments [10e-8]
 
-=item B<--query-cover>
+=item B<--query-cover> INT
 
  Minimum diamond query cover% to report an alignment [50]
  
@@ -162,13 +162,13 @@
 
  Run annotations with COGs, DB COGs path file
 
-=item B<-c, --cMaxEvalue>
+=item B<-c, --cMaxEvalue> FLOAT
 
  Max Evalue for Rps-Blast COGs filtering [10e-8]
 
-=item B<-S, --SubmissionFiles> FILE
+=item B<-S, --SubmissionFiles>
 
- Build submission files - A tabular info file must be provided
+ Build submission files
  
 =item B<-D, --DiamondAgainstPrivateDB> FILE
 
@@ -235,12 +235,12 @@ use Term::ANSIColor;
 use POSIX;
 use 5.010;  #for filesize
 
+# For genologin load module
+# module load bioinfo/prokka-1.13.4;module load bioinfo/SPAdes-3.13.0;module load bioinfo/diamond-v0.9.22;module load system/Java8;module load bioinfo/MEGAN5;module load bioinfo/blast-2.2.26;module load bioinfo/samtools-1.3.1;module load bioinfo/tabix-0.2.5
 
-my $SPADES         = "/usr/local/bioinfo/src/SPAdes/SPAdes-3.11.0-Linux/bin/spades.py";
-my $DIAMOND        = "/usr/local/bioinfo/src/diamond/diamond-0.9.22/bin/diamond";
 my $DIAMOND_NR_DB  = "/bank/diamonddb/nr.dmnd";
 my $DIAMOND_UP_DB  = "/bank/diamonddb/uniprot_sprot.dmnd";
-my $MINTIA_VERSION = "Mintia_v0.2";
+my $MINTIA_VERSION = "Mintia_v1.0";
 
 
 ########################################################################
@@ -701,19 +701,14 @@ sub check {
 	
     # Step2 Annotate
     print "\n- Step 2 - annotate:\n";
-	$err = `which metagene >& /dev/null`;
-	print "  => metagene.........";
-	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
-	else   { print colored(['bold green'], "ok\n"); }
-	
-	$err = `which transeq >& /dev/null`;
-	print "  => transeq..........";
+	$err = `which prokka >& /dev/null`;
+	print "  => prokka...........";
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   {
 		print colored(['bold green'], "ok");
-		my $version = `transeq --version 2>&1`;
+		my $version = `prokka --version 2>&1`;
 		chomp($version);
-		$version =~ s/^.*EMBOSS:/version:/;
+		$version =~ s/^\w+\s+/version:/;
 		print "...$version\n";
 	}
 	
@@ -981,10 +976,10 @@ sub assemble {
 	foreach my $k (sort keys(%h_sample)) {
 		print LOG " - $k...";
 		if(exists($h_sample{$k}{'R2_F'})) {
-			`$SPADES -1 $h_sample{$k}{'R1_F'} -2 $h_sample{$k}{'R2_F'} -t $threads --careful -o $outputDir/$k`;
+			`spades.py -1 $h_sample{$k}{'R1_F'} -2 $h_sample{$k}{'R2_F'} -t $threads --careful -o $outputDir/$k`;
 		}
 		else {
-			`$SPADES -s $h_sample{$k}{'R1_F'} -t $threads --careful -o $outputDir/$k`;
+			`spades.py -s $h_sample{$k}{'R1_F'} -t $threads --careful -o $outputDir/$k`;
 		}
 		print LOG "done\n";
 	}
@@ -1922,7 +1917,7 @@ sub annotate {
 		'M|Megan=s'                   => \$megan,
 		'C|Cog=s'                     => \$cog,
 		'c|cMaxEvalue=f'              => \$cog_cMaxEvalue,
-		'S|SubmissionFiles=s'         => \$ncbi,
+		'S|SubmissionFiles'           => \$ncbi,
 		'D|DiamondAgainstPrivateDB=s' => \$diamond,
 		't|threads=i'                 => \$threads,
 		'd|dirOutputs=s'              => \$outputDir,
@@ -2005,15 +2000,15 @@ sub annotate {
 	my @a_fosmid = split_fasta_by_id($inputSeq, $separator, $outputDir, "fosmid.fasta");
 
 	####
-	## Run metagene, parse and generate output files (bed, nuc and prot)
+	## Run prokka, parse and generate output files (gff, nuc and prot)
 	####
-	my $metageneBED = "$outputDir/metagene.bed";
-	my $metageneTFA = "$outputDir/metagene.fasta";
-	my $metagenePRO = "$outputDir/metagene-prot.fasta";
+	my $prokkaGFF = "$outputDir/prokka.gff";
+	my $prokkaTFA = "$outputDir/prokka.fasta";
+	my $prokkaPRO = "$outputDir/prokka-prot.fasta";
 	
 	# %h_orf = (
 	#    fastaID => {
-	#          ORF      => 'Number of metagene ORF',
+	#          ORF      => 'Number of prokka ORF',
 	#          uniORF   => 'Number of annotated ORF against Uniprot',
 	#          nrORF    => 'Number of annotated ORF against NR',
 	#          ORFName1 => {
@@ -2038,33 +2033,39 @@ sub annotate {
 	# )
 	my %h_orf = ();
 	
-	print LOG "## Run metagene\n";
-	open(NUC, ">$metageneTFA") || die "Error: Unabled to create $metageneTFA";
-	my @a_metageneOutput = split(/\n/, `metagene $inputSeq`);
+	print LOG "## Run prokka\n";
+	`prokka $inputSeq --outDir $outputDir --cpu $threads  --prefix prokka_tmp_ --locustag "##TEMPLATE##" --force >& $outputDir/prokka_tmp_.stderr`;
 	my $orfcmp      = 1;
 	my $name        = "";
-	my $metagenebed = "";
-	foreach my $line (@a_metageneOutput) {
-		if($line eq "") {
-			$orfcmp--;
-			$h_orf{$name}{"ORF"}    = $orfcmp;
-			$h_orf{$name}{"uniORF"} = 0;
-			$h_orf{$name}{"nrORF"}  = 0;
-			print LOG "$orfcmp ORF(s) found\n";
-			$orfcmp = 1;
-			$name   = "";
+	my $prokkagff   = "";
+	my %h_prokka2mintia;
+	open(GFF, ">$prokkaGFF") || die "Error: Unabled to create $prokkaGFF";
+	open(PROKKAGFF, "$outputDir/prokka_tmp_.gff") || die "Error: Unabled to open $outputDir/prokka_tmp_.gff";
+	while(my $line=<PROKKAGFF>) {
+		if($line !~ /##TEMPLATE##/) {
+			print GFF $line if($line =~ /^##/);
 		}
-		elsif($line =~ /^#\s(.*)/ && $name eq "") {
-			$name = $1;
-			print LOG " - $name: ";
-		}
-		elsif($line =~ /^[0-9]/) {
-			my($start, $end, $strand, $delta, $score, $type) = split(/\t/, $line);
-			$metagenebed .= "$name\t".($start-1)."\t$end\tORF$orfcmp\t$score\t$strand\n";
-			$h_orf{$name}{"ORF$orfcmp"}{"Start"}      = $start;
-			$h_orf{$name}{"ORF$orfcmp"}{"Length"}     = ($end-$start+1);
+		else {
+			my @a_line = split(/\t/, $line);
+			 # New contig ?
+			if($name ne $a_line[0]) {
+				if($name ne "") {
+					$orfcmp--;
+					print LOG " - $name: $orfcmp ORF(s) found\n";
+					$h_orf{$name}{"ORF"}    = $orfcmp;
+					$h_orf{$name}{"uniORF"} = 0;
+					$h_orf{$name}{"nrORF"}  = 0;
+				}
+				$orfcmp = 1;
+				$name = $a_line[0];
+			}
+			$line =~s/(##TEMPLATE##\_\d+);/ORF$orfcmp;/g;
+			$h_prokka2mintia{$1} = "$name$separator"."ORF$orfcmp";
+			print GFF $line;
+			$h_orf{$name}{"ORF$orfcmp"}{"Start"}      = $a_line[3];
+			$h_orf{$name}{"ORF$orfcmp"}{"Length"}     = ($a_line[4]-$a_line[3]+1);
 			$h_orf{$name}{"ORF$orfcmp"}{"Strand"}     = 0;
-			$h_orf{$name}{"ORF$orfcmp"}{"Strand"}     = 16 if($strand eq "-");
+			$h_orf{$name}{"ORF$orfcmp"}{"Strand"}     = 16 if($a_line[6] eq "-");
 			$h_orf{$name}{"ORF$orfcmp"}{"uniNbHSP"}   = 0;
 			$h_orf{$name}{"ORF$orfcmp"}{"uniMaxCov"}  = 0;
 			$h_orf{$name}{"ORF$orfcmp"}{"uniCov"}     = 0;
@@ -2075,82 +2076,102 @@ sub annotate {
 			$h_orf{$name}{"ORF$orfcmp"}{"nrCov"}      = 0;
 			$h_orf{$name}{"ORF$orfcmp"}{"nrIden"}     = 0;
 			$h_orf{$name}{"ORF$orfcmp"}{"nrSpecies"}  = "";
-			
-			# Warnning if ORF ! %3 => cut
-			my $length = $end-$start+1-(($end-$start+1)%3);
-			my $reste  = ($end-$start+1)%3;
-			my $orf    = "";
-			if ($strand =~ /^\+/) {
-				if ($type =~ /^partial \(lack 5/) { $orf = substr($h_fasta{$name}, $end-$length, $length); }
-				else                              { $orf = substr($h_fasta{$name}, $start-1,     $length); }
-			}
-			else {
-				if ($type =~ /^partial \(lack 5/) {	$orf = substr($h_fasta{$name}, $start-1,     $length); }
-				else                              { $orf = substr($h_fasta{$name}, $end-$length, $length); }
-				$orf =~ tr/atcgnxATCGNX/tagcnxTAGCNX/;
-				$orf = reverse $orf;
-			}
-			print NUC ">$name$separator"."ORF$orfcmp\n$orf\n";
 			$orfcmp++;
 		}
 	}
+	close(PROKKAGFF);
+	close(GFF);
 	$orfcmp--;
+	print LOG " - $name: $orfcmp ORF(s) found\n";
 	$h_orf{$name}{"ORF"}    = $orfcmp;
 	$h_orf{$name}{"uniORF"} = 0;
 	$h_orf{$name}{"nrORF"}  = 0;
-	print LOG "$orfcmp ORF(s) found\n";
-	close(NUC);
-	print LOG " ==> Create $metageneTFA........done\n";
-		
-	# Create prot file
-	open(PRO, ">$metagenePRO") || die "Error: Unabled to create $metagenePRO";
-	my $transeq = `transeq -sequence $metageneTFA -stdout -auto`;
-	$transeq =~ s/\_1\n/\n/g;
-	print PRO $transeq;
-	close PRO;
-	print LOG " ==> Create $metagenePRO...done\n";
+	print LOG " ==> Create $prokkaGFF..........done\n";
 	
-	open(BED, ">$metageneBED") || die "Error: Unabled to create $metageneBED";
-	print BED $metagenebed;
-	close(BED);	
-	print LOG " ==> Create $metageneBED..........done\n";
+	open(NUC, ">$prokkaTFA") || die "Error: Unabled to create $prokkaTFA";
+	open(PROKKAFFN, "$outputDir/prokka_tmp_.ffn") || die "Error: Unabled to open $outputDir/prokka_tmp_.ffn";
+	while(my $line=<PROKKAFFN>) {
+		if($line =~ /^>(\S+)/) {
+			$line=~s/>(\S+)/>$h_prokka2mintia{$1}/;
+		}
+		print NUC $line;
+	}
+	close(PROKKAFFN);
+	close(NUC);
+	print LOG " ==> Create $prokkaTFA........done\n";
+
+	open(PRO, ">$prokkaPRO") || die "Error: Unabled to create $prokkaPRO";
+	open(PROKKAFAA, "$outputDir/prokka_tmp_.faa") || die "Error: Unabled to open $outputDir/prokka_tmp_.faa";
+	while(my $line=<PROKKAFAA>) {
+		if($line =~ /^>(\S+)/) {
+			$line=~s/>(\S+)/>$h_prokka2mintia{$1}/;
+		}
+		print PRO $line;
+	}
+	close(PROKKAFAA);
+	close(PRO);
+	print LOG " ==> Create $prokkaPRO...done\n";
+	
+	if($ncbi) {
+		open(PROKKAGBK, "$outputDir/prokka_tmp_.gbk") || die "Error: Unabled to open $outputDir/prokka_tmp_.gbk";
+		while(my $line=<PROKKAGBK>) {
+			if($line =~ /^LOCUS/) {
+				my @a_line = split(/\s+/, $line);
+				my $outfile = "$outputDir/".$a_line[1]."/prokka.gbk";
+				open(NCBI, ">$outfile")  || die "Error: Unabled to create $outfile";
+				print NCBI $line;
+			}
+			elsif($line =~ /^\/\/$/) {
+				print NCBI $line;
+				close(NCBI);
+			}
+			elsif($line =~ /\/locus_tag=/) {
+				$line=~s/locus_tag="(\S+)"/locus_tag="$h_prokka2mintia{$1}"/;
+				print NCBI $line;
+			}
+			else { print NCBI $line; }
+		}
+		close(PROKKAGBK);
+	}
 		
 	####
-	## Contigs and ORFs diamond blastx against nr and uniprot to identity missed ORFs by MetaGene
+	## Contigs and ORFs diamond blastx against nr and uniprot to identity missed ORFs by prokka
 	## Rq: diamond param -k 100000 --max-hsps .. usefull ?
 	####
 	if($funAndTaxo) {
 		print LOG "## Run functional and taxonomic annotation\n";
 		print LOG " - Run diamond-blastx $inputSeq against NR........";
-		#`$DIAMOND blastx --db $DIAMOND_NR_DB --query $inputSeq --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 -e $diamond_evalue --out $outputDir/contigs-nr.diamond.tsv >& $outputDir/contigs-nr.diamond_tmp_.stderr`;
+		#`diamond blastx --db $DIAMOND_NR_DB --query $inputSeq --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 -e $diamond_evalue --out $outputDir/contigs-nr.diamond.tsv >& $outputDir/contigs-nr.diamond_tmp_.stderr`;
 
 		print LOG "done\n - Run diamond-blastx $inputSeq against Uniprot...";
-		#`$DIAMOND blastx --db $DIAMOND_UP_DB --query $inputSeq --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 -e $diamond_evalue --out $outputDir/contigs-uniprot.diamond.tsv >& $outputDir/contigs-uniprot.diamond_tmp_.stderr`;
+		#`diamond blastx --db $DIAMOND_UP_DB --query $inputSeq --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 -e $diamond_evalue --out $outputDir/contigs-uniprot.diamond.tsv >& $outputDir/contigs-uniprot.diamond_tmp_.stderr`;
 		
-		print LOG "done\n - Run diamond-blastx $metageneTFA against NR........";
-		#`$DIAMOND blastx --db $DIAMOND_NR_DB --query $metageneTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/metagene-nr.diamond.tsv >& $outputDir/metagene-nr.diamond_tmp_.stderr`;
+		print LOG "done\n - Run diamond-blastx $prokkaTFA against NR........";
+		#`diamond blastx --db $DIAMOND_NR_DB --query $prokkaTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-nr.diamond.tsv >& $outputDir/prokka-nr.diamond_tmp_.stderr`;
 		
-		print LOG "done\n - Run diamond-blastx $metageneTFA against Uniprot...";
-		#`$DIAMOND blastx --db $DIAMOND_UP_DB --query $metageneTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/metagene-uniprot.diamond.tsv >& $outputDir/metagene-uniprot.diamond_tmp_.stderr`;
+		print LOG "done\n - Run diamond-blastx $prokkaTFA against Uniprot...";
+		#`diamond blastx --db $DIAMOND_UP_DB --query $prokkaTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-uniprot.diamond.tsv >& $outputDir/prokka-uniprot.diamond_tmp_.stderr`;
 		print LOG "done\n";
 	}
 	
+	# Split fasta by fosmid need for HTML report (and Megan)
+	my @a_fosmidFromprokkaTfa   = split_fasta_by_id($prokkaTFA, $separator, $outputDir, "prokka.fasta");
+	
 	####
 	## MEGAN must be run by fosmid and takes as input:
-	## - fosmid orf fasta file (extract from metagene.fasta)
-	## - fosmid diamond-blastx of ORFs against nr (extract from metagene-nr.diamond.xml)
+	## - fosmid orf fasta file (extract from prokka.fasta)
+	## - fosmid diamond-blastx of ORFs against nr (extract from prokka-nr.diamond.xml)
 	## MEGAN produces a .rma file and a jpg tree file 
 	####
 	if($megan) {
 		print LOG "## Run MEGAN\n";
-		print LOG " - Run diamond-blastx $metageneTFA against NR........";
-		#`$DIAMOND blastx --db $DIAMOND_NR_DB --query $metageneTFA --threads $threads --outfmt 5 -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/metagene-nr.diamond.xml >& $outputDir/metagene-nr.diamond_tmp_.stderr`;
+		print LOG " - Run diamond-blastx $prokkaTFA against NR........";
+		#`diamond blastx --db $DIAMOND_NR_DB --query $prokkaTFA --threads $threads --outfmt 5 -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-nr.diamond.xml >& $outputDir/prokka-nr.diamond_tmp_.stderr`;
 		print LOG "done\n";
 				
 		# Split fasta and xml by fosmid to run MEGAN by fosmid
 		print LOG " - Prepare inputs files: split FASTA and XML files by fosmid...";
-		my @a_fosmidFromMetageneTfa = split_fasta_by_id($metageneTFA, $separator, $outputDir, "metagene.fasta");
-		my @a_fosmidFromDiamondXml  = split_xml_by_id("$outputDir/metagene-nr.diamond.xml", $separator, $outputDir, "diamond-metageneVSnr_tmp_.xml");
+		my @a_fosmidFromDiamondXml  = split_xml_by_id("$outputDir/prokka-nr.diamond.xml", $separator, $outputDir, "diamond-prokkaVSnr_tmp_.xml");
 			
 		### TODO valider que les tableaux sont identiques !!!!
 		print LOG "done\n";
@@ -2159,7 +2180,7 @@ sub annotate {
 			# Build config file
 			my $path = "$outputDir/$a_fosmid[$i]";
 			open(MEGCFG, ">$path/megan_tmp_.cfg") || die "Error: Unabled to create $path/megan.cfg\n";
-			print MEGCFG "import blastFile='$path/diamond-metageneVSnr_tmp_.xml' fastaFile='$path/metagene.fasta' meganFile='$path/megan_tmp_.rma';\n"
+			print MEGCFG "import blastFile='$path/diamond-prokkaVSnr_tmp_.xml' fastaFile='$path/prokka.fasta' meganFile='$path/megan_tmp_.rma';\n"
 						. "set windowSize=1200 x 100;\n"
 						. "collapse rank='Species';\n"
 						. "select nodes='all';\n"
@@ -2175,7 +2196,10 @@ sub annotate {
 						. "quit;\n";
 			close MEGCFG;
 			print LOG " - Run MEGAN on $a_fosmid[$i]...";
-			#`(xvfb-run MEGAN -g -E -L $megan -c $path/megan_tmp_.cfg) >& $path/megan_tmp_.log`;
+			`(xvfb-run MEGAN -g -E -L $megan -c $path/megan_tmp_.cfg) >& $path/megan_tmp_.log`;
+			if(-e "$path/megan.png") {}
+			else {`(xvfb-run MEGAN -g -E -L $megan -c $path/megan_tmp_.cfg) >& $path/megan_tmp_.log`;}
+			
 			print LOG "done\n";
 		}
 	}
@@ -2191,7 +2215,7 @@ sub annotate {
 	my %h_nbOrfByCog = ();
 	if($cog) {
 		print LOG "## Run rpsblast (COGs)...";
-		#`(rpsblast -i $metagenePRO -d $cog -a $threads -e $cog_cMaxEvalue -o $outputDir/cogs_$cog_cMaxEvalue.rpsblast) >& $outputDir/cogs_$cog_cMaxEvalue.rpsblast_tmp_.stderr`;
+		`(rpsblast -i $prokkaPRO -d $cog -a $threads -e $cog_cMaxEvalue -o $outputDir/cogs_$cog_cMaxEvalue.rpsblast) >& $outputDir/cogs_$cog_cMaxEvalue.rpsblast_tmp_.stderr`;
 		
 		my $curFosId = "";
 		my $curOrfId = "";
@@ -2237,17 +2261,16 @@ sub annotate {
 			}
 		}
 		close COGOUT;
-		use Data::Dumper qw(Dumper);
- 
-		print Dumper \%h_nbOrfByCog;
+		#use Data::Dumper qw(Dumper);
+		#print Dumper \%h_nbOrfByCog;
 
 		print LOG "done\n";
 	}
 	
 	if($diamond) {
 		print LOG "## Run diamond against your own fasta file...";
-		`$DIAMOND makedb --in $diamond --db $outputDir/private_tmp_ >& $outputDir/private.diamond_makedb_tmp_.stderr`;
-		`$DIAMOND blastx --db $outputDir/private_tmp_ --query $metageneTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp  -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/private.diamond.tsv >& $outputDir/private.diamond_tmp_.stderr`;
+		`diamond makedb --in $diamond --db $outputDir/private_tmp_ >& $outputDir/private.diamond_makedb_tmp_.stderr`;
+		`diamond blastx --db $outputDir/private_tmp_ --query $prokkaTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp  -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/private.diamond.tsv >& $outputDir/private.diamond_tmp_.stderr`;
 		# Valid output ?
 		my $error = `grep Error $outputDir/private.diamond_tmp_.stderr`;
 		if($error) {
@@ -2259,13 +2282,7 @@ sub annotate {
 			print LOG "done\n";	
 		}
 	}
-	
-	if(!$keep) {
-		print LOG "## Remove temporary files";
-		unlink glob "$outputDir/*_tmp_*";
-		unlink glob "$outputDir/*/*_tmp_*";
-		print LOG "...done\n";
-	}
+
 	
 	#####
 	## HTML Report
@@ -2276,190 +2293,196 @@ sub annotate {
 	copy($inputSeq, "$outputDir/fosmids.fa") or die "Unabled to copy $inputSeq input $outputDir: $!";
 	`samtools faidx $outputDir/fosmids.fa`;
 	
-	# bgzip tabix for metagene.bed
-	`bgzip -fc $metageneBED > $metageneBED.gz; tabix -p bed $metageneBED.gz`;
+	# bgzip tabix for prokka.gff
+	`bgzip -fc $prokkaGFF > $prokkaGFF.gz; tabix -p gff $prokkaGFF.gz`;
 	
-	# Tracks : Diamond VS NR (alignment and annotation tracks)
-	# Alignment track  => Build sort.bam and bai from Diamond fosmid against NR tsv
-	# Annotation track => for the "resume" track build $dianrRTrack
-	# sam header from fai
-	my $samheader = "";
-	open(FAI,"$outputDir/fosmids.fa.fai") || die "Error: Unabled to open $outputDir/fosmids.fa.fai\n";
-	while(my $line=<FAI>) {
-		my @a_line = split(/\t/, $line);
-		$samheader .= "\@SQ\tSN:$a_line[0]\tLN:$a_line[1]\n";
-	}
-	close(FAI);
-	# sam body from contigs-nr.diamond.tsv
-	open(SAM,">$outputDir/contigs-nr.diamond_tmp_.sam") || die "Error: Unabled to create $outputDir/contigs-nr.diamond_tmp_.sam\n";
-	print SAM $samheader;
-	open(DIANR, "$outputDir/contigs-nr.diamond.tsv") || die "Error: Unabled to open $outputDir/contigs-nr.diamond.tsv\n";
-	my $dianrRTrack;
-	my $cmp = 0;
-	while(my $line=<DIANR>) {
-		chomp $line;
-		my ($qseqid,$sseqid,$pident,$nident,$length,$mismatch,$gaps,$gapopen,$qstart,$qend,$sstart,$send,$evalue,$bitscore,$stitle,$qcovhsp) = split(/\t/, $line);
-		my $strand = 0;
-		if($qstart>$qend) {
-			my $tmp = $qstart;
-			$qstart = $qend;
-			$qend   = $tmp;
-			$strand = 16;
+	my $dianrRTrack;     #Diamond VS NR 
+	my $diauniRTrack;    #Diamond VS Uniprot 
+	my $dianrorfRTrack;  #Diamond ORF VS NR
+	my $diauniorfRTrack; #Diamond ORF VS Uniprot
+	if($funAndTaxo) {
+		# Tracks : Diamond VS NR (alignment and annotation tracks)
+		# Alignment track  => Build sort.bam and bai from Diamond fosmid against NR tsv
+		# Annotation track => for the "resume" track build $dianrRTrack
+		# sam header from fai
+		my $samheader = "";
+		open(FAI,"$outputDir/fosmids.fa.fai") || die "Error: Unabled to open $outputDir/fosmids.fa.fai\n";
+		while(my $line=<FAI>) {
+			my @a_line = split(/\t/, $line);
+			$samheader .= "\@SQ\tSN:$a_line[0]\tLN:$a_line[1]\n";
 		}
-		print SAM "$sseqid\t$strand\t$qseqid\t$qstart\t30\t".($qend-$qstart+1)."M\t*\t0\t0\t*\t*\t";
-		print SAM "XI:Z:$pident\tXJ:Z:$nident\tXL:i:$length\tXM:i:$mismatch\tXH:i:$gaps\tXG:i:$gapopen\tXC:Z:$qcovhsp\tXE:Z:$evalue\tXB:Z:$bitscore\tXA:Z:$stitle\n";
-		my @a_link = split(/\|/,$sseqid);
-		$dianrRTrack .= "," if($cmp);
-		$dianrRTrack .= "{chr:\"$qseqid\",Name:\"<a href=\\\"https://www.ncbi.nlm.nih.gov/protein/$a_link[3]\\\" target=\\\"_blank\\\">$sseqid</a>\",start:$qstart,end:$qend,evalue:$evalue,color:\"rgba(64,140,193,0.2)\",description:\"$stitle\"}";
-		$cmp++;
-	}
-	close(DIANR);
-	close(SAM);
-	`samtools view -bS $outputDir/contigs-nr.diamond_tmp_.sam | samtools sort - -o $outputDir/contigs-nr.diamond.bam ; samtools index $outputDir/contigs-nr.diamond.bam`;
-	
-	# Tracks : Diamond VS Uniprot (alignment and annotation tracks)
-	# Alignmnet track  => Build sort.bam and bai from Diamond fosmid against uniprot tsv
-	# Annotation track => for the "resume" track build $diauniRTrack
-	# sam body from contigs-uniprot.diamond.tsv
-	open(SAM,">$outputDir/contigs-uniprot.diamond_tmp_.sam") || die "Error: Unabled to create $outputDir/contigs-uniprot.diamond_tmp_.sam\n";
-	print SAM $samheader;
-	open(DIAUNI, "$outputDir/contigs-uniprot.diamond.tsv") || die "Error: Unabled to open $outputDir/contigs-uniprot.diamond.tsv\n";
-	my $diauniRTrack;
-	$cmp = 0;
-	while(my $line=<DIAUNI>) {
-		chomp $line;
-		my ($qseqid,$sseqid,$pident,$nident,$length,$mismatch,$gaps,$gapopen,$qstart,$qend,$sstart,$send,$evalue,$bitscore,$stitle,$qcovhsp) = split(/\t/, $line);
-		my $strand = 0;
-		if($qstart>$qend) {
-			my $tmp = $qstart;
-			$qstart = $qend;
-			$qend   = $tmp;
-			$strand = 16;
-		}
-		print SAM "$sseqid\t$strand\t$qseqid\t$qstart\t30\t".($qend-$qstart+1)."M\t*\t0\t0\t*\t*\t";
-		print SAM "XI:Z:$pident\tXJ:Z:$nident\tXL:i:$length\tXM:i:$mismatch\tXH:i:$gaps\tXG:i:$gapopen\tXC:Z:$qcovhsp\tXE:Z:$evalue\tXB:Z:$bitscore\tXA:Z:$stitle\n";
-		my @a_link = split(/\|/,$sseqid);
-		$diauniRTrack .= "," if($cmp);
-		$diauniRTrack .= "{chr:\"$qseqid\",Name:\"<a href=\\\"https://www.ncbi.nlm.nih.gov/protein/$a_link[2]\\\" target=\\\"_blank\\\">$sseqid</a>\",start:$qstart,end:$qend,evalue:$evalue,color:\"rgba(88,162,88,0.2)\",description:\"$stitle\"}";
-		$cmp++;
-	}
-	close(DIAUNI);
-	close(SAM);
-	`samtools view -bS $outputDir/contigs-uniprot.diamond_tmp_.sam | samtools sort - -o $outputDir/contigs-uniprot.diamond.bam ; samtools index $outputDir/contigs-uniprot.diamond.bam`;
-		
-	# Tracks : Diamond ORF VS NR (alignment and annotation tracks)
-	# Alignmnet track  => Build sort.bam and bai from Diamond ORF against NR tsv
-	# Annotation track => for the "resume" track build $dianrorfRTrack
-	# Coord must be shift: orf to fosmid
-	open(SAM,">$outputDir/metagene-nr.diamond_tmp_.sam") || die "Error: Unabled to create $outputDir/metagene-nr.diamond_tmp_.sam\n";
-	print SAM $samheader;
-	open(DIANR, "$outputDir/metagene-nr.diamond.tsv") || die "Error: Unabled to open $outputDir/metagene-nr.diamond.tsv\n";
-	my $dianrorfRTrack;
-	$cmp = 0;
-	while(my $line=<DIANR>) {
-		chomp $line;
-		my ($qseqid,$sseqid,$pident,$nident,$length,$mismatch,$gaps,$gapopen,$qstart,$qend,$sstart,$send,$evalue,$bitscore,$stitle,$qcovhsp) = split(/\t/, $line);
-		my $strand = 0;
-		if($qstart>$qend) {
-			my $tmp = $qstart;
-			$qstart = $qend;
-			$qend   = $tmp;
-			$strand = 16;
-		}
-		my $orfname = "";
-		if($qseqid =~ /^(\S*)#(ORF\d+)$/) {
-			$qseqid  = $1;
-			$orfname = $2;
-		}
-		my $len = $qend - $qstart + 1;
-		my ($shiftstart, $shiftend) = (0, 0);
-		if($h_orf{$qseqid}{$orfname}{"Strand"} == 0) {
-			$shiftstart = $qstart + $h_orf{$qseqid}{$orfname}{"Start"};
-			$shiftend   = $shiftstart + $len;
-		}
-		else {
-			$shiftstart = $h_orf{$qseqid}{$orfname}{"Length"} - $qend + $h_orf{$qseqid}{$orfname}{"Start"};
-			$shiftend   = $shiftstart + $len;
-		}
-		print SAM "$sseqid\t".$h_orf{$qseqid}{$orfname}{"Strand"}."\t$qseqid\t$shiftstart\t30\t$len"."M\t*\t0\t0\t*\t*\t";
-		print SAM "XI:Z:$pident\tXJ:Z:$nident\tXL:i:$length\tXM:i:$mismatch\tXH:i:$gaps\tXG:i:$gapopen\tXC:Z:$qcovhsp\tXE:Z:$evalue\tXB:Z:$bitscore\tXA:Z:$stitle\n";
-		my @a_link = split(/\|/,$sseqid);
-		$dianrorfRTrack .= "," if($cmp);
-		$dianrorfRTrack .= "{chr:\"$qseqid\",Name:\"<a href=\\\"https://www.ncbi.nlm.nih.gov/protein/$a_link[3]\\\" target=\\\"_blank\\\">$sseqid</a>\",start:$shiftstart,end:$shiftend,evalue:$evalue,color:\"rgba(193,64,64,0.2)\",description:\"$stitle\"}";
-		
-		# Save orf hsp, cov... info
-		$h_orf{$qseqid}{$orfname}{"nrNbHSP"}++;
-		$h_orf{$qseqid}{"nrORF"}++ if($h_orf{$qseqid}{$orfname}{"nrNbHSP"} == 1);
-		$h_orf{$qseqid}{$orfname}{"nrMaxCov"} = $qcovhsp if($qcovhsp > $h_orf{$qseqid}{$orfname}{"nrMaxCov"});
-		if($qcovhsp*$pident > $h_orf{$qseqid}{$orfname}{"nrCov"}*$h_orf{$qseqid}{$orfname}{"nrIden"}) {
-			$h_orf{$qseqid}{$orfname}{"nrCov"}  = $qcovhsp;
-			$h_orf{$qseqid}{$orfname}{"nrIden"} = $pident;
-			if($stitle =~ /\[(.*?)\]/) {
-				$h_orf{$qseqid}{$orfname}{"nrSpecies"} = $1;
+		close(FAI);
+		# sam body from contigs-nr.diamond.tsv
+		open(SAM,">$outputDir/contigs-nr.diamond_tmp_.sam") || die "Error: Unabled to create $outputDir/contigs-nr.diamond_tmp_.sam\n";
+		print SAM $samheader;
+		open(DIANR, "$outputDir/contigs-nr.diamond.tsv") || die "Error: Unabled to open $outputDir/contigs-nr.diamond.tsv\n";
+		my $cmp = 0;
+		while(my $line=<DIANR>) {
+			chomp $line;
+			my ($qseqid,$sseqid,$pident,$nident,$length,$mismatch,$gaps,$gapopen,$qstart,$qend,$sstart,$send,$evalue,$bitscore,$stitle,$qcovhsp) = split(/\t/, $line);
+			my $strand = 0;
+			if($qstart>$qend) {
+				my $tmp = $qstart;
+				$qstart = $qend;
+				$qend   = $tmp;
+				$strand = 16;
 			}
+			print SAM "$sseqid\t$strand\t$qseqid\t$qstart\t30\t".($qend-$qstart+1)."M\t*\t0\t0\t*\t*\t";
+			print SAM "XI:Z:$pident\tXJ:Z:$nident\tXL:i:$length\tXM:i:$mismatch\tXH:i:$gaps\tXG:i:$gapopen\tXC:Z:$qcovhsp\tXE:Z:$evalue\tXB:Z:$bitscore\tXA:Z:$stitle\n";
+			my $link = $sseqid;
+			$link =~s/^gi\|\d+\|[A-Za-z]*\|//;
+			$link =~s/\|$//;
+			$dianrRTrack .= "," if($cmp);
+			$dianrRTrack .= "{chr:\"$qseqid\",Name:\"<a href=\\\"https://www.ncbi.nlm.nih.gov/protein/$link\\\" target=\\\"_blank\\\">$sseqid</a>\",start:$qstart,end:$qend,evalue:$evalue,color:\"rgba(64,140,193,0.2)\",description:\"$stitle\"}";
+			$cmp++;
 		}
-		$cmp++;
-	}
-	close(DIANR);
-	close(SAM);	
-	`samtools view -bS $outputDir/metagene-nr.diamond_tmp_.sam | samtools sort - -o $outputDir/metagene-nr.diamond.bam ; samtools index $outputDir/metagene-nr.diamond.bam`;
-	
-	# Tracks : Diamond ORF VS Uniprot (alignment and annotation tracks)
-	# Alignmnet track  => Build sort.bam and bai from Diamond ORF against uniprot tsv
-	# Annotation track => for the "resume" track build $diauniorfRTrack
-	# Coord must be shift: orf to fosmid
-	open(SAM,">$outputDir/metagene-uniprot.diamond_tmp_.sam") || die "Error: Unabled to create $outputDir/metagene-uniprot.diamond_tmp_.sam\n";
-	print SAM $samheader;
-	open(DIAUNI, "$outputDir/metagene-uniprot.diamond.tsv") || die "Error: Unabled to open $outputDir/metagene-uniprot.diamond.tsv\n";
-	my $diauniorfRTrack;
-	$cmp = 0;
-	while(my $line=<DIAUNI>) {
-		chomp $line;
-		my ($qseqid,$sseqid,$pident,$nident,$length,$mismatch,$gaps,$gapopen,$qstart,$qend,$sstart,$send,$evalue,$bitscore,$stitle,$qcovhsp) = split(/\t/, $line);
-		my $strand = 0;
-		if($qstart>$qend) {
-			my $tmp = $qstart;
-			$qstart = $qend;
-			$qend   = $tmp;
-			$strand = 16;
-		}
-		my $orfname = "";
-		if($qseqid =~ /^(\S*)#(ORF\d+)$/) {
-			$qseqid  = $1;
-			$orfname = $2;
-		}
-		my $len = $qend - $qstart + 1;
-		my ($shiftstart, $shiftend) = (0, 0);
-		if($h_orf{$qseqid}{$orfname}{"Strand"} == 0) {
-			$shiftstart = $qstart + $h_orf{$qseqid}{$orfname}{"Start"};
-			$shiftend   = $shiftstart + $len;
-		}
-		else {
-			$shiftstart = $h_orf{$qseqid}{$orfname}{"Length"} - $qend + $h_orf{$qseqid}{$orfname}{"Start"};
-			$shiftend   = $shiftstart + $len;
-		}
-		print SAM "$sseqid\t".$h_orf{$qseqid}{$orfname}{"Strand"}."\t$qseqid\t$shiftstart\t30\t$len"."M\t*\t0\t0\t*\t*\t";
-		print SAM "XI:Z:$pident\tXJ:Z:$nident\tXL:i:$length\tXM:i:$mismatch\tXH:i:$gaps\tXG:i:$gapopen\tXC:Z:$qcovhsp\tXE:Z:$evalue\tXB:Z:$bitscore\tXA:Z:$stitle\n";
-		my @a_link = split(/\|/,$sseqid);
-		$diauniorfRTrack .= "," if($cmp);
-		$diauniorfRTrack .= "{chr:\"$qseqid\",Name:\"<a href=\\\"https://www.ncbi.nlm.nih.gov/protein/$a_link[2]\\\" target=\\\"_blank\\\">$sseqid</a>\",start:$shiftstart,end:$shiftend,evalue:$evalue,color:\"rgba(224,136,42,0.2)\",description:\"$stitle\"}";
+		close(DIANR);
+		close(SAM);
+		`samtools view -bS $outputDir/contigs-nr.diamond_tmp_.sam | samtools sort - -o $outputDir/contigs-nr.diamond.bam ; samtools index $outputDir/contigs-nr.diamond.bam`;
 		
-		# Save orf hsp, cov... info
-		$h_orf{$qseqid}{$orfname}{"uniNbHSP"}++;
-		$h_orf{$qseqid}{"uniORF"}++ if($h_orf{$qseqid}{$orfname}{"uniNbHSP"} == 1);
-		$h_orf{$qseqid}{$orfname}{"uniMaxCov"} = $qcovhsp if($qcovhsp > $h_orf{$qseqid}{$orfname}{"uniMaxCov"});
-		if($qcovhsp*$pident > $h_orf{$qseqid}{$orfname}{"uniCov"}*$h_orf{$qseqid}{$orfname}{"uniIden"}) {
-			$h_orf{$qseqid}{$orfname}{"uniCov"}  = $qcovhsp;
-			$h_orf{$qseqid}{$orfname}{"uniIden"} = $pident;
-			if($stitle =~ /OS=(\w+\s+\w+)/) {
-				$h_orf{$qseqid}{$orfname}{"uniSpecies"} = $1;
+		# Tracks : Diamond VS Uniprot (alignment and annotation tracks)
+		# Alignmnet track  => Build sort.bam and bai from Diamond fosmid against uniprot tsv
+		# Annotation track => for the "resume" track build $diauniRTrack
+		# sam body from contigs-uniprot.diamond.tsv
+		open(SAM,">$outputDir/contigs-uniprot.diamond_tmp_.sam") || die "Error: Unabled to create $outputDir/contigs-uniprot.diamond_tmp_.sam\n";
+		print SAM $samheader;
+		open(DIAUNI, "$outputDir/contigs-uniprot.diamond.tsv") || die "Error: Unabled to open $outputDir/contigs-uniprot.diamond.tsv\n";
+		$cmp = 0;
+		while(my $line=<DIAUNI>) {
+			chomp $line;
+			my ($qseqid,$sseqid,$pident,$nident,$length,$mismatch,$gaps,$gapopen,$qstart,$qend,$sstart,$send,$evalue,$bitscore,$stitle,$qcovhsp) = split(/\t/, $line);
+			my $strand = 0;
+			if($qstart>$qend) {
+				my $tmp = $qstart;
+				$qstart = $qend;
+				$qend   = $tmp;
+				$strand = 16;
 			}
+			print SAM "$sseqid\t$strand\t$qseqid\t$qstart\t30\t".($qend-$qstart+1)."M\t*\t0\t0\t*\t*\t";
+			print SAM "XI:Z:$pident\tXJ:Z:$nident\tXL:i:$length\tXM:i:$mismatch\tXH:i:$gaps\tXG:i:$gapopen\tXC:Z:$qcovhsp\tXE:Z:$evalue\tXB:Z:$bitscore\tXA:Z:$stitle\n";
+			my @a_link = split(/\|/,$sseqid);
+			$diauniRTrack .= "," if($cmp);
+			$diauniRTrack .= "{chr:\"$qseqid\",Name:\"<a href=\\\"https://www.ncbi.nlm.nih.gov/protein/$a_link[2]\\\" target=\\\"_blank\\\">$sseqid</a>\",start:$qstart,end:$qend,evalue:$evalue,color:\"rgba(88,162,88,0.2)\",description:\"$stitle\"}";
+			$cmp++;
 		}
-		$cmp++;
+		close(DIAUNI);
+		close(SAM);
+		`samtools view -bS $outputDir/contigs-uniprot.diamond_tmp_.sam | samtools sort - -o $outputDir/contigs-uniprot.diamond.bam ; samtools index $outputDir/contigs-uniprot.diamond.bam`;
+			
+		# Tracks : Diamond ORF VS NR (alignment and annotation tracks)
+		# Alignmnet track  => Build sort.bam and bai from Diamond ORF against NR tsv
+		# Annotation track => for the "resume" track build $dianrorfRTrack
+		# Coord must be shift: orf to fosmid
+		open(SAM,">$outputDir/prokka-nr.diamond_tmp_.sam") || die "Error: Unabled to create $outputDir/prokka-nr.diamond_tmp_.sam\n";
+		print SAM $samheader;
+		open(DIANR, "$outputDir/prokka-nr.diamond.tsv") || die "Error: Unabled to open $outputDir/prokka-nr.diamond.tsv\n";
+		$cmp = 0;
+		while(my $line=<DIANR>) {
+			chomp $line;
+			my ($qseqid,$sseqid,$pident,$nident,$length,$mismatch,$gaps,$gapopen,$qstart,$qend,$sstart,$send,$evalue,$bitscore,$stitle,$qcovhsp) = split(/\t/, $line);
+			my $strand = 0;
+			if($qstart>$qend) {
+				my $tmp = $qstart;
+				$qstart = $qend;
+				$qend   = $tmp;
+				$strand = 16;
+			}
+			my $orfname = "";
+			if($qseqid =~ /^(\S*)#(ORF\d+)$/) {
+				$qseqid  = $1;
+				$orfname = $2;
+			}
+			my $len = $qend - $qstart + 1;
+			my ($shiftstart, $shiftend) = (0, 0);
+			if($h_orf{$qseqid}{$orfname}{"Strand"} == 0) {
+				$shiftstart = $qstart + $h_orf{$qseqid}{$orfname}{"Start"};
+				$shiftend   = $shiftstart + $len;
+			}
+			else {
+				$shiftstart = $h_orf{$qseqid}{$orfname}{"Length"} - $qend + $h_orf{$qseqid}{$orfname}{"Start"};
+				$shiftend   = $shiftstart + $len;
+			}
+			print SAM "$sseqid\t".$h_orf{$qseqid}{$orfname}{"Strand"}."\t$qseqid\t$shiftstart\t30\t$len"."M\t*\t0\t0\t*\t*\t";
+			print SAM "XI:Z:$pident\tXJ:Z:$nident\tXL:i:$length\tXM:i:$mismatch\tXH:i:$gaps\tXG:i:$gapopen\tXC:Z:$qcovhsp\tXE:Z:$evalue\tXB:Z:$bitscore\tXA:Z:$stitle\n";
+			my $link = $sseqid;
+			$link =~s/^gi\|\d+\|[A-Za-z]*\|//;
+			$link =~s/\|$//;
+			$dianrorfRTrack .= "," if($cmp);
+			$dianrorfRTrack .= "{chr:\"$qseqid\",Name:\"<a href=\\\"https://www.ncbi.nlm.nih.gov/protein/$link\\\" target=\\\"_blank\\\">$sseqid</a>\",start:$shiftstart,end:$shiftend,evalue:$evalue,color:\"rgba(193,64,64,0.2)\",description:\"$stitle\"}";
+			
+			# Save orf hsp, cov... info
+			$h_orf{$qseqid}{$orfname}{"nrNbHSP"}++;
+			$h_orf{$qseqid}{"nrORF"}++ if($h_orf{$qseqid}{$orfname}{"nrNbHSP"} == 1);
+			$h_orf{$qseqid}{$orfname}{"nrMaxCov"} = $qcovhsp if($qcovhsp > $h_orf{$qseqid}{$orfname}{"nrMaxCov"});
+			if($qcovhsp*$pident > $h_orf{$qseqid}{$orfname}{"nrCov"}*$h_orf{$qseqid}{$orfname}{"nrIden"}) {
+				$h_orf{$qseqid}{$orfname}{"nrCov"}  = $qcovhsp;
+				$h_orf{$qseqid}{$orfname}{"nrIden"} = $pident;
+				if($stitle =~ /\[(.*?)\]/) {
+					$h_orf{$qseqid}{$orfname}{"nrSpecies"} = $1;
+				}
+			}
+			$cmp++;
+		}
+		close(DIANR);
+		close(SAM);	
+		`samtools view -bS $outputDir/prokka-nr.diamond_tmp_.sam | samtools sort - -o $outputDir/prokka-nr.diamond.bam ; samtools index $outputDir/prokka-nr.diamond.bam`;
+		
+		# Tracks : Diamond ORF VS Uniprot (alignment and annotation tracks)
+		# Alignmnet track  => Build sort.bam and bai from Diamond ORF against uniprot tsv
+		# Annotation track => for the "resume" track build $diauniorfRTrack
+		# Coord must be shift: orf to fosmid
+		open(SAM,">$outputDir/prokka-uniprot.diamond_tmp_.sam") || die "Error: Unabled to create $outputDir/prokka-uniprot.diamond_tmp_.sam\n";
+		print SAM $samheader;
+		open(DIAUNI, "$outputDir/prokka-uniprot.diamond.tsv") || die "Error: Unabled to open $outputDir/prokka-uniprot.diamond.tsv\n";
+		$cmp = 0;
+		while(my $line=<DIAUNI>) {
+			chomp $line;
+			my ($qseqid,$sseqid,$pident,$nident,$length,$mismatch,$gaps,$gapopen,$qstart,$qend,$sstart,$send,$evalue,$bitscore,$stitle,$qcovhsp) = split(/\t/, $line);
+			my $strand = 0;
+			if($qstart>$qend) {
+				my $tmp = $qstart;
+				$qstart = $qend;
+				$qend   = $tmp;
+				$strand = 16;
+			}
+			my $orfname = "";
+			if($qseqid =~ /^(\S*)#(ORF\d+)$/) {
+				$qseqid  = $1;
+				$orfname = $2;
+			}
+			my $len = $qend - $qstart + 1;
+			my ($shiftstart, $shiftend) = (0, 0);
+			if($h_orf{$qseqid}{$orfname}{"Strand"} == 0) {
+				$shiftstart = $qstart + $h_orf{$qseqid}{$orfname}{"Start"};
+				$shiftend   = $shiftstart + $len;
+			}
+			else {
+				$shiftstart = $h_orf{$qseqid}{$orfname}{"Length"} - $qend + $h_orf{$qseqid}{$orfname}{"Start"};
+				$shiftend   = $shiftstart + $len;
+			}
+			print SAM "$sseqid\t".$h_orf{$qseqid}{$orfname}{"Strand"}."\t$qseqid\t$shiftstart\t30\t$len"."M\t*\t0\t0\t*\t*\t";
+			print SAM "XI:Z:$pident\tXJ:Z:$nident\tXL:i:$length\tXM:i:$mismatch\tXH:i:$gaps\tXG:i:$gapopen\tXC:Z:$qcovhsp\tXE:Z:$evalue\tXB:Z:$bitscore\tXA:Z:$stitle\n";
+			my @a_link = split(/\|/,$sseqid);
+			$diauniorfRTrack .= "," if($cmp);
+			$diauniorfRTrack .= "{chr:\"$qseqid\",Name:\"<a href=\\\"https://www.ncbi.nlm.nih.gov/protein/$a_link[2]\\\" target=\\\"_blank\\\">$sseqid</a>\",start:$shiftstart,end:$shiftend,evalue:$evalue,color:\"rgba(224,136,42,0.2)\",description:\"$stitle\"}";
+			
+			# Save orf hsp, cov... info
+			$h_orf{$qseqid}{$orfname}{"uniNbHSP"}++;
+			$h_orf{$qseqid}{"uniORF"}++ if($h_orf{$qseqid}{$orfname}{"uniNbHSP"} == 1);
+			$h_orf{$qseqid}{$orfname}{"uniMaxCov"} = $qcovhsp if($qcovhsp > $h_orf{$qseqid}{$orfname}{"uniMaxCov"});
+			if($qcovhsp*$pident > $h_orf{$qseqid}{$orfname}{"uniCov"}*$h_orf{$qseqid}{$orfname}{"uniIden"}) {
+				$h_orf{$qseqid}{$orfname}{"uniCov"}  = $qcovhsp;
+				$h_orf{$qseqid}{$orfname}{"uniIden"} = $pident;
+				if($stitle =~ /OS=(\w+\s+\w+)/) {
+					$h_orf{$qseqid}{$orfname}{"uniSpecies"} = $1;
+				}
+			}
+			$cmp++;
+		}
+		close(DIAUNI);
+		close(SAM);	
+		`samtools view -bS $outputDir/prokka-uniprot.diamond_tmp_.sam | samtools sort - -o $outputDir/prokka-uniprot.diamond.bam ; samtools index $outputDir/prokka-uniprot.diamond.bam`;
 	}
-	close(DIAUNI);
-	close(SAM);	
-	`samtools view -bS $outputDir/metagene-uniprot.diamond_tmp_.sam | samtools sort - -o $outputDir/metagene-uniprot.diamond.bam ; samtools index $outputDir/metagene-uniprot.diamond.bam`;
 	
 	open (HTML, ">$outputDir/$outputHtml") || die "Error: Unabled to create $outputDir/$outputHtml\n";
 	my $html = $HTML_HEADER;
@@ -2557,8 +2580,8 @@ sub annotate {
 		<table class="table table-striped table-bordered mb-0" style="width:100%;">
 			<thead>
 				<tr>
-					<th style="text-align:center">Metagene Fasta files</th>
-					<th style="text-align:center">Metagene annotation</th>
+					<th style="text-align:center">Prokka Fasta files</th>
+					<th style="text-align:center">Prokka annotation</th>
 	';
 	if($funAndTaxo) {
 		print HTML '
@@ -2580,16 +2603,16 @@ sub annotate {
 			<tbody>
 				<tr>
 					<td nowrap style="text-align:center">
-						<a href="./metagene.fasta"      target="_blank" class="btn btn-sm btn-outline-secondary">DNA</a> -
-						<a href="./metagene-prot.fasta" target="_blank" class="btn btn-sm btn-outline-secondary">PROT</a></td>
-					<td nowrap style="text-align:center"><a href="./metagene.bed" target="_blank" class="btn btn-sm btn-outline-secondary">BED</a></td>
+						<a href="./prokka.fasta"      target="_blank" class="btn btn-sm btn-outline-secondary">DNA</a> -
+						<a href="./prokka-prot.fasta" target="_blank" class="btn btn-sm btn-outline-secondary">PROT</a></td>
+					<td nowrap style="text-align:center"><a href="./prokka.gff" target="_blank" class="btn btn-sm btn-outline-secondary">GFF</a></td>
 	';
 	if($funAndTaxo) {
 		print HTML '
 					<td nowrap style="text-align:center"><a href="./contigs-nr.diamond.tsv" target="_blank" class="btn btn-sm btn-outline-secondary">TSV</a></td>
 					<td nowrap style="text-align:center"><a href="./contigs-uniprot.diamond.tsv" target="_blank" class="btn btn-sm btn-outline-secondary">TSV</a></td>
-					<td nowrap style="text-align:center"><a href="./metagene-nr.diamond.tsv" target="_blank" class="btn btn-sm btn-outline-secondary">TSV</a></td>
-					<td nowrap style="text-align:center"><a href="./metagene-uniprot.diamond.tsv" target="_blank" class="btn btn-sm btn-outline-secondary">TSV</a></td>
+					<td nowrap style="text-align:center"><a href="./prokka-nr.diamond.tsv" target="_blank" class="btn btn-sm btn-outline-secondary">TSV</a></td>
+					<td nowrap style="text-align:center"><a href="./prokka-uniprot.diamond.tsv" target="_blank" class="btn btn-sm btn-outline-secondary">TSV</a></td>
 		';
 	}
 	if($cog) {
@@ -2616,10 +2639,19 @@ sub annotate {
 				<th nowrap class="valn" style="text-align:center">G</th>
 				<th nowrap class="valn" style="text-align:center">C</th>
 				<th nowrap class="valn" style="text-align:center">Others</th>
+				<th nowrap class="valn" style="text-align:center">Prokka</th>
+	';
+	if($ncbi) {
+		print HTML '
+				<th nowrap class="valn" style="text-align:center">GenBank</th>
+		';
+	}
+	if($funAndTaxo) {
+		print HTML '
 				<th nowrap class="valn" style="text-align:center" colspan="2">Annotated ORFs<br/>against Uniprot</th>
 				<th nowrap class="valn" style="text-align:center" colspan="2">Annotated ORFs<br/>against NR</th>
-				<th nowrap class="valn" style="text-align:center">Metagene</th>
-	';
+		';
+	}
 	print HTML '<th nowrap class="valn" style="text-align:center">MEGAN</th>' if($megan);
 	print HTML '<th nowrap class="valn" style="text-align:center" colspan="2">COGs</th>' if($cog);
 	print HTML '
@@ -2644,19 +2676,26 @@ sub annotate {
 							.	"<td class='valn'>$A</td>  <td class='valn'>$T</td>"
 							.	"<td class='valn'>$G</td>  <td class='valn'>$C</td>"
 							.	"<td class='valn'>$o</td>"
-							.	"<td class='valn'>".$h_orf{$id}{'uniORF'}." / ".$h_orf{$id}{'ORF'}."</td><td style='width:59px'>";
-					if($h_orf{$id}{"uniORF"} > 0) {
-						print HTML "<button type='button' data-toggle='modal' data-target='#uniAnnot-$id' class='btn btn-sm btn-outline-secondary'>"
-								  ."<span class='oi oi-zoom-in' aria-hidden='true'></span></button>";
+							.   "<td class='valn text-center' rowspan=$nbseq>"
+							.		"<a href='./$i/prokka.fasta' class='btn btn-sm btn-outline-secondary' target='_blank'>Fasta</a></td>";
+					if($ncbi) {
+						print HTML "<td class='valn text-center' rowspan=$nbseq>"
+							.		"<a href='./$i/prokka.gbk' class='btn btn-sm btn-outline-secondary' target='_blank'>GBK</a></td>";
 					}
-					print HTML "</td>"
-							.  "<td class='valn'>".$h_orf{$id}{'nrORF'}." / ".$h_orf{$id}{'ORF'}."</td><td style='width:59px'>";
-					if($h_orf{$id}{"nrORF"} > 0) {
-						print HTML "<button type='button' data-toggle='modal' data-target='#nrAnnot-$id' class='btn btn-sm btn-outline-secondary'>"
-							.		"<span class='oi oi-zoom-in' aria-hidden='true'></span></button>";
+					if($funAndTaxo) {
+						print HTML "<td class='valn'>".$h_orf{$id}{'uniORF'}." / ".$h_orf{$id}{'ORF'}."</td><td style='width:59px'>";
+						if($h_orf{$id}{"uniORF"} > 0) {
+							print HTML "<button type='button' data-toggle='modal' data-target='#uniAnnot-$id' class='btn btn-sm btn-outline-secondary'>"
+									  ."<span class='oi oi-zoom-in' aria-hidden='true'></span></button>";
+						}
+						print HTML "</td>"
+								.  "<td class='valn'>".$h_orf{$id}{'nrORF'}." / ".$h_orf{$id}{'ORF'}."</td><td style='width:59px'>";
+						if($h_orf{$id}{"nrORF"} > 0) {
+							print HTML "<button type='button' data-toggle='modal' data-target='#nrAnnot-$id' class='btn btn-sm btn-outline-secondary'>"
+								.		"<span class='oi oi-zoom-in' aria-hidden='true'></span></button>";
+						}
+						print HTML "</td>";
 					}
-					print HTML "</td><td class='valn text-center' rowspan=$nbseq>"
-							.		"<a href='./$i/metagene.fasta' class='btn btn-sm btn-outline-secondary' target='_blank'>Fasta</a></td>";
 					if($megan) {
 						print HTML "<td class='valn text-center' rowspan=$nbseq>"
 								.		"<button type='button' data-toggle='modal' data-target='#meganview' class='pop btn btn-sm btn-outline-secondary' style='padding:0 4px 0 4px'>"
@@ -2698,22 +2737,28 @@ sub annotate {
 		print HTML "<td class='valn'>$len</td> <td class='valn'>$gc</td>"
 				.	"<td class='valn'>$A</td>  <td class='valn'>$T</td>"
 				.	"<td class='valn'>$G</td>  <td class='valn'>$C</td>"
-				.	"<td class='valn'>$o</td>"
-				.	"<td class='valn'>".$h_orf{$id}{'uniORF'}." / ".$h_orf{$id}{'ORF'}."</td><td style='width:59px'>";
-		if($h_orf{$id}{"uniORF"} > 0) {
-			print HTML "<button type='button' data-toggle='modal' data-target='#uniAnnot-$id' class='btn btn-sm btn-outline-secondary'>"
-					  ."<span class='oi oi-zoom-in' aria-hidden='true'></span></button>";
-		}
-		print HTML "</td>"
-				.  "<td class='valn'>".$h_orf{$id}{'nrORF'}." / ".$h_orf{$id}{'ORF'}."</td><td style='width:59px'>";
-		if($h_orf{$id}{"nrORF"} > 0) {
-			print HTML "<button type='button' data-toggle='modal' data-target='#nrAnnot-$id' class='btn btn-sm btn-outline-secondary'>"
-					  ."<span class='oi oi-zoom-in' aria-hidden='true'></span></button>";
-		}
-		print HTML "</td>";
+				.	"<td class='valn'>$o</td>";
 		if($nbseq==1) {
 			print HTML "<td class='valn text-center' rowspan=$nbseq>"
-					.		"<a href='./$i/metagene.fasta' class='btn btn-sm btn-outline-secondary' target='_blank'>Fasta</a></td>";
+					.		"<a href='./$i/prokka.fasta' class='btn btn-sm btn-outline-secondary' target='_blank'>Fasta</a></td>";
+		}
+		if($ncbi && $nbseq==1) {
+			print HTML "<td class='valn text-center' rowspan=$nbseq>"
+					.       "<a href='./$i/prokka.gbk' class='btn btn-sm btn-outline-secondary' target='_blank'>GBK</a></td>";
+		}
+		if($funAndTaxo) {
+			print HTML "<td class='valn'>".$h_orf{$id}{'uniORF'}." / ".$h_orf{$id}{'ORF'}."</td><td style='width:59px'>";
+			if($h_orf{$id}{"uniORF"} > 0) {
+				print HTML "<button type='button' data-toggle='modal' data-target='#uniAnnot-$id' class='btn btn-sm btn-outline-secondary'>"
+						  ."<span class='oi oi-zoom-in' aria-hidden='true'></span></button>";
+			}
+			print HTML "</td>"
+					.  "<td class='valn'>".$h_orf{$id}{'nrORF'}." / ".$h_orf{$id}{'ORF'}."</td><td style='width:59px'>";
+			if($h_orf{$id}{"nrORF"} > 0) {
+				print HTML "<button type='button' data-toggle='modal' data-target='#nrAnnot-$id' class='btn btn-sm btn-outline-secondary'>"
+						  ."<span class='oi oi-zoom-in' aria-hidden='true'></span></button>";
+			}
+			print HTML "</td>";
 		}
 		if($megan && $nbseq==1) {
 			print HTML "<td class='valn text-center' rowspan=$nbseq>"
@@ -3054,14 +3099,16 @@ sub annotate {
 						"tracks": [
 						{
 							type: "annotation",
-							format: "bed",
-							url: "./metagene.bed.gz",
-							indexURL: "./metagene.bed.gz.tbi",
+							format: "gff",
+							url: "./prokka.gff.gz",
+							indexURL: "./prokka.gff.gz.tbi",
 							displayMode: "EXPANDED",
-							name: "Metagene",
+							name: "Prokka",
 							visibilityWindow: 1000000,
 							color:"rgba(104,64,193,0.8)"
-						},
+						}';
+	if($funAndTaxo) {
+		print HTML ',
 						{
 							name: "Diamond VS NR",
 							type: "annotation",
@@ -3089,7 +3136,9 @@ sub annotate {
 							visibilityWindow: 50000,
 							height: 40,
 							features: ['.$diauniorfRTrack.']
-						}
+						}';
+	}
+	print HTML '
 				]}};
 			}
 			else {
@@ -3102,14 +3151,16 @@ sub annotate {
 						"tracks": [
 						{
 							type: "annotation",
-							format: "bed",
-							url: "./metagene.bed.gz",
-							indexURL: "./metagene.bed.gz.tbi",
+							format: "gff",
+							url: "./prokka.gff.gz",
+							indexURL: "./prokka.gff.gz.tbi",
 							displayMode: "EXPANDED",
-							name: "Metagene",
+							name: "Prokka",
 							visibilityWindow: 1000000,
 							color:"rgba(104,64,193,0.8)"
-						},
+						}';
+	if($funAndTaxo) {
+		print HTML ',
 						{
 							name: "Diamond VS NR",
 							type: "alignment",
@@ -3148,8 +3199,8 @@ sub annotate {
 							name: "Diamond ORF VS NR",
 							type: "alignment",
 							format: "bam",
-							url: "./metagene-nr.diamond.bam",
-							indexURL: "./metagene-nr.diamond.bam.bai",
+							url: "./prokka-nr.diamond.bam",
+							indexURL: "./prokka-nr.diamond.bam.bai",
 							height: 125,
 							visibilityWindow: 50000,
 							color:"rgba(193,64,64,0.8)"
@@ -3165,8 +3216,8 @@ sub annotate {
 							name: "Diamond ORF VS Uniprot",
 							type: "alignment",
 							format: "bam",
-							url: "./metagene-uniprot.diamond.bam",
-							indexURL: "./metagene-uniprot.diamond.bam.bai",
+							url: "./prokka-uniprot.diamond.bam",
+							indexURL: "./prokka-uniprot.diamond.bam.bai",
 							height: 125,
 							visibilityWindow: 50000,
 							color:"rgba(224,136,42,0.8)"
@@ -3177,7 +3228,9 @@ sub annotate {
 							visibilityWindow: 50000,
 							height: 40,
 							features: ['.$diauniorfRTrack.']
-						}
+						}';
+	}
+	print HTML '
 				]}};
 			}
 			
@@ -3192,7 +3245,8 @@ sub annotate {
                             return false;
                         }
 						
-                        popoverData.forEach(function (nameValue) {						
+						firstheader = 0;
+                        popoverData.forEach(function (nameValue) {
 							if (nameValue.name) {
 								let name  = nameValue.name;
 								let value = nameValue.value;
@@ -3200,7 +3254,7 @@ sub annotate {
 									if(name == "id" || name == "chr") { return; }
 								}
 								else if(track.type == "alignment") {
-									if( name == "Cigar"              || name == "Mapped"             ||
+									if( name == "Cigar"              || name == "Mapped"           ||
 										name == "Secondary"          || name == "Supplementary"    ||
 										name == "Duplicate"          || name == "Failed QC"        ||
 										name == "Mapping Quality"    || name.startsWith("Genomic Location") ||
@@ -3240,8 +3294,9 @@ sub annotate {
 								}
 								
 								let header = "";
-								if( name == "Name") {
-									header = " style=\"background-color:#eee;border-bottom:1px solid darkgrey\"";
+								if((name == "ID" || name == "Name") && firstheader==0) {
+										header = " style=\"background-color:#eee;border-bottom:1px solid darkgrey\"";
+										if(name == "ID") { firstheader = 1; }
 								}
 								
 								markup += "<tr" + header + "><td class=\"igv-popover-item\">" + name + "</td>"
@@ -3266,8 +3321,14 @@ sub annotate {
 	
 	print HTML $HTML_FOOTER;
 	close(HTML);
-	print LOG "...done\n";
-	
+	print LOG ".......done\n";
+		
+	if(!$keep) {
+		print LOG "## Remove temporary files";
+		unlink glob "$outputDir/*_tmp_*";
+		unlink glob "$outputDir/*/*_tmp_*";
+		print LOG "...done\n";
+	}
 	close(LOG);
 }
 
