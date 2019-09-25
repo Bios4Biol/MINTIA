@@ -13,7 +13,7 @@ The annotation module (annotate) aims at obtaining main gene functions and a fun
 	- [Tools dependancies](#tools-dependancies)
 	- [Databanks](#databanks)
 	- [Install](#install)
-- [Run MINTIA]
+- [Run MINTIA](#run)
 	- [Check tools dependancies](#check)
 	- [Assemble](assemble)
 	- [Annotate](annotate)
@@ -45,7 +45,7 @@ Reference database are needed to...
 
 #### Check tools dependancies
 
-```sh
+```
 $ ./mintia.pl check -h
 Name:
      mintia.pl - Fosmid assembly and annotation pipeline.
@@ -60,7 +60,7 @@ Check Options:
 
 #### Assemble
 
-```sh
+```
 $ ./mintia.pl assemble -h
 Name:
      mintia.pl - Fosmid assembly and annotation pipeline.
@@ -114,7 +114,7 @@ Assemble Options:
 
 #### Annotate
 
-```sh
+```
 $ ./mintia.pl annotate -h
 Name:
      mintia.pl - Fosmid assembly and annotation pipeline.
