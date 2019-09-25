@@ -45,9 +45,136 @@ Reference database are needed to...
 
 #### Check tools dependancies
 
+```
+./mintia.pl check -h
+Name:
+     mintia.pl - Fosmid assembly and annotation pipeline.
+
+Check Synopsis:
+     mintia.pl check
+
+Check Options:
+    -h, --help
+             Print help
+```
+
 #### Assemble
 
+```
+./mintia.pl assemble -h
+Name:
+     mintia.pl - Fosmid assembly and annotation pipeline.
+
+Assemble Synopsis:
+     mintia.pl assemble --input FILE[S] --vectorSeq FILE --dirOutputs STR
+
+Assemble Options:
+    -i, --input FILE[S]
+             Fastq(.gz) file(s)
+             For each sample one OR two fastq file must be provided:
+             - Paired data must contain R1/R2: R[12].f[ast]q[.gz]
+               Ex: sampleName1_R1.fastq sampleName1_R2.fastq
+                   sampleName2_R1.fq.gz sampleName2_R2.fq.gz
+             - Single data
+               Ex: sampleName.f[ast]q[.gz]
+
+    -v, --vectorSeq FILE
+             Path to the vector fasta file
+
+    --length INT
+             Fosmid's expected length [40000]
+
+    --minimalContigLength INT
+             Contig's minimum length [1000]
+
+    --minimalContigDepth INT
+             Contig's minimum depth [8]
+
+    -c, --maxDepth INT
+             Coverage, maximum depth use to filter input reads [300]
+
+    -d, --dirOutputs STR
+             Path to the outputs directory
+
+    -Z, --zipOutput STR
+             Zip output name [mintia_assemble.zip]
+
+    -H, --htmlOutput STR
+             HTML output name [mintia_assemble.html]
+
+    -L, --logOutput STR
+             Log output file name [mintia_assemble.log]
+
+    -t, --threads
+             number of threads for SPADES [8]
+
+    -h, --help
+             Print help
+```
+
 #### Annotate
+
+```
+./mintia.pl annotate -h
+Name:
+     mintia.pl - Fosmid assembly and annotation pipeline.
+
+Annotate Synopsis:
+     mintia.pl annotate --input FILE --dirOutputs STR
+
+Annotate Options:
+    -i, --input FILE
+             Fasta(.gz) file
+
+    -s, --separator CHAR [#]
+             Which separator allows retreiving the fosmid name
+             This separator will be also use to create ORF id
+             Example: >fosmidName1#contig1... |
+                      >fosmidName1#contig2... | => fosmidName1
+                      >fosmidName1#contig3... |
+
+    -F, --FunctionalAndTaxonomic
+             Run functional and taxonomic annotations
+
+    -e, --evalue FLOAT
+             Maximum diamond e-value to report alignments [10e-8]
+
+    --query-cover INT
+             Minimum diamond query cover% to report an alignment [50]
+
+    -M, --Megan FILE
+             Run MEGAN - A license file must be provided
+
+    -C, --Cog FILE
+             Run annotations with COGs, DB COGs path file
+
+    -c, --cMaxEvalue FLOAT
+             Max Evalue for Rps-Blast COGs filtering [10e-8]
+
+    -S, --SubmissionFiles
+             Build submission files
+
+    -D, --DiamondAgainstPrivateDB FILE
+             Run diamond against your own protein reference fasta file
+
+    -t, --threads INT
+             Number of threads for Blast [8]
+
+    -d, --dirOutputs STR
+             Path to the outputs directory
+
+    -H, --htmlOutput STR
+             HTML output name [mintia_annotate.html]
+
+    -L, --logOutput STR
+             Log output file name [mintia_annotate.log]
+
+    -k, --keepTmpFiles
+             Keep temporary files
+
+    -h, --help
+             Print help
+```
 
 ## License
 GNU GPL v3
