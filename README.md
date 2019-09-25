@@ -24,13 +24,13 @@ This MINITA repository is for command line user.
 | Bioinformatics tools | Version | | Unix tools | Version |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | cross_match | 1.090518 | | bgzip | |
-| diamond | 0.8.24 | | file | file-5.04 |
+| spades | v3.13.0 | file | file-5.04 |
+| diamond | 0.8.24 | |  |  |
 | Emboss (transeq) | 6.4.0.0 | | grep | GNU grep 2.6.3 |
 | metagene | | | tabix | 0.2.5 (r964) |
 | megan | 5.10.6 | | which | |
 | rpsblast | 2.2.26 | |
 | samtools | 1.3.1 | |
-| spades | | |
 
 #### Databanks
 Reference database are needed to...
