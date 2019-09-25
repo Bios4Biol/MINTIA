@@ -45,8 +45,8 @@ Reference database are needed to...
 
 #### Check tools dependancies
 
-```
-./mintia.pl check -h
+```sh
+$ ./mintia.pl check -h
 Name:
      mintia.pl - Fosmid assembly and annotation pipeline.
 
@@ -60,8 +60,8 @@ Check Options:
 
 #### Assemble
 
-```
-./mintia.pl assemble -h
+```sh
+$ ./mintia.pl assemble -h
 Name:
      mintia.pl - Fosmid assembly and annotation pipeline.
 
@@ -114,8 +114,8 @@ Assemble Options:
 
 #### Annotate
 
-```
-./mintia.pl annotate -h
+```sh
+$ ./mintia.pl annotate -h
 Name:
      mintia.pl - Fosmid assembly and annotation pipeline.
 
