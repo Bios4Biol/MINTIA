@@ -1,0 +1,20 @@
+## Check input fasta file
+## Run prokka
+ - bioindent1.C1a: 41 ORF(s) found
+ - bioindent2.C1: 44 ORF(s) found
+ ==> Create MintiaAnnotate/prokka.gff..........done
+ ==> Create MintiaAnnotate/prokka.fasta........done
+ ==> Create MintiaAnnotate/prokka-prot.fasta...done
+## Run functional and taxonomic annotation
+ - Run diamond-blastx Data/Input/bioindentCONCAT.fasta against NR........done
+ - Run diamond-blastx Data/Input/bioindentCONCAT.fasta against Uniprot...done
+ - Run diamond-blastx MintiaAnnotate/prokka.fasta against NR........done
+ - Run diamond-blastx MintiaAnnotate/prokka.fasta against Uniprot...done
+## Run MEGAN
+ - Run diamond-blastx MintiaAnnotate/prokka.fasta against NR........done
+ - Prepare inputs files: split FASTA and XML files by fosmid...done
+ - Run MEGAN on bioindent1.C1a...done
+ - Run MEGAN on bioindent2.C1...done
+## Run rpsblast (COGs)...done
+## Create HTML report.......done
+## Remove temporary files...done
