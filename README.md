@@ -38,7 +38,16 @@ This MINITA repository is for command line user.
 
 
 #### Databanks
-Reference database are needed to...
+Reference databases are needed to the "annotate" module.
+- NR 
+- Uniprot/Swissprot
+- COGs 
+> Create COGs DB
+```sh
+wget ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd//cdd.tar.gz
+tar -xvzf cdd.tar.gz
+makeprofiledb -title COG.3-28-17 -in Cog.pn -out Cog.v3-28-17 -threshold 9.82 -scale 100.0 -dbtype rps -index true
+```
 
 #### Install
 
