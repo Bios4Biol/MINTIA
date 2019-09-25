@@ -28,13 +28,14 @@ This MINITA repository is for command line user.
 
 | Bioinformatics tools | Version | | Unix tools | Version |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
-| `cross_match` | 1.090518 | | `bgzip` | |
-| `spades` | ``v3.13.0`` | | `file` | file-5.04 |
-| `prokka` | 1.13.3 | | `grep` | GNU grep 2.6.3 |
-| `diamond` | 0.8.24 | | `which` |  |
-| `megan` | 5.10.6 | | `xvfb-run` | |
-| `rpsblast` | 2.2.26 | | | |
-| `samtools` | 1.3.1 | | `tabix` | 0.2.5 (r964) |
+| **`cross_match`** | `1.090518` | | **`bgzip`** | |
+| **`spades`** | `v3.13.0` | | **`file`** | file-5.04 |
+| **`prokka`** | `1.13.3` | | **`grep`** | GNU grep 2.6.3 |
+| **`diamond`** | `0.8.24` | | **`which`** |  |
+| **`megan`** | `5.10.6` | | **`xvfb-run`** | |
+| **`samtools`** | `1.3.1` | | **`tabix`** | 0.2.5 (r964) |
+| **`rpsblast`** | `2.2.26` | | | |
+
 
 #### Databanks
 Reference database are needed to...
