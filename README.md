@@ -13,6 +13,10 @@ The annotation module (annotate) aims at obtaining main gene functions and a fun
 	- [Tools dependancies](#tools-dependancies)
 	- [Databanks](#databanks)
 	- [Install](#install)
+- [Run MINTIA]
+	- [Check tools dependancies](#check)
+	- [Assemble](assemble)
+	- [Annotate](annotate)
 - [License](#license)
 - [Copyright](#copyright)
 - [Contact](#contact)
@@ -36,6 +40,14 @@ This MINITA repository is for command line user.
 Reference database are needed to...
 
 #### Install
+
+## Run MINTIA
+
+#### Check tools dependancies
+
+#### Assemble
+
+#### Annotate
 
 ## License
 GNU GPL v3
