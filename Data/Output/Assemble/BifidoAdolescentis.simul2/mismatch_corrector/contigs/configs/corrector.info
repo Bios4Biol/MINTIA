@@ -1,0 +1,7 @@
+"bwa": "/usr/local/bioinfo/src/SPAdes/SPAdes-3.13.0-Linux/bin/spades-bwa"
+"dataset": "/work/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/Assemble/BifidoAdolescentis.simul2/input_dataset.yaml"
+"log_filename": "log.properties"
+"max_nthreads": !!int "1"
+"output_dir": "/work/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/Assemble/BifidoAdolescentis.simul2/mismatch_corrector/contigs"
+"strategy": "mapped_squared"
+"work_dir": "/work/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/Assemble/BifidoAdolescentis.simul2/tmp/corrector_yKb4i4"

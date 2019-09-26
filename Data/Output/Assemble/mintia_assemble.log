@@ -1,0 +1,37 @@
+## Inputs...2 sample(s) found:
+ - BifidoAdolescentis.simul2: paired-end
+ - BifidoAdolescentis.simul6: paired-end
+
+## Read filter using max depth (300)
+ - BifidoAdolescentis.simul2: 40000/144000 reads take into account
+ - BifidoAdolescentis.simul6: 40000/167000 reads take into account
+
+## Run SPADES
+ - BifidoAdolescentis.simul2...done
+ - BifidoAdolescentis.simul6...done
+
+## Run Crossmatch
+ - BifidoAdolescentis.simul2...done
+ - BifidoAdolescentis.simul6...done
+
+## Filter scaffolds
+ - BifidoAdolescentis.simul2...1/1 selected
+ - BifidoAdolescentis.simul6...1/1 selected
+
+## Find and remove XXed block(s):
+ - BifidoAdolescentis.simul2:
+   - Scaffold 1:
+     - Length: 43266 bp
+     - XXed block coordinate: [0-4304]	[39437-43265]	
+     - XXed block length: 8134 bp
+     - New scaffold length: 35132 bp
+ - BifidoAdolescentis.simul6:
+   - Scaffold 1:
+     - Length: 50204 bp
+     - XXed block coordinate: [0-7497]	[49565-50203]	
+     - XXed block length: 8137 bp
+     - New scaffold length: 42067 bp
+##
+#Sample	Paired	Nb_scaffold	Nb_Filtered	(ID	Length	Coverage	XXed_Block	Clean_length)xN
+BifidoAdolescentis.simul2	Yes	1	1	1	43266	135.27	[0-4304][39437-43265]	35132	
+BifidoAdolescentis.simul6	Yes	1	1	1	50204	116.53	[0-7497][49565-50203]	42067	
