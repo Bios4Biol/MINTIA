@@ -976,10 +976,10 @@ sub assemble {
 	foreach my $k (sort keys(%h_sample)) {
 		print LOG " - $k...";
 		if(exists($h_sample{$k}{'R2_F'})) {
-			#`spades.py -1 $h_sample{$k}{'R1_F'} -2 $h_sample{$k}{'R2_F'} -t $threads --careful -o $outputDir/$k`;
+			`spades.py -1 $h_sample{$k}{'R1_F'} -2 $h_sample{$k}{'R2_F'} -t $threads --careful -o $outputDir/$k`;
 		}
 		else {
-			#`spades.py -s $h_sample{$k}{'R1_F'} -t $threads --careful -o $outputDir/$k`;
+			`spades.py -s $h_sample{$k}{'R1_F'} -t $threads --careful -o $outputDir/$k`;
 		}
 		print LOG "done\n";
 	}
@@ -1086,10 +1086,12 @@ sub assemble {
 
     #By filtered scaffold
     foreach my $k2 (sort {$a <=> $b} keys(%{$h_sample{$k1}{"scaffolds"}})) {
-	  print CLEAN ">$k1#$k2";
-	  print CLEAN "#".length($h_sample{$k1}{"scaffolds"}{$k2}{"newseq"})."\n";
-	  print CLEAN join("\n", $h_sample{$k1}{"scaffolds"}{$k2}{"newseq"}=~/(.{1,60})/g)."\n";
-	  
+	  #If seq lenght>0
+	  if(length($h_sample{$k1}{"scaffolds"}{$k2}{"newseq"})>0) {
+		print CLEAN ">$k1#$k2";
+		print CLEAN "#".length($h_sample{$k1}{"scaffolds"}{$k2}{"newseq"})."\n";
+		print CLEAN join("\n", $h_sample{$k1}{"scaffolds"}{$k2}{"newseq"}=~/(.{1,60})/g)."\n";
+	  }
       print LOG "$k2\t";                                              #ID
       print LOG $h_sample{$k1}{"scaffolds"}{$k2}{"len"}."\t";         #Length
       print LOG $h_sample{$k1}{"scaffolds"}{$k2}{"cov"}."\t";         #Coverage
@@ -1474,9 +1476,11 @@ sub assemble {
 		$dwnlid++;
 		$seq = "";
 		foreach my $k2 (sort {$a <=> $b} keys(%{$h_sample{$k1}{"scaffolds"}})) {
-			$seq .= ">$k1#$k2";
-			$seq .= "#".length($h_sample{$k1}{"scaffolds"}{$k2}{"newseq"})."\\n";
-			$seq .= join("\\n", $h_sample{$k1}{"scaffolds"}{$k2}{"newseq"}=~/(.{1,60})/g)."\\n";
+			if(length($h_sample{$k1}{"scaffolds"}{$k2}{"newseq"})>0) {
+				$seq .= ">$k1#$k2";
+				$seq .= "#".length($h_sample{$k1}{"scaffolds"}{$k2}{"newseq"})."\\n";
+				$seq .= join("\\n", $h_sample{$k1}{"scaffolds"}{$k2}{"newseq"}=~/(.{1,60})/g)."\\n";
+			}
 		}
 		if($dwnlid != 0) { $download .= ",";}
 		$download .= "\"$seq\"";

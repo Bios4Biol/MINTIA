@@ -1,0 +1,13 @@
+name: mintia
+channels:
+   - conda-forge
+   - bioconda
+   - defaults
+dependencies:
+   - spades>=3.13.0
+   - prokka=1.13.3
+   - diamond>=0.9.26
+   - samtools>=1.9
+   - tabix>=0.2.5
+   - blast>=2.9.0
+
