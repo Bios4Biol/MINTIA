@@ -717,8 +717,8 @@ sub check {
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   {
 		print colored(['bold green'], "ok");
-		my $version = `diamond --version`;
-		$version =~ s/^.*version\s/version:/;
+		my $version = `diamond --version 2> /dev/null`;
+		$version =~ s/^.*version\s+/version:/;
 		chomp($version);
 		print "...$version\n";
 	}
@@ -744,7 +744,7 @@ sub check {
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   {
 		print colored(['bold green'], "ok");
-		my $version = `rpsblast --help | head -n2 | tail -n1`;
+		my $version = `rpsblast -version | head -n1`;
 		$version =~ s/^.*\s([\d\.]+).*$/version:$1/;
 		chomp($version);
 		print "...$version\n";
@@ -766,7 +766,7 @@ sub check {
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   {
 		print colored(['bold green'], "ok");
-		my $version = `tabix 2>&1 | head -n3 | tail -n1`;
+		my $version = `tabix 2>&1 | head -n2 | tail -n1`;
 		$version =~ s/^.*:\s+(.*)$/version:$1/;
 		chomp($version);
 		print "...$version\n";
@@ -976,10 +976,10 @@ sub assemble {
 	foreach my $k (sort keys(%h_sample)) {
 		print LOG " - $k...";
 		if(exists($h_sample{$k}{'R2_F'})) {
-			`spades.py -1 $h_sample{$k}{'R1_F'} -2 $h_sample{$k}{'R2_F'} -t $threads --careful -o $outputDir/$k`;
+			#`spades.py -1 $h_sample{$k}{'R1_F'} -2 $h_sample{$k}{'R2_F'} -t $threads --careful -o $outputDir/$k`;
 		}
 		else {
-			`spades.py -s $h_sample{$k}{'R1_F'} -t $threads --careful -o $outputDir/$k`;
+			#`spades.py -s $h_sample{$k}{'R1_F'} -t $threads --careful -o $outputDir/$k`;
 		}
 		print LOG "done\n";
 	}
@@ -1073,38 +1073,38 @@ sub assemble {
     }
   }
 
-  # Create output files:
-  #  - scaffold filtered vector cleaned fasta file by sample
-  #  - info table
-  #  - report html:
-  #    - summary info/stat
-  #    - histogramme of length (scaffold with/without vector, vector)
-  #    - plot length vs coverage
-
-  # Table
-  print "#Sample\tPaired\tNb_scaffold\tNb_Filtered\t(ID\tLength\tCoverage\tXXed_Block\tClean_length)xN\n";
+  # Result on stdout AND create output file (cleaned scaffolds input of annotate module)
+  open (CLEAN, ">$outputDir/mintia_assemble.fasta") || die "Error: Unabled to create $outputDir/mintia_assemble.fasta\n";
+  my $assembleFasta = "";
+  print LOG "##\n#Sample\tPaired\tNb_scaffold\tNb_Filtered\t(ID\tLength\tCoverage\tXXed_Block\tClean_length)xN\n";
   foreach my $k1 (sort keys(%h_sample)) {
-    print "$k1\t";                                       #Sample
-    if(exists($h_sample{$k1}{"R2"})) { print "Yes\t"; }  #Paired
-    else                             { print "No\t";  }
-    print $h_sample{$k1}{"nbScaffold"}."\t";             #Nb_scaffold
-    print "".(keys %{$h_sample{$k1}{"scaffolds"}})."\t"; #Nb_Filtered
+    print LOG "$k1\t";                                       #Sample
+    if(exists($h_sample{$k1}{"R2"})) { print LOG "Yes\t"; }  #Paired
+    else                             { print LOG "No\t";  }
+    print LOG $h_sample{$k1}{"nbScaffold"}."\t";             #Nb_scaffold
+    print LOG "".(keys %{$h_sample{$k1}{"scaffolds"}})."\t"; #Nb_Filtered
 
     #By filtered scaffold
     foreach my $k2 (sort {$a <=> $b} keys(%{$h_sample{$k1}{"scaffolds"}})) {
-      print "$k2\t";                                              #ID
-      print $h_sample{$k1}{"scaffolds"}{$k2}{"len"}."\t";         #Length
-      print $h_sample{$k1}{"scaffolds"}{$k2}{"cov"}."\t";         #Coverage
-      print $h_sample{$k1}{"scaffolds"}{$k2}{"XX"}."\t";          #XXed_Block
+	  print CLEAN ">$k1#$k2";
+	  print CLEAN "#".length($h_sample{$k1}{"scaffolds"}{$k2}{"newseq"})."\n";
+	  print CLEAN join("\n", $h_sample{$k1}{"scaffolds"}{$k2}{"newseq"}=~/(.{1,60})/g)."\n";
+	  
+      print LOG "$k2\t";                                              #ID
+      print LOG $h_sample{$k1}{"scaffolds"}{$k2}{"len"}."\t";         #Length
+      print LOG $h_sample{$k1}{"scaffolds"}{$k2}{"cov"}."\t";         #Coverage
+      print LOG $h_sample{$k1}{"scaffolds"}{$k2}{"XX"}."\t";          #XXed_Block
 			if($h_sample{$k1}{"scaffolds"}{$k2}{"newseq"} =~ /Error/) { #Clean_length
-				print "Error - Unexpected number of XXed blocks\t";
+				print LOG "Error - Unexpected number of XXed blocks\t";
 			}
 			else {
-				print length($h_sample{$k1}{"scaffolds"}{$k2}{"newseq"})."\t";
+				print LOG length($h_sample{$k1}{"scaffolds"}{$k2}{"newseq"})."\t";
 			}
     }
-    print "\n";
+    print LOG "\n";
   }
+  close CLEAN;
+  close(LOG);
 
 
 	##############################
@@ -1759,7 +1759,6 @@ sub assemble {
 </html>
 ';
 	close(HTML);
-	close(LOG);
 }
 
 
