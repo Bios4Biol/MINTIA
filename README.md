@@ -10,11 +10,11 @@
 
 ## Table of content
 - [Installation](#installation)
+	- [Install](#install)
 	- [Tools dependancies](#tools-dependancies)
 	- [Databanks](#databanks)
-	- [Install](#install)
 - [Run MINTIA](#run-mintia)
-	- [Check tools dependancies](#check-tools-dependancies)
+	- [Check tools dependencies](#check-tools-dependencies)
 	- [Assemble](#assemble)
 	- [Annotate](#annotate)
 - [License](#license)
@@ -24,6 +24,25 @@
 ## Installation
 This MINITA repository is for command line user.
 
+#### Install
+Clone this repository:
+```sh
+$ git clone --recursive https://github.com/Bios4Biol/MINTIA.git
+```
+Use conda to install the third party software:
+```sh
+$ cd MINTIA
+$ conda env create --file environment.yaml
+$ conda activate mintia
+```
+Two dependencies will not be installed by conda and must be installed "manually":
+- cross_match **required** for the assemble module (step1): [cross_match](http://www.phrap.org/consed/consed.html#howToGet)
+- MEGAN5 (optional) for the annotate module (step2): [megan5](https://software-ab.informatik.uni-tuebingen.de/download/megan5/welcome.html)
+
+Tools dependencies can be checked:
+```sh
+$ ./mintia.pl check
+```
 #### Tools dependancies
 
 | Bioinformatics tools | Version || Unix tools | Version |
@@ -35,7 +54,6 @@ This MINITA repository is for command line user.
 | **`megan`** | `5.10.6` || **`xvfb-run`** | |
 | **`samtools`** | `1.3.1` || **`tabix`** | `0.2.5 (r964)` |
 | **`rpsblast`** | `2.2.26` || | |
-
 
 #### Databanks
 Reference databases are needed to the "annotate" module.
@@ -49,23 +67,9 @@ $ tar -xvzf cdd.tar.gz
 $ makeprofiledb -title COG.3-28-17 -in Cog.pn -out Cog.v3-28-17 -threshold 9.82 -scale 100.0 -dbtype rps -index true
 ```
 
-#### Install
-Clone this repository:
-```sh
-$ git clone --recursive https://github.com/Bios4Biol/MINTIA.git
-```
-Use conda to install the third party software:
-```sh
-$ cd MINTIA
-$ conda env create --file environment.yaml
-```
-Two dependencies will not be installed by conda and must be installed "manually":
-- cross_match **required** for the assemble module (step1): [cross_match](http://www.phrap.org/consed/consed.html#howToGet)
-- MEGAN5 (optional) for the annotate module (step2): [megan5](https://software-ab.informatik.uni-tuebingen.de/download/megan5/welcome.html)
-
 ## Run MINTIA
 
-#### Check tools dependancies
+#### Check tools dependencies
 
 ```
 $ ./mintia.pl check -h
