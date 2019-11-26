@@ -60,7 +60,7 @@ $ cd MINTIA
 $ conda env create --file environment.yaml
 ```
 Two dependencies will not be installed by conda and must be installed "manually":
-- cross_match required for the assemble module (step1): [cross_match](http://www.phrap.org/consed/consed.html#howToGet)
+- cross_match **required** for the assemble module (step1): [cross_match](http://www.phrap.org/consed/consed.html#howToGet)
 - MEGAN5 (optional) for the annotate module (step2): [megan5](https://software-ab.informatik.uni-tuebingen.de/download/megan5/welcome.html)
 
 ## Run MINTIA
