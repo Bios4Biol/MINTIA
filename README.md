@@ -44,12 +44,24 @@ Reference databases are needed to the "annotate" module.
 - COGs 
 > Create COGs DB
 ```sh
-wget ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd//cdd.tar.gz
-tar -xvzf cdd.tar.gz
-makeprofiledb -title COG.3-28-17 -in Cog.pn -out Cog.v3-28-17 -threshold 9.82 -scale 100.0 -dbtype rps -index true
+$ wget ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd//cdd.tar.gz
+$ tar -xvzf cdd.tar.gz
+$ makeprofiledb -title COG.3-28-17 -in Cog.pn -out Cog.v3-28-17 -threshold 9.82 -scale 100.0 -dbtype rps -index true
 ```
 
 #### Install
+Clone this repository:
+```sh
+$ git clone --recursive https://github.com/Bios4Biol/MINTIA.git
+```
+Use conda to install the third party software:
+```sh
+$ cd MINTIA
+$ conda env create --file environment.yaml
+```
+Two dependencies will not be installed by conda and must be installed "manually":
+- cross_match required for the assemble module (step1): [cross_match](http://www.phrap.org/consed/consed.html#howToGet)
+- MEGAN5 (optional) for the annotate module (step2): [megan5](https://software-ab.informatik.uni-tuebingen.de/download/megan5/welcome.html)
 
 ## Run MINTIA
 
