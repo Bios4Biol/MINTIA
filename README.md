@@ -33,6 +33,7 @@ Use conda to install the third party software:
 ```sh
 $ cd MINTIA
 $ conda env create --file environment.yaml
+$ unset PERL5LIB
 $ conda activate mintia
 ```
 Two dependencies will not be installed by conda and must be installed "manually":
