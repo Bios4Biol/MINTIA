@@ -9,7 +9,7 @@
 =head1 SYNOPSIS
 
  mintia.pl check
- mintia.pl assemble --input FILE[S] --vectorSeq FILE --dirOutputs STR
+ mintia.pl assemble -i FASTQ_FILE[S] -v FASTA_FILE -d STR
  mintia.pl annotate
 
 =head1 CHECK SYNOPSIS
@@ -18,11 +18,11 @@
 
 =head1 ASSEMBLE SYNOPSIS
 
- mintia.pl assemble --input FILE[S] --vectorSeq FILE --dirOutputs STR
+ mintia.pl assemble -i FASTQ_FILE[S] -v FASTA_FILE -d STR
 
 =head1 ANNOTATE SYNOPSIS
 
- mintia.pl annotate --input FILE --dirOutputs STR
+ mintia.pl annotate -i FASTA_FILE -F -d STR
 
 =head1 COMMANDS
 
@@ -82,7 +82,7 @@
 
 =item B<-v, --vectorSeq> FILE
 
- Path to the vector fasta file
+ Vector fasta file
 
 =item B<--length> INT
 
@@ -103,10 +103,6 @@
 =item B<-d, --dirOutputs> STR
 
  Path to the outputs directory
-
-=item B<-Z, --zipOutput> STR
-
- Zip output name [mintia_assemble.zip]
 
 =item B<-H, --htmlOutput> STR
 
@@ -202,7 +198,7 @@
 
 =head1 VERSION
 
- Mintia_v0.2
+ Mintia_v1.0
 
 =head1 AUTHORS
 
@@ -234,9 +230,6 @@ use Getopt::Long qw(:config no_ignore_case);
 use Term::ANSIColor;
 use POSIX;
 use 5.010;  #for filesize
-
-# For genologin load module
-# module load bioinfo/prokka-1.13.4;module load bioinfo/SPAdes-3.13.0;module load bioinfo/diamond-v0.9.22;module load system/Java8;module load bioinfo/MEGAN5;module load bioinfo/blast-2.2.26;module load bioinfo/samtools-1.3.1;module load bioinfo/tabix-0.2.5
 
 my $DIAMOND_NR_DB  = "/bank/diamonddb/nr.dmnd";
 my $DIAMOND_UP_DB  = "/bank/diamonddb/uniprot_sprot.dmnd";
@@ -652,8 +645,9 @@ sub xx_bargraph {
 	}
 	return $res;
 }
+
 ########################################################################
-# Assemble main 
+# Check main
 ########################################################################
 =head2 procedure check
 
@@ -792,7 +786,6 @@ sub assemble {
 	my $vectorSeq   = undef;
 	my $coverage    = 300;
 	my $outputDir   = undef;
-	my $outputZip   = "mintia_assemble.zip";
 	my $outputHtml  = "mintia_assemble.html";
 	my $outputLog   = "mintia_assemble.log";
 	my $threads     = 8;
@@ -829,7 +822,6 @@ sub assemble {
 		'v|vectorSeq=s'         => \$vectorSeq,
 		'c|maxDepth=i'          => \$coverage,
 		'd|dirOutputs=s'        => \$outputDir,
-		'Z|zipOutput=s'         => \$outputZip,
 		'H|htmlOutput=s'        => \$outputHtml,
 		'L|logOutput=s'         => \$outputLog,
 		't|threads=i'           => \$threads,
