@@ -61,8 +61,7 @@ $ ./mintia.pl check
   => tabix............ok...version:1.9
 ```
 #### Tools dependancies
-
-| Bioinformatics tools | Version || Unix tools | Version |
+| Tools | Tested version || Tools | Tested version |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | **`cross_match`** | `1.090518` || **`bgzip`** | |
 | **`spades`** | `v3.13.0` || **`file`** | `file-5.04` |
