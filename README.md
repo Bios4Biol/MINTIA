@@ -43,6 +43,22 @@ Two dependencies will not be installed by conda and must be installed "manually"
 Tools dependencies can be checked:
 ```sh
 $ ./mintia.pl check
+##############################################
+        Mintia_v1.0 check dependencies
+##############################################
+
+- Step 1 - assemble:
+  => spades...........ok...version:v3.13.1
+  => cross_match......ok...version:1.090518
+
+- Step 2 - annotate:
+  => prokka...........ok...version:1.14.5
+  => diamond..........ok...version:0.9.29
+  => xvfb-run.........ok
+  => MEGAN............ok...version:5.11.3
+  => rpsblast.........ok...version:2.9.0
+  => samtools.........ok...version:1.9
+  => tabix............ok...version:1.9
 ```
 #### Tools dependancies
 
