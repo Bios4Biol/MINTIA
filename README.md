@@ -157,7 +157,7 @@ Example on data test - HTML output report [HTML](http://genoweb.toulouse.inra.fr
 ```
 ./mintia.pl assemble -t 1 --input Data/Input/Assemble/BifidoAdolescentis.simul*gz --vectorSeq Data/Input/Assemble/pCC1FOS.fasta -len 40000 -c 300 -d Data/Output/Assemble/
 ```
-![Mintia assemble report (HTML)](link-to-image)
+![Mintia assemble report (HTML)](./Data/Output/Assemble/mintia_assemble.png)
 
 #### Annotate
 
