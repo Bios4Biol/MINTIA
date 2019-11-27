@@ -11,7 +11,7 @@
 ## Table of content
 - [Installation](#installation)
 	- [Install](#install)
-	- [Tools dependancies](#tools-dependancies)
+	- [Tools dependencies](#tools-dependencies)
 	- [Databanks](#databanks)
 - [Run MINTIA](#run-mintia)
 	- [Check tools dependencies](#check-tools-dependencies)
@@ -60,7 +60,7 @@ $ ./mintia.pl check
   => samtools.........ok...version:1.9
   => tabix............ok...version:1.9
 ```
-#### Tools dependancies
+#### Tools dependencies
 | Tools | Tested version || Tools | Tested version |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | **`cross_match`** | `1.090518` || **`bgzip`** | |
