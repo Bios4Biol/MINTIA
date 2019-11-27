@@ -108,7 +108,7 @@ Name:
      mintia.pl - Fosmid assembly and annotation pipeline.
 
 Assemble Synopsis:
-     mintia.pl assemble --input FILE[S] --vectorSeq FILE --dirOutputs STR
+     mintia.pl assemble -i FASTQ_FILE[S] -v FASTA_FILE -d STR
 
 Assemble Options:
     -i, --input FILE[S]
@@ -121,7 +121,7 @@ Assemble Options:
                Ex: sampleName.f[ast]q[.gz]
 
     -v, --vectorSeq FILE
-             Path to the vector fasta file
+             Vector fasta file
 
     --length INT
              Fosmid's expected length [40000]
@@ -137,9 +137,6 @@ Assemble Options:
 
     -d, --dirOutputs STR
              Path to the outputs directory
-
-    -Z, --zipOutput STR
-             Zip output name [mintia_assemble.zip]
 
     -H, --htmlOutput STR
              HTML output name [mintia_assemble.html]
@@ -169,7 +166,7 @@ Name:
      mintia.pl - Fosmid assembly and annotation pipeline.
 
 Annotate Synopsis:
-     mintia.pl annotate --input FILE --dirOutputs STR
+     mintia.pl annotate -i FASTA_FILE -F -d STR
 
 Annotate Options:
     -i, --input FILE
@@ -229,7 +226,7 @@ Annotate Options:
 GNU GPL v3
 
 ## Copyright
-2019 INRA
+2018 INRA
 
 ## Contact
 support.sigenae@inra.fr
