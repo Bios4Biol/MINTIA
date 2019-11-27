@@ -153,11 +153,11 @@ Assemble Options:
     -h, --help
              Print help
 ```
-Example on data test - HTML output report [HTML](http://genoweb.toulouse.inra.fr/~sigenae/MINTIA/mintia_assemble.html):
+Example on data test - HTML output report [HTML]():
 ```
 ./mintia.pl assemble -t 1 --input Data/Input/Assemble/BifidoAdolescentis.simul*gz --vectorSeq Data/Input/Assemble/pCC1FOS.fasta -len 40000 -c 300 -d Data/Output/Assemble/
 ```
-![Mintia assemble report (HTML)](./Data/Output/Assemble/mintia_assemble.png)
+<a href="http://genoweb.toulouse.inra.fr/~sigenae/MINTIA/mintia_assemble.html">![Mintia assemble report (HTML)](./Data/Output/Assemble/mintia_assemble.png)</a>
 
 #### Annotate
 
