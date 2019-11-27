@@ -10,11 +10,11 @@
 
 ## Table of content
 - [Installation](#installation)
-	- [Tools dependancies](#tools-dependancies)
-	- [Databanks](#databanks)
 	- [Install](#install)
+	- [Tools dependencies](#tools-dependencies)
+	- [Databanks](#databanks)
 - [Run MINTIA](#run-mintia)
-	- [Check tools dependancies](#check-tools-dependancies)
+	- [Check tools dependencies](#check-tools-dependencies)
 	- [Assemble](#assemble)
 	- [Annotate](#annotate)
 - [License](#license)
@@ -24,9 +24,44 @@
 ## Installation
 This MINITA repository is for command line user.
 
-#### Tools dependancies
+#### Install
+Clone this repository:
+```sh
+$ git clone --recursive https://github.com/Bios4Biol/MINTIA.git
+```
+Use conda to install the third party software:
+```sh
+$ cd MINTIA
+$ conda env create --file environment.yaml
+$ unset PERL5LIB
+$ conda activate mintia
+```
+Two dependencies will not be installed by conda and must be installed "manually":
+- cross_match **required** for the assemble module (step1): [cross_match](http://www.phrap.org/consed/consed.html#howToGet)
+- MEGAN5 (optional) for the annotate module (step2): [megan5](https://software-ab.informatik.uni-tuebingen.de/download/megan5/welcome.html)
 
-| Bioinformatics tools | Version || Unix tools | Version |
+Tools dependencies can be checked:
+```sh
+$ ./mintia.pl check
+##############################################
+        Mintia_v1.0 check dependencies
+##############################################
+
+- Step 1 - assemble:
+  => spades...........ok...version:v3.13.1
+  => cross_match......ok...version:1.090518
+
+- Step 2 - annotate:
+  => prokka...........ok...version:1.14.5
+  => diamond..........ok...version:0.9.29
+  => xvfb-run.........ok
+  => MEGAN............ok...version:5.11.3
+  => rpsblast.........ok...version:2.9.0
+  => samtools.........ok...version:1.9
+  => tabix............ok...version:1.9
+```
+#### Tools dependencies
+| Tools | Tested version || Tools | Tested version |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | **`cross_match`** | `1.090518` || **`bgzip`** | |
 | **`spades`** | `v3.13.0` || **`file`** | `file-5.04` |
@@ -36,7 +71,6 @@ This MINITA repository is for command line user.
 | **`samtools`** | `1.3.1` || **`tabix`** | `0.2.5 (r964)` |
 | **`rpsblast`** | `2.2.26` || | |
 
-
 #### Databanks
 Reference databases are needed to the "annotate" module.
 - NR 
@@ -44,16 +78,14 @@ Reference databases are needed to the "annotate" module.
 - COGs 
 > Create COGs DB
 ```sh
-wget ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd//cdd.tar.gz
-tar -xvzf cdd.tar.gz
-makeprofiledb -title COG.3-28-17 -in Cog.pn -out Cog.v3-28-17 -threshold 9.82 -scale 100.0 -dbtype rps -index true
+$ wget ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd//cdd.tar.gz
+$ tar -xvzf cdd.tar.gz
+$ makeprofiledb -title COG.3-28-17 -in Cog.pn -out Cog.v3-28-17 -threshold 9.82 -scale 100.0 -dbtype rps -index true
 ```
-
-#### Install
 
 ## Run MINTIA
 
-#### Check tools dependancies
+#### Check tools dependencies
 
 ```
 $ ./mintia.pl check -h
@@ -121,10 +153,13 @@ Assemble Options:
     -h, --help
              Print help
 ```
-Example on test data:
+Example on data test:
 ```
 ./mintia.pl assemble -t 1 --input Data/Input/Assemble/BifidoAdolescentis.simul*gz --vectorSeq Data/Input/Assemble/pCC1FOS.fasta -len 40000 -c 300 -d Data/Output/Assemble/
 ```
+<p align="center">
+	<a href="http://genoweb.toulouse.inra.fr/~sigenae/MINTIA/mintia_assemble.html"><img target="_blank" style="border:1px solid lightgrey;border-radius:5px;padding:5px" src="./Data/Output/Assemble/mintia_assemble.png" width="400"></a>
+</p>
 
 #### Annotate
 
