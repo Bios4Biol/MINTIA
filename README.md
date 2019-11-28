@@ -69,7 +69,7 @@ $ ./mintia.pl check
 | **`diamond`** | `0.8.24` || **`which`** |  |
 | **`megan`** | `5.10.6` || **`xvfb-run`** | |
 | **`samtools`** | `1.3.1` || **`tabix`** | `0.2.5 (r964)` |
-| **`rpsblast`** | `2.2.26` || | |
+| **`rpsblast`** | `2.9.0` || | |
 
 #### Databanks
 Reference databases are needed to the "annotate" module.
