@@ -2212,7 +2212,7 @@ sub annotate {
 	my %h_nbOrfByCog = ();
 	if($cog) {
 		print LOG "## Run rpsblast (COGs)...";
-		`(rpsblast -i $prokkaPRO -d $cog -a $threads -e $cog_cMaxEvalue -o $outputDir/cogs_$cog_cMaxEvalue.rpsblast) >& $outputDir/cogs_$cog_cMaxEvalue.rpsblast_tmp_.stderr`;
+		`(rpsblast -query $prokkaPRO -db $cog -num_threads $threads -evalue $cog_cMaxEvalue -out $outputDir/cogs_$cog_cMaxEvalue.rpsblast) >& $outputDir/cogs_$cog_cMaxEvalue.rpsblast_tmp_.stderr`;
 		
 		my $curFosId = "";
 		my $curOrfId = "";
@@ -2228,7 +2228,7 @@ sub annotate {
 				my $cogdescr = $2;
 				# Catch full description
 				while($line = <COGOUT>) {
-					if($line !~/Length =/) {
+					if($line !~/Length\s*=/) {
 						$line =~ s/^\s+/ /;
 						$line =~ s/\s+$//;
 						$cogdescr .= $line;
