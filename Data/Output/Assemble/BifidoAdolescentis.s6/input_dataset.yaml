@@ -1,0 +1,6 @@
+- "left reads":
+  - "/work2/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/AssembleOK/BifidoAdolescentis.s6_R1.fq"
+  "orientation": "fr"
+  "right reads":
+  - "/work2/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/AssembleOK/BifidoAdolescentis.s6_R2.fq"
+  "type": "paired-end"

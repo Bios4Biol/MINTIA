@@ -1,0 +1,7 @@
+"bwa": "/save/sigenae/.conda/envs/mintia/bin/spades-bwa"
+"dataset": "/work2/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/AssembleOK/BifidoAdolescentis.s2/input_dataset.yaml"
+"log_filename": "log.properties"
+"max_nthreads": !!int "2"
+"output_dir": "/work2/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/AssembleOK/BifidoAdolescentis.s2/mismatch_corrector/contigs"
+"strategy": "mapped_squared"
+"work_dir": "/work2/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/AssembleOK/BifidoAdolescentis.s2/tmp/corrector_vu3q6gdu"

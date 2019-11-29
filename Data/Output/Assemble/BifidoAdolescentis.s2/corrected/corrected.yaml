@@ -1,0 +1,8 @@
+- "left reads":
+  - "/work2/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/AssembleOK/BifidoAdolescentis.s2/corrected/BifidoAdolescentis.s2_R1.00.0_0.cor.fastq.gz"
+  "orientation": "fr"
+  "right reads":
+  - "/work2/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/AssembleOK/BifidoAdolescentis.s2/corrected/BifidoAdolescentis.s2_R2.00.0_0.cor.fastq.gz"
+  "single reads":
+  - "/work2/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/AssembleOK/BifidoAdolescentis.s2/corrected/BifidoAdolescentis.s2_R_unpaired.00.0_0.cor.fastq.gz"
+  "type": "paired-end"

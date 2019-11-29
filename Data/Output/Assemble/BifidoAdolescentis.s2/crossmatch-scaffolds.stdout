@@ -1,0 +1,81 @@
+cross_match Data/Output/AssembleOK//BifidoAdolescentis.s2/scaffolds.fasta Data/Input/Assemble/pCC1FOS.fasta -minmatch 9 -minscore 30 -screen 
+cross_match version 1.090518
+
+Run date:time  191129:172835
+Query file(s):  Data/Output/AssembleOK//BifidoAdolescentis.s2/scaffolds.fasta   Log file: Data/Output/AssembleOK//BifidoAdolescentis.s2/scaffolds.fasta.log
+Subject file(s):   Data/Input/Assemble/pCC1FOS.fasta
+Presumed sequence type (from score matrix): DNA
+
+Pairwise comparison algorithm: banded Smith-Waterman
+
+Score matrix (set by value of penalty: -2)
+    A   C   G   T   N   X
+A   1  -2  -2  -2   0  -3
+C  -2   1  -2  -2   0  -3
+G  -2  -2   1  -2   0  -3
+T  -2  -2  -2   1   0  -3
+N   0   0   0   0   0   0
+X  -3  -3  -3  -3   0  -3
+
+Gap penalties: gap_init: -4, gap_ext: -3, ins_gap_ext: -3, del_gap_ext: -3, 
+Using complexity-adjusted scores. Assumed background frequencies:
+ Aa: 0.250  Cc: 0.250  Gg: 0.250  Tt: 0.250  Nn: 0.000  : 0.000  
+
+minmatch: 9, maxmatch: 20, max_group_size: 0 (turned off), minscore: 30, near_minscore: 30, bandwidth: 14, indexwordsize: 9, indexwordsize2: 4, word_offset: 2
+word_raw: 0
+vector_bound: 0
+gap1_minscore: 17, gap1_dropoff: -12
+masklevel: 80
+minmargin: 0.5
+splice_edge_length: 0, allocation: 1 bytes
+min_intron_length: 30, max_intron_length: 10000, max_overlap: 20, min_exon_length: 6 
+Variable sizes: int: 4, long int: 8, SEQ_AREA: 4, signed: 1
+
+
+Sequence file: Data/Output/AssembleOK//BifidoAdolescentis.s2/scaffolds.fasta    1 entries
+Residue counts,  score matrix column # (* = last column):
+  A        9545    1
+  C       12031    2
+  G       12150    3
+  T        9540    4
+Total  43266 residues
+
+4 distinct alphabetic chars have freq > 1% -- 
+
+Allocated space: 86535 seqs, 36 ids, 2 descrips
+
+NO QUALITY FILE Data/Output/AssembleOK//BifidoAdolescentis.s2/scaffolds.fasta.qual WAS FOUND. REMAINING INPUT QUALITIES SET TO 15.
+Base_llr -5.55, intron_coeff: -0.00288828
+
+Total subject length: 8139 residues, final minscore: 30
+
+Num. pairs: 11
+Maximal single base matches (low complexity regions):
+
+4301  0.00 0.00 0.00  NODE_1_length_43266_cov_135.265554        1  4305 (38961)    pCC1FOSnew        6  4310 (3829)  
+3819  0.00 0.00 0.00  NODE_1_length_43266_cov_135.265554    39438 43266 (0)    pCC1FOSnew     4311  8139 (0)  
+
+1 matching entries (first file).
+
+Discrepancy summary:
+Qual algn  cum    rcum    (%)    unalgn X    N  sub del ins  total (%)   cum  rcum (%)
+
+
+Score histogram: displayed unspliced matches/cum/frac, other unspliced, displayed spliced, other spliced:
+> 1000    2     2 1.000      0     0 0.000      0     0 0.000      0     0 0.000  
+
+Start histogram: displayed unspliced matches/cum/frac, other unspliced, displayed spliced, other spliced:
+> 1000    1     1 0.500      0     0 0.000      0     0 0.000      0     0 0.000  
+    0    1     2 1.000      0     0 0.000      0     0 0.000      0     0 0.000  
+
+
+Splice histogram : displayed 5' splice, other 5' splice: displayed 3' splice, other 3' splice:
+Screened sequences written to  Data/Output/AssembleOK//BifidoAdolescentis.s2/scaffolds.fasta.screen
+
+
+
+Times in secs (cum)
+read queries   0 (  0)
+sort queries   0 (  0)
+find matches   0 (  0)
+         end   0 (  0)

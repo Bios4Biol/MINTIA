@@ -1,0 +1,49 @@
+---
+max read length: 150
+nomerge max read length: 150
+average read length: 150
+average coverage: 135.19
+libraries:       
+    - type:            paired-end
+      orientation:     fr
+      left reads:      
+        - /work2/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/AssembleOK/BifidoAdolescentis.s2/corrected/BifidoAdolescentis.s2_R1.00.0_0.cor.fastq.gz
+      right reads:     
+        - /work2/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/AssembleOK/BifidoAdolescentis.s2/corrected/BifidoAdolescentis.s2_R2.00.0_0.cor.fastq.gz
+      single reads:    
+        - /work2/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/AssembleOK/BifidoAdolescentis.s2/corrected/BifidoAdolescentis.s2_R_unpaired.00.0_0.cor.fastq.gz
+      data:            
+        unmerged read length: 150
+        merged read length: 0
+        insert size mean: 199.437
+        insert size deviation: 9.9727
+        insert size left quantile: 187
+        insert size right quantile: 212
+        insert size median: 199
+        insert size mad: 7
+        insert size distribution: { 152: 1, 157: 1, 160: 2, 163: 2, 164: 2, 
+                                    165: 4, 166: 6, 167: 11, 168: 16, 169: 16, 
+                                    170: 27, 171: 20, 172: 41, 173: 44, 
+                                    174: 53, 175: 67, 176: 107, 177: 140, 
+                                    178: 157, 179: 186, 180: 242, 181: 282, 
+                                    182: 317, 183: 384, 184: 475, 185: 525, 
+                                    186: 619, 187: 712, 188: 745, 189: 930, 
+                                    190: 996, 191: 1072, 192: 1139, 193: 1279, 
+                                    194: 1314, 195: 1391, 196: 1544, 197: 1487, 
+                                    198: 1538, 199: 1561, 200: 1530, 201: 1632, 
+                                    202: 1533, 203: 1419, 204: 1415, 205: 1273, 
+                                    206: 1228, 207: 1171, 208: 1043, 209: 972, 
+                                    210: 911, 211: 809, 212: 683, 213: 628, 
+                                    214: 524, 215: 424, 216: 396, 217: 337, 
+                                    218: 256, 219: 241, 220: 189, 221: 143, 
+                                    222: 124, 223: 94, 224: 77, 225: 54, 
+                                    226: 51, 227: 20, 228: 33, 229: 23, 
+                                    230: 15, 231: 9, 232: 9, 233: 6, 234: 3, 
+                                    235: 3, 236: 1, 237: 1, 238: 3, 239: 1 }
+        pi threshold:    0
+        binary converted: true
+        single reads mapped: false
+        library index:   0
+        number of reads: 80000
+        total nucleotides: 12000000
+...
