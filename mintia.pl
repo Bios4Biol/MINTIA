@@ -2029,7 +2029,7 @@ sub annotate {
 	my %h_orf = ();
 	
 	print LOG "## Run prokka\n";
-	`prokka $inputSeq --outDir $outputDir --cpu $threads  --prefix prokka_tmp_ --locustag "##TEMPLATE##" --force >& $outputDir/prokka_tmp_.stderr`;
+	`prokka $inputSeq --outDir $outputDir --cpu $threads --prefix prokka_tmp_ --locustag "##TEMPLATE##" --force >& $outputDir/prokka_tmp_.stderr`;
 	my $orfcmp      = 1;
 	my $name        = "";
 	my $prokkagff   = "";
@@ -2113,8 +2113,17 @@ sub annotate {
 		while(my $line=<PROKKAGBK>) {
 			if($line =~ /^LOCUS/) {
 				my @a_line = split(/\s+/, $line);
-				my $outfile = "$outputDir/".$a_line[1]."/prokka.gbk";
-				open(NCBI, ">$outfile")  || die "Error: Unabled to create $outfile";
+				
+				my $id = "";
+				if($separator ne "" && index($a_line[1], $separator)!=-1) {
+					$id = substr($a_line[1], 0, index($a_line[1], $separator));
+				}
+				else {
+					$id = $a_line[1];
+				}
+								
+				my $outfile = "$outputDir/$id/prokka.gbk";
+				open(NCBI, ">>$outfile")  || die "Error: Unabled to create $outfile";
 				print NCBI $line;
 			}
 			elsif($line =~ /^\/\/$/) {

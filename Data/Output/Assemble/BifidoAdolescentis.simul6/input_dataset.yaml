@@ -1,6 +1,0 @@
-- "left reads":
-  - "/work/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/Assemble/BifidoAdolescentis.simul6_R1.fq"
-  "orientation": "fr"
-  "right reads":
-  - "/work/project/sigenae/Philippe/MINTIA/GIT/MINTIA/Data/Output/Assemble/BifidoAdolescentis.simul6_R2.fq"
-  "type": "paired-end"
