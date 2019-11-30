@@ -72,7 +72,7 @@ $ ./mintia.pl check
 | **`rpsblast`** | `2.9.0` || | |
 
 #### Databanks
-Reference databases are needed to the "annotate" module.
+Reference databases are required for the "annotate" module.
 - NR 
 - Uniprot/Swissprot
 - COGs 
