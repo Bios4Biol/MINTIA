@@ -73,9 +73,9 @@ $ ./mintia.pl check
 
 #### Databanks
 Reference databases are required for the "annotate" module.
-- NR: Non-redundant protein database indexed for Diamond (used by -F and -M [see below](#annotate)) 
+- NR: non-redundant protein database indexed for Diamond (used by -F and -M [see below](#annotate)) 
 - Uniprot/Swissprot: protein database indexed for Diamond (used by -F [see below](#annotate))
-- COGs: Database of Clusters of Orthologous Groups of proteins, input of `rpsblast` (used by -C [see below](#annotate))
+- COGs: database of Clusters of Orthologous Groups of proteins, input of `rpsblast` (used by -C [see below](#annotate))
 > Create COGs DB
 ```sh
 $ wget ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd//cdd.tar.gz
