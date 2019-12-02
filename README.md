@@ -72,10 +72,10 @@ $ ./mintia.pl check
 | **`rpsblast`** | `2.9.0` || | |
 
 #### Databanks
-Reference databases are needed to the "annotate" module.
-- NR 
-- Uniprot/Swissprot
-- COGs 
+Reference databases are required for the "annotate" module.
+- NR: non-redundant protein database indexed for Diamond (used by -F and -M [see below](#annotate)) 
+- Uniprot/Swissprot: protein database indexed for Diamond (used by -F [see below](#annotate))
+- COGs: database of Clusters of Orthologous Groups of proteins, input of `rpsblast` (used by -C [see below](#annotate))
 > Create COGs DB
 ```sh
 $ wget ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd//cdd.tar.gz
@@ -166,7 +166,7 @@ Name:
      mintia.pl - Fosmid assembly and annotation pipeline.
 
 Annotate Synopsis:
-     mintia.pl annotate -i FASTA_FILE -F -d STR
+     mintia.pl annotate -i FASTA_FILE -n NR_DMND_FILE -u UNIPROT_DMND_FILE -F -d STR
 
 Annotate Options:
     -i, --input FILE
@@ -179,17 +179,27 @@ Annotate Options:
                       >fosmidName1#contig2... | => fosmidName1
                       >fosmidName1#contig3... |
 
+    -n, --nrDB FILE
+             Non-redundant proteins database indexed for Diamond (Ex: the nr.dmnd)
+             Required by -F.
+
+    -u, --uniprotDB FILE
+             Proteic sequence database indexed for Diamond (Ex: the uniprot_sprot.dmnd)
+             Required by -F and -M.
+
     -F, --FunctionalAndTaxonomic
              Run functional and taxonomic annotations
+             -n, --nrDB and -u, --uniprotDB must be provided
 
     -e, --evalue FLOAT
              Maximum diamond e-value to report alignments [10e-8]
 
-    --query-cover INT
+    -q, --queryCover INT
              Minimum diamond query cover% to report an alignment [50]
 
     -M, --Megan FILE
              Run MEGAN - A license file must be provided
+             -n, --nrDB must be provided
 
     -C, --Cog FILE
              Run annotations with COGs, DB COGs path file
@@ -201,7 +211,7 @@ Annotate Options:
              Build submission files
 
     -D, --DiamondAgainstPrivateDB FILE
-             Run diamond against your own protein reference fasta file
+             Run diamond against your own protein reference FASTA file
 
     -t, --threads INT
              Number of threads for Blast [8]
