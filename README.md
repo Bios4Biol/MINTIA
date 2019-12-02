@@ -166,7 +166,7 @@ Name:
      mintia.pl - Fosmid assembly and annotation pipeline.
 
 Annotate Synopsis:
-     mintia.pl annotate -i FASTA_FILE -F -d STR
+     mintia.pl annotate -i FASTA_FILE -n NR_DMND_FILE -u UNIPROT_DMND_FILE -F -d STR
 
 Annotate Options:
     -i, --input FILE
