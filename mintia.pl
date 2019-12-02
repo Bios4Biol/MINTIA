@@ -22,7 +22,7 @@
 
 =head1 ANNOTATE SYNOPSIS
 
- mintia.pl annotate -i FASTA_FILE -F -d STR
+ mintia.pl annotate -i FASTA_FILE -n NR_DMND_FILE -u UNIPROT_DMND_FILE -F -d STR
 
 =head1 COMMANDS
 
@@ -138,21 +138,33 @@
           >fosmidName1#contig2... | => fosmidName1
           >fosmidName1#contig3... |
 
+=item B<-n, --nrDB> FILE
+
+ Non-redundant proteins database indexed for Diamond (Ex: the nr.dmnd)
+ Required by -F.
+
+=item B<-u, --uniprotDB> FILE
+
+ Proteic sequence database indexed for Diamond (Ex: the uniprot_sprot.dmnd)
+ Required by -F and -M.
+
 =item B<-F, --FunctionalAndTaxonomic>
 
  Run functional and taxonomic annotations
+ -n, --nrDB and -u, --uniprotDB must be provided
  
 =item B<-e, --evalue> FLOAT
 
  Maximum diamond e-value to report alignments [10e-8]
 
-=item B<--query-cover> INT
+=item B<-q, --queryCover> INT
 
  Minimum diamond query cover% to report an alignment [50]
  
 =item B<-M, --Megan> FILE
 
  Run MEGAN - A license file must be provided
+ -n, --nrDB must be provided
 
 =item B<-C, --Cog> FILE
 
@@ -168,7 +180,7 @@
  
 =item B<-D, --DiamondAgainstPrivateDB> FILE
 
- Run diamond against your own protein reference fasta file
+ Run diamond against your own protein reference FASTA file
 
 =item B<-t, --threads> INT
 
@@ -231,8 +243,8 @@ use Term::ANSIColor;
 use POSIX;
 use 5.010;  #for filesize
 
-my $DIAMOND_NR_DB  = "/bank/diamonddb/nr.dmnd";
-my $DIAMOND_UP_DB  = "/bank/diamonddb/uniprot_sprot.dmnd";
+#my $DIAMOND_NR_DB  = "/bank/diamonddb/nr.dmnd";
+#my $DIAMOND_UP_DB  = "/bank/diamonddb/uniprot_sprot.dmnd";
 my $MINTIA_VERSION = "Mintia_v1.0";
 
 
@@ -1890,6 +1902,8 @@ sub split_xml_by_id {
 sub annotate {
 	# Parameters
 	my $inputSeq     = "";
+	my $dbNR         = "";
+	my $dbUniP       = "";
 	my $separator    = "#";
 	my $outputDir    = undef;
 	my $outputHtml   = "mintia_annotate.html";
@@ -1906,9 +1920,11 @@ sub annotate {
 	GetOptions(
 		'i|input=s{1}'                => \$inputSeq,
 		's|separator=s'               => \$separator,
+		'n|nrDB=s'                    => \$dbNR,
+		'u|uniprotDB=s'               => \$dbUniP,
 		'F|FunctionalAndTaxonomic'    => \$funAndTaxo,
 		'e|evalue=f'                  => \$diamond_evalue,
-		'query-cover=i'               => \$diamond_queryCover,
+		'q|queryCover=i'              => \$diamond_queryCover,
 		'M|Megan=s'                   => \$megan,
 		'C|Cog=s'                     => \$cog,
 		'c|cMaxEvalue=f'              => \$cog_cMaxEvalue,
@@ -1928,7 +1944,7 @@ sub annotate {
 	pod2usage(
 		-message => "$0 annotate: '-i, --input' is required.\n",
 		-verbose => 99,
-		-sections => "NAME|ANNOTATE SYNOPSIS|ANNOTATE OPTIONS") if($inputSeq eq "");
+		-sections => "NAME|ANNOTATE SYNOPSIS|ANNOTATE OPTIONS") if ($inputSeq eq "");
 	pod2usage(
 		-message => "$0 annotate: $inputSeq doesn't exist.\n",
 		-verbose => 99,
@@ -1937,15 +1953,49 @@ sub annotate {
 			-message => "$0 annotate: $inputSeq is not readable.\n"
 			-verbose => 99,
 			-sections => "NAME|ANNOTATE SYNOPSIS|ANNOTATE OPTIONS") if !(-r $inputSeq);
+	if($dbNR ne "") {
+		pod2usage(
+			-message => "$0 annotate: $dbNR doesn't exist.\n",
+			-verbose => 99,
+			-sections => "NAME|ANNOTATE SYNOPSIS|ANNOTATE OPTIONS") if !(-e $dbNR);
+		pod2usage(
+			-message => "$0 annotate: $dbNR is not readable.\n"
+			-verbose => 99,
+			-sections => "NAME|ANNOTATE SYNOPSIS|ANNOTATE OPTIONS") if !(-r $dbNR);
+	}
+	if($dbUniP ne "") {
+		pod2usage(
+			-message => "$0 annotate: $dbUniP doesn't exist.\n",
+			-verbose => 99,
+			-sections => "NAME|ANNOTATE SYNOPSIS|ANNOTATE OPTIONS") if !(-e $dbUniP);
+		pod2usage(
+			-message => "$0 annotate: $dbUniP is not readable.\n"
+			-verbose => 99,
+			-sections => "NAME|ANNOTATE SYNOPSIS|ANNOTATE OPTIONS") if !(-r $dbUniP);
+	}	
+	if($funAndTaxo) {
+		pod2usage(
+			-message => "$0 annotate: -n, --nrDB is required by -F.\n",
+			-verbose => 99,
+			-sections => "NAME|ANNOTATE SYNOPSIS|ANNOTATE OPTIONS") if ($dbNR eq "");
+		pod2usage(
+			-message => "$0 annotate: -u, --uniprotDB is required by -F.\n",
+			-verbose => 99,
+			-sections => "NAME|ANNOTATE SYNOPSIS|ANNOTATE OPTIONS") if ($dbUniP eq "");
+	}
 	if($megan) {
 		pod2usage(
 			-message => "$0 annotate: $megan doesn't exist.\n",
 			-verbose => 99,
 			-sections => "NAME|ANNOTATE SYNOPSIS|ANNOTATE OPTIONS") if !(-e $megan);
 		pod2usage(
-				-message => "$0 annotate: $megan is not readable.\n"
-				-verbose => 99,
-				-sections => "NAME|ANNOTATE SYNOPSIS|ANNOTATE OPTIONS") if !(-r $megan);
+			-message => "$0 annotate: $megan is not readable.\n"
+			-verbose => 99,
+			-sections => "NAME|ANNOTATE SYNOPSIS|ANNOTATE OPTIONS") if !(-r $megan);
+		pod2usage(
+			-message => "$0 annotate: -n, --nrDB is required by -M.\n",
+			-verbose => 99,
+			-sections => "NAME|ANNOTATE SYNOPSIS|ANNOTATE OPTIONS") if ($dbNR eq "");
 	}
 	if($cog) {
 		pod2usage(
@@ -2142,21 +2192,21 @@ sub annotate {
 		
 	####
 	## Contigs and ORFs diamond blastx against nr and uniprot to identity missed ORFs by prokka
-	## Rq: diamond param -k 100000 --max-hsps .. usefull ?
+	## Rq: diamond param -k 100000 --max-hsps... 
 	####
 	if($funAndTaxo) {
 		print LOG "## Run functional and taxonomic annotation\n";
 		print LOG " - Run diamond-blastx $inputSeq against NR........";
-		`diamond blastx --db $DIAMOND_NR_DB --query $inputSeq --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 -e $diamond_evalue --out $outputDir/contigs-nr.diamond.tsv >& $outputDir/contigs-nr.diamond_tmp_.stderr`;
+		`diamond blastx --db $dbNR --query $inputSeq --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 -e $diamond_evalue --out $outputDir/contigs-nr.diamond.tsv >& $outputDir/contigs-nr.diamond_tmp_.stderr`;
 
 		print LOG "done\n - Run diamond-blastx $inputSeq against Uniprot...";
-		`diamond blastx --db $DIAMOND_UP_DB --query $inputSeq --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 -e $diamond_evalue --out $outputDir/contigs-uniprot.diamond.tsv >& $outputDir/contigs-uniprot.diamond_tmp_.stderr`;
+		`diamond blastx --db $dbUniP --query $inputSeq --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 -e $diamond_evalue --out $outputDir/contigs-uniprot.diamond.tsv >& $outputDir/contigs-uniprot.diamond_tmp_.stderr`;
 		
 		print LOG "done\n - Run diamond-blastx $prokkaTFA against NR........";
-		`diamond blastx --db $DIAMOND_NR_DB --query $prokkaTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-nr.diamond.tsv >& $outputDir/prokka-nr.diamond_tmp_.stderr`;
+		`diamond blastx --db $dbNR --query $prokkaTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-nr.diamond.tsv >& $outputDir/prokka-nr.diamond_tmp_.stderr`;
 		
 		print LOG "done\n - Run diamond-blastx $prokkaTFA against Uniprot...";
-		`diamond blastx --db $DIAMOND_UP_DB --query $prokkaTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-uniprot.diamond.tsv >& $outputDir/prokka-uniprot.diamond_tmp_.stderr`;
+		`diamond blastx --db $dbUniP --query $prokkaTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-uniprot.diamond.tsv >& $outputDir/prokka-uniprot.diamond_tmp_.stderr`;
 		print LOG "done\n";
 	}
 	
@@ -2172,7 +2222,7 @@ sub annotate {
 	if($megan) {
 		print LOG "## Run MEGAN\n";
 		print LOG " - Run diamond-blastx $prokkaTFA against NR........";
-		`diamond blastx --db $DIAMOND_NR_DB --query $prokkaTFA --threads $threads --outfmt 5 -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-nr.diamond.xml >& $outputDir/prokka-nr.diamond_tmp_.stderr`;
+		`diamond blastx --db $dbNR --query $prokkaTFA --threads $threads --outfmt 5 -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-nr.diamond.xml >& $outputDir/prokka-nr.diamond_tmp_.stderr`;
 		print LOG "done\n";
 				
 		# Split fasta and xml by fosmid to run MEGAN by fosmid
