@@ -179,17 +179,27 @@ Annotate Options:
                       >fosmidName1#contig2... | => fosmidName1
                       >fosmidName1#contig3... |
 
+    -n, --nrDB FILE
+             Non-redundant proteins database indexed for Diamond (Ex: the nr.dmnd)
+             Required by -F.
+
+    -u, --uniprotDB FILE
+             Proteic sequence database indexed for Diamond (Ex: the uniprot_sprot.dmnd)
+             Required by -F and -M.
+
     -F, --FunctionalAndTaxonomic
              Run functional and taxonomic annotations
+             -n, --nrDB and -u, --uniprotDB must be provided
 
     -e, --evalue FLOAT
              Maximum diamond e-value to report alignments [10e-8]
 
-    --query-cover INT
+    -q, --queryCover INT
              Minimum diamond query cover% to report an alignment [50]
 
     -M, --Megan FILE
              Run MEGAN - A license file must be provided
+             -n, --nrDB must be provided
 
     -C, --Cog FILE
              Run annotations with COGs, DB COGs path file
@@ -201,7 +211,7 @@ Annotate Options:
              Build submission files
 
     -D, --DiamondAgainstPrivateDB FILE
-             Run diamond against your own protein reference fasta file
+             Run diamond against your own protein reference FASTA file
 
     -t, --threads INT
              Number of threads for Blast [8]
