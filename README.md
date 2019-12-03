@@ -155,7 +155,7 @@ Example based on test data:
 ./mintia.pl assemble -t 1 --input Data/Input/Assemble/BifidoAdolescentis.s*gz --vectorSeq Data/Input/Assemble/pCC1FOS.fasta -len 40000 -c 300 -d Data/Output/Assemble/
 ```
 <p align="center">
-	<a href="http://genoweb.toulouse.inra.fr/~sigenae/MINTIA/mintia_assemble.html" target="_blank"><img style="border:1px solid lightgrey;border-radius:5px;padding:5px" src="./Data/Output/Assemble/mintia_assemble.png" width="400"></a>
+	<a href="http://genoweb.toulouse.inra.fr/~sigenae/MINTIA/Assemble/mintia_assemble.html" target="_blank"><img style="border:1px solid lightgrey;border-radius:5px;padding:5px" src="./Data/Output/Assemble/mintia_assemble.png" width="400"></a>
 </p>
 
 #### Annotate
@@ -236,7 +236,7 @@ Example based on test data:
 ./mintia.pl annotate -t 1.......
 ```
 <p align="center">
-	<a href="http://genoweb.toulouse.inra.fr/~sigenae/MINTIA/mintia_annotate.html" target="_blank"><img src="./Data/Output/Annotate/mintia_annotate.png" width="400"></a>
+	<a href="http://genoweb.toulouse.inra.fr/~sigenae/MINTIA/Annotate/mintia_annotate.html" target="_blank"><img src="./Data/Output/Annotate/mintia_annotate.png" width="400"></a>
 </p>
 
 ## License
