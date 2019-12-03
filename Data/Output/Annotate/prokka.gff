@@ -1,89 +1,77 @@
 ##gff-version 3
-##sequence-region bioindent1.C1a 1 38297
-##sequence-region bioindent2.C1 1 37094
-bioindent1.C1a	Prodigal:2.6	CDS	711	2498	.	-	0	ID=ORF1;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF1;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	2512	4779	.	-	0	ID=ORF2;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF2;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	4752	4871	.	-	0	ID=ORF3;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF3;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	4879	5643	.	-	0	ID=ORF4;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF4;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	5646	6020	.	-	0	ID=ORF5;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF5;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	6017	6715	.	-	0	ID=ORF6;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF6;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	6712	7626	.	-	0	ID=ORF7;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF7;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	7623	8339	.	-	0	ID=ORF8;Name=fliM;db_xref=COG:COG1868;gene=fliM;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P23453;locus_tag=ORF8;product=Flagellar motor switch protein FliM
-bioindent1.C1a	Prodigal:2.6	CDS	8425	8925	.	-	0	ID=ORF9;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF9;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	8929	9396	.	-	0	ID=ORF10;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF10;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	9425	9619	.	-	0	ID=ORF11;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF11;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	9759	11177	.	-	0	ID=ORF12;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF12;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	11226	12482	.	-	0	ID=ORF13;Name=ycf3;gene=ycf3;inference=ab initio prediction:Prodigal:2.6,protein motif:HAMAP:MF_00439;locus_tag=ORF13;product=Photosystem I assembly protein Ycf3
-bioindent1.C1a	Prodigal:2.6	CDS	12479	13678	.	-	0	ID=ORF14;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF14;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	13752	14423	.	-	0	ID=ORF15;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF15;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	14621	14845	.	+	0	ID=ORF16;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF16;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	15027	15239	.	+	0	ID=ORF17;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF17;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	15240	15626	.	+	0	ID=ORF18;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF18;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	15666	16601	.	-	0	ID=ORF19;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF19;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	16816	17052	.	+	0	ID=ORF20;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF20;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	17049	17375	.	+	0	ID=ORF21;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF21;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	17399	18592	.	-	0	ID=ORF22;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF22;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	18640	19521	.	-	0	ID=ORF23;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF23;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	21127	22212	.	-	0	ID=ORF24;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF24;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	22209	22985	.	-	0	ID=ORF25;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF25;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	23039	23701	.	-	0	ID=ORF26;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF26;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	23705	24154	.	-	0	ID=ORF27;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF27;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	24160	25410	.	-	0	ID=ORF28;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF28;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	25413	26153	.	-	0	ID=ORF29;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF29;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	26179	27453	.	-	0	ID=ORF30;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF30;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	27556	29493	.	-	0	ID=ORF31;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF31;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	29538	29894	.	-	0	ID=ORF32;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF32;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	29896	30087	.	-	0	ID=ORF33;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF33;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	30532	30780	.	-	0	ID=ORF34;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF34;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	31012	31866	.	+	0	ID=ORF35;Name=araC;gene=araC;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P0A9E0;locus_tag=ORF35;product=Arabinose operon regulatory protein
-bioindent1.C1a	Prodigal:2.6	CDS	31792	33144	.	-	0	ID=ORF36;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF36;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	33141	33713	.	-	0	ID=ORF37;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF37;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	33742	34164	.	+	0	ID=ORF38;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF38;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	34286	36046	.	-	0	ID=ORF39;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF39;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	36126	37469	.	-	0	ID=ORF40;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF40;product=hypothetical protein
-bioindent1.C1a	Prodigal:2.6	CDS	37486	38274	.	-	0	ID=ORF41;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF41;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	69	1274	.	-	0	ID=ORF1;eC_number=3.2.1.4;Name=celA;gene=celA;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P54937;locus_tag=ORF1;product=Endoglucanase A
-bioindent2.C1	Prodigal:2.6	CDS	1398	2042	.	-	0	ID=ORF2;eC_number=3.1.3.-;db_xref=COG:COG0637;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:Q9X0Y1;locus_tag=ORF2;product=Phosphorylated carbohydrates phosphatase
-bioindent2.C1	Prodigal:2.6	CDS	2039	2683	.	-	0	ID=ORF3;eC_number=2.5.1.3;Name=thiE;gene=thiE;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P66919;locus_tag=ORF3;product=Thiamine-phosphate synthase
-bioindent2.C1	Prodigal:2.6	CDS	2673	3491	.	-	0	ID=ORF4;eC_number=2.7.1.50;Name=thiM;db_xref=COG:COG2145;gene=thiM;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P39593;locus_tag=ORF4;product=Hydroxyethylthiazole kinase
-bioindent2.C1	Prodigal:2.6	CDS	3600	4808	.	-	0	ID=ORF5;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF5;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	4943	5440	.	+	0	ID=ORF6;Name=carD;db_xref=COG:COG1329;gene=carD;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:A0R561;locus_tag=ORF6;product=RNA polymerase-binding transcription factor CarD
-bioindent2.C1	Prodigal:2.6	CDS	5443	6177	.	+	0	ID=ORF7;eC_number=2.7.7.60;Name=ispD;db_xref=COG:COG1211;gene=ispD;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P9WKG9;locus_tag=ORF7;product=2-C-methyl-D-erythritol 4-phosphate cytidylyltransferase
-bioindent2.C1	Prodigal:2.6	CDS	6174	7046	.	+	0	ID=ORF8;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF8;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	7225	7911	.	+	0	ID=ORF9;eC_number=3.1.-.-;Name=yhcG;db_xref=COG:COG4804;gene=yhcG;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P45423;locus_tag=ORF9;product=Putative nuclease YhcG
-bioindent2.C1	Prodigal:2.6	CDS	7975	8322	.	-	0	ID=ORF10;eC_number=3.1.27.-;Name=mazF6;db_xref=COG:COG2337;gene=mazF6;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P9WII3;locus_tag=ORF10;product=Endoribonuclease MazF6
-bioindent2.C1	Prodigal:2.6	CDS	8309	8593	.	-	0	ID=ORF11;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF11;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	9222	10337	.	+	0	ID=ORF12;eC_number=3.6.4.12;Name=ruvB;gene=ruvB;inference=ab initio prediction:Prodigal:2.6,protein motif:HAMAP:MF_00016;locus_tag=ORF12;product=Holliday junction ATP-dependent DNA helicase RuvB
-bioindent2.C1	Prodigal:2.6	CDS	10353	11093	.	+	0	ID=ORF13;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF13;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	11184	11618	.	+	0	ID=ORF14;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF14;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	11781	12689	.	+	0	ID=ORF15;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF15;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	12744	13001	.	-	0	ID=ORF16;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF16;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	13163	14833	.	+	0	ID=ORF17;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF17;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	14957	15826	.	+	0	ID=ORF18;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF18;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	15955	16881	.	+	0	ID=ORF19;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF19;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	16951	17577	.	+	0	ID=ORF20;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF20;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	17587	18486	.	+	0	ID=ORF21;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF21;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	18639	19109	.	+	0	ID=ORF22;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF22;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	19191	19865	.	+	0	ID=ORF23;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF23;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	19916	20329	.	+	0	ID=ORF24;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF24;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	20598	20840	.	+	0	ID=ORF25;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF25;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	20857	21384	.	+	0	ID=ORF26;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF26;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	21716	22651	.	+	0	ID=ORF27;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF27;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	22729	23004	.	-	0	ID=ORF28;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF28;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	22976	23113	.	-	0	ID=ORF29;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF29;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	23083	23289	.	-	0	ID=ORF30;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF30;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	23382	24233	.	+	0	ID=ORF31;eC_number=2.4.2.17;Name=hisG;db_xref=COG:COG0040;gene=hisG;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P9WMN1;locus_tag=ORF31;product=ATP phosphoribosyltransferase
-bioindent2.C1	Prodigal:2.6	CDS	24305	24952	.	+	0	ID=ORF32;eC_number=4.2.1.19;Name=hisB;db_xref=COG:COG0131;gene=hisB;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:A0QX83;locus_tag=ORF32;product=Imidazoleglycerol-phosphate dehydratase
-bioindent2.C1	Prodigal:2.6	CDS	24946	25569	.	+	0	ID=ORF33;eC_number=2.4.2.-;Name=hisH;gene=hisH;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P59957;locus_tag=ORF33;product=Imidazole glycerol phosphate synthase subunit HisH
-bioindent2.C1	Prodigal:2.6	CDS	25569	26381	.	+	0	ID=ORF34;eC_number=4.1.3.-;Name=hisF;db_xref=COG:COG0107;gene=hisF;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P9WMM3;locus_tag=ORF34;product=Imidazole glycerol phosphate synthase subunit HisF
-bioindent2.C1	Prodigal:2.6	CDS	26526	26825	.	+	0	ID=ORF35;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF35;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	26898	28181	.	-	0	ID=ORF36;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF36;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	28129	31536	.	-	0	ID=ORF37;Name=smc;gene=smc;inference=ab initio prediction:Prodigal:2.6,protein motif:HAMAP:MF_01894;locus_tag=ORF37;product=Chromosome partition protein Smc
-bioindent2.C1	Prodigal:2.6	CDS	31533	32192	.	-	0	ID=ORF38;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF38;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	32182	33588	.	-	0	ID=ORF39;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF39;product=hypothetical protein
-bioindent2.C1	Prodigal:2.6	CDS	33718	34494	.	-	0	ID=ORF40;eC_number=3.6.3.-;Name=tcyC;db_xref=COG:COG1126;gene=tcyC;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P39456;locus_tag=ORF40;product=L-cystine import ATP-binding protein TcyC
-bioindent2.C1	Prodigal:2.6	CDS	34499	35146	.	-	0	ID=ORF41;Name=tcyB;db_xref=COG:COG0765;gene=tcyB;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P42200;locus_tag=ORF41;product=L-cystine transport system permease protein TcyB
-bioindent2.C1	Prodigal:2.6	CDS	35156	35956	.	-	0	ID=ORF42;Name=artP;db_xref=COG:COG0834;gene=artP;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:P54535;locus_tag=ORF42;product=Arginine-binding extracellular protein ArtP
-bioindent2.C1	Prodigal:2.6	CDS	36199	36750	.	-	0	ID=ORF43;Name=sigR;db_xref=COG:COG1595;gene=sigR;inference=ab initio prediction:Prodigal:2.6,similar to AA sequence:UniProtKB:Q7AKG9;locus_tag=ORF43;product=ECF RNA polymerase sigma factor SigR
-bioindent2.C1	Prodigal:2.6	CDS	36756	37073	.	-	0	ID=ORF44;inference=ab initio prediction:Prodigal:2.6;locus_tag=ORF44;product=hypothetical protein
+##sequence-region BifidoAdolescentis.s2#1#35132 1 35132
+##sequence-region BifidoAdolescentis.s6#1#42067 1 42067
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	9	590	.	+	0	ID=ORF1;eC_number=3.1.22.4;Name=ruvC;db_xref=COG:COG0817;gene=ruvC;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:Q5SJC4;locus_tag=ORF1;product=Crossover junction endodeoxyribonuclease RuvC
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	638	1255	.	+	0	ID=ORF2;eC_number=3.6.4.12;Name=ruvA;db_xref=COG:COG0632;gene=ruvA;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:A0QWH5;locus_tag=ORF2;product=Holliday junction ATP-dependent DNA helicase RuvA
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	1252	2340	.	+	0	ID=ORF3;eC_number=3.6.4.12;Name=ruvB;db_xref=COG:COG2255;gene=ruvB;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P9WGW1;locus_tag=ORF3;product=Holliday junction ATP-dependent DNA helicase RuvB
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	2397	2810	.	+	0	ID=ORF4;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF4;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	2926	3507	.	+	0	ID=ORF5;eC_number=2.4.2.7;Name=apt;db_xref=COG:COG0503;gene=apt;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:B0K969;locus_tag=ORF5;product=Adenine phosphoribosyltransferase
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	3559	4746	.	+	0	ID=ORF6;eC_number=6.2.1.5;Name=sucC;db_xref=COG:COG0045;gene=sucC;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:A0R3M4;locus_tag=ORF6;product=Succinate--CoA ligase [ADP-forming] subunit beta
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	4748	5671	.	+	0	ID=ORF7;eC_number=6.2.1.5;Name=sucD;db_xref=COG:COG0074;gene=sucD;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P9WGC7;locus_tag=ORF7;product=Succinate--CoA ligase [ADP-forming] subunit alpha
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	5668	7056	.	+	0	ID=ORF8;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF8;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	7004	8632	.	+	0	ID=ORF9;Name=purH;db_xref=COG:COG0138;gene=purH;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P9WHM7;locus_tag=ORF9;product=Bifunctional purine biosynthesis protein PurH
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	8789	9073	.	+	0	ID=ORF10;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF10;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	8987	9922	.	-	0	ID=ORF11;Name=aqpZ;gene=aqpZ;inference=ab initio prediction:Prodigal:002006,protein motif:HAMAP:MF_01146;locus_tag=ORF11;product=Aquaporin Z
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	10035	10808	.	+	0	ID=ORF12;eC_number=5.4.99.-;db_xref=COG:COG1187;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P9WHQ1;locus_tag=ORF12;product=putative RNA pseudouridine synthase
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	10805	12934	.	+	0	ID=ORF13;Name=der;gene=der;inference=ab initio prediction:Prodigal:002006,protein motif:HAMAP:MF_00195;locus_tag=ORF13;product=GTPase Der
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	13060	13473	.	-	0	ID=ORF14;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF14;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Aragorn:001002	tRNA	13698	13774	.	-	.	ID=ORF15;inference=COORDINATES:profile:Aragorn:001002;locus_tag=ORF15;product=tRNA-Pro(ggg)
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	14019	15449	.	+	0	ID=ORF16;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF16;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	15592	17505	.	+	0	ID=ORF17;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF17;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	17519	17836	.	+	0	ID=ORF18;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF18;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	17851	20454	.	+	0	ID=ORF19;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF19;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	20563	20910	.	+	0	ID=ORF20;Name=rbpA;gene=rbpA;inference=ab initio prediction:Prodigal:002006,protein motif:HAMAP:MF_01483;locus_tag=ORF20;product=RNA polymerase-binding protein RbpA
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	21016	21729	.	+	0	ID=ORF21;eC_number=3.1.3.5;db_xref=COG:COG0546;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:Q9I767;locus_tag=ORF21;product=5'-nucleotidase
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	21910	22275	.	-	0	ID=ORF22;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF22;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	22294	22962	.	-	0	ID=ORF23;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF23;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	23072	23518	.	-	0	ID=ORF24;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF24;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	23591	23815	.	-	0	ID=ORF25;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF25;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	23883	24014	.	-	0	ID=ORF26;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF26;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Aragorn:001002	tRNA	24290	24364	.	-	.	ID=ORF27;inference=COORDINATES:profile:Aragorn:001002;locus_tag=ORF27;product=tRNA-Val(cac)
+BifidoAdolescentis.s2#1#35132	Aragorn:001002	tRNA	24394	24466	.	-	.	ID=ORF28;inference=COORDINATES:profile:Aragorn:001002;locus_tag=ORF28;product=tRNA-Val(gac)
+BifidoAdolescentis.s2#1#35132	Aragorn:001002	tRNA	24506	24577	.	-	.	ID=ORF29;inference=COORDINATES:profile:Aragorn:001002;locus_tag=ORF29;product=tRNA-Cys(gca)
+BifidoAdolescentis.s2#1#35132	Aragorn:001002	tRNA	24607	24680	.	-	.	ID=ORF30;inference=COORDINATES:profile:Aragorn:001002;locus_tag=ORF30;product=tRNA-Gly(gcc)
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	24851	25660	.	+	0	ID=ORF31;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF31;product=hypothetical protein
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	25753	26637	.	-	0	ID=ORF32;eC_number=3.6.1.27;Name=uppP;db_xref=COG:COG1968;gene=uppP;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P9WFF9;locus_tag=ORF32;product=Undecaprenyl-diphosphatase
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	26776	27597	.	+	0	ID=ORF33;eC_number=2.7.1.-;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:Q3XZZ9;locus_tag=ORF33;product=putative ketoamine kinase
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	27706	28857	.	-	0	ID=ORF34;Name=dnaJ2;db_xref=COG:COG0484;gene=dnaJ2;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P9WNV7;locus_tag=ORF34;product=Chaperone protein DnaJ 2
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	28910	30037	.	-	0	ID=ORF35;Name=hrcA;db_xref=COG:COG1420;gene=hrcA;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:A0R0T9;locus_tag=ORF35;product=Heat-inducible transcription repressor HrcA
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	30412	32520	.	+	0	ID=ORF36;eC_number=2.2.1.1;Name=tkt;db_xref=COG:COG0021;gene=tkt;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P9WG25;locus_tag=ORF36;product=Transketolase
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	32610	33713	.	+	0	ID=ORF37;eC_number=2.2.1.2;Name=tal;db_xref=COG:COG0176;gene=tal;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:A0QWX9;locus_tag=ORF37;product=Transaldolase
+BifidoAdolescentis.s2#1#35132	Prodigal:002006	CDS	33884	35101	.	-	0	ID=ORF38;eC_number=2.6.1.2;Name=alaA;db_xref=COG:COG0436;gene=alaA;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P0A959;locus_tag=ORF38;product=Glutamate-pyruvate aminotransferase AlaA
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	102	353	.	+	0	ID=ORF1;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF1;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	495	1274	.	-	0	ID=ORF2;eC_number=1.6.-.-;Name=nfrA;db_xref=COG:COG0778;gene=nfrA;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:Q2G0Z5;locus_tag=ORF2;product=NADPH-dependent oxidoreductase
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	1383	1760	.	-	0	ID=ORF3;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF3;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	1858	2562	.	+	0	ID=ORF4;eC_number=5.4.2.11;Name=gpmA;gene=gpmA;inference=ab initio prediction:Prodigal:002006,protein motif:HAMAP:MF_01039;locus_tag=ORF4;product=2%2C3-bisphosphoglycerate-dependent phosphoglycerate mutase
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	2823	4220	.	+	0	ID=ORF5;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF5;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	4394	5407	.	-	0	ID=ORF6;Name=cytR;db_xref=COG:COG1609;gene=cytR;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P0ACN7;locus_tag=ORF6;product=HTH-type transcriptional repressor CytR
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	5772	6626	.	+	0	ID=ORF7;Name=melD;db_xref=COG:COG1175;gene=melD;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:O34706;locus_tag=ORF7;product=Melibiose/raffinose/stachyose import permease protein MelD
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	6623	7465	.	+	0	ID=ORF8;Name=araQ;db_xref=COG:COG0395;gene=araQ;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P94530;locus_tag=ORF8;product=L-arabinose transport system permease protein AraQ
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	7665	8267	.	-	0	ID=ORF9;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF9;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	8496	10229	.	+	0	ID=ORF10;eC_number=3.2.1.10;Name=malL;db_xref=COG:COG0366;gene=malL;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P29094;locus_tag=ORF10;product=Oligo-1%2C6-glucosidase
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	10392	12560	.	-	0	ID=ORF11;eC_number=2.4.1.25;Name=malQ;db_xref=COG:COG1640;gene=malQ;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P9WK23;locus_tag=ORF11;product=4-alpha-glucanotransferase
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	12934	14727	.	+	0	ID=ORF12;eC_number=3.2.1.41;Name=pulA;db_xref=COG:COG1523;gene=pulA;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:O33840;locus_tag=ORF12;product=Pullulanase
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	14825	15607	.	+	0	ID=ORF13;eC_number=3.1.3.18;Name=gph_1;gene=gph_1;inference=ab initio prediction:Prodigal:002006,protein motif:HAMAP:MF_00495;locus_tag=ORF13;product=Phosphoglycolate phosphatase
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	15779	16585	.	+	0	ID=ORF14;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF14;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	16706	17734	.	+	0	ID=ORF15;Name=ccpA;db_xref=COG:COG1609;gene=ccpA;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P25144;locus_tag=ORF15;product=Catabolite control protein A
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	18195	18461	.	+	0	ID=ORF16;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF16;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	20006	21043	.	+	0	ID=ORF17;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF17;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	21054	22037	.	+	0	ID=ORF18;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF18;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	22276	22788	.	-	0	ID=ORF19;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF19;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	22955	23833	.	+	0	ID=ORF20;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF20;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	24319	26418	.	+	0	ID=ORF21;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF21;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	26684	28564	.	+	0	ID=ORF22;Name=dnaK;db_xref=COG:COG0443;gene=dnaK;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P19993;locus_tag=ORF22;product=Chaperone protein DnaK
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	28567	29235	.	+	0	ID=ORF23;Name=grpE;gene=grpE;inference=ab initio prediction:Prodigal:002006,protein motif:HAMAP:MF_01151;locus_tag=ORF23;product=Protein GrpE
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	29410	30435	.	+	0	ID=ORF24;Name=cbpA;db_xref=COG:COG2214;gene=cbpA;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P36659;locus_tag=ORF24;product=Curved DNA-binding protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	30513	31049	.	+	0	ID=ORF25;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF25;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	31342	31614	.	+	0	ID=ORF26;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF26;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	31978	32700	.	+	0	ID=ORF27;eC_number=3.1.3.18;Name=gph_2;gene=gph_2;inference=ab initio prediction:Prodigal:002006,protein motif:HAMAP:MF_00495;locus_tag=ORF27;product=Phosphoglycolate phosphatase
+BifidoAdolescentis.s6#1#42067	Aragorn:001002	tRNA	32788	32861	.	-	.	ID=ORF28;inference=COORDINATES:profile:Aragorn:001002;locus_tag=ORF28;product=tRNA-Ala(cgc)
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	32992	33693	.	-	0	ID=ORF29;Name=dedA;db_xref=COG:COG0586;gene=dedA;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P0ABP6;locus_tag=ORF29;product=Protein DedA
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	34313	35188	.	-	0	ID=ORF30;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF30;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	35473	36534	.	+	0	ID=ORF31;eC_number=2.1.1.198;Name=rsmI;db_xref=COG:COG0313;gene=rsmI;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P9WGW7;locus_tag=ORF31;product=Ribosomal RNA small subunit methyltransferase I
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	36504	36995	.	-	0	ID=ORF32;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF32;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	37001	37705	.	-	0	ID=ORF33;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF33;product=hypothetical protein
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	37783	39645	.	+	0	ID=ORF34;eC_number=6.1.1.10;Name=metG;db_xref=COG:COG0073;gene=metG;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:P00959;locus_tag=ORF34;product=Methionine--tRNA ligase
+BifidoAdolescentis.s6#1#42067	Prodigal:002006	CDS	40308	42056	.	-	0	ID=ORF35;inference=ab initio prediction:Prodigal:002006;locus_tag=ORF35;product=hypothetical protein
 ##FASTA

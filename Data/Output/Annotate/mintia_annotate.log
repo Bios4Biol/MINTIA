@@ -1,20 +1,21 @@
 ## Check input fasta file
 ## Run prokka
- - bioindent1.C1a: 41 ORF(s) found
- - bioindent2.C1: 44 ORF(s) found
- ==> Create MintiaAnnotate/prokka.gff..........done
- ==> Create MintiaAnnotate/prokka.fasta........done
- ==> Create MintiaAnnotate/prokka-prot.fasta...done
+ - BifidoAdolescentis.s2#1#35132: 38 ORF(s) found
+ - BifidoAdolescentis.s6#1#42067: 35 ORF(s) found
+ ==> Create Data/Output/Annotate3/prokka.gff..........done
+ ==> Create Data/Output/Annotate3/prokka.fasta........done
+ ==> Create Data/Output/Annotate3/prokka-prot.fasta...done
+ ==> Create submission file(s) by fosmid.......done
 ## Run functional and taxonomic annotation
- - Run diamond-blastx Data/Input/bioindentCONCAT.fasta against NR........done
- - Run diamond-blastx Data/Input/bioindentCONCAT.fasta against Uniprot...done
- - Run diamond-blastx MintiaAnnotate/prokka.fasta against NR........done
- - Run diamond-blastx MintiaAnnotate/prokka.fasta against Uniprot...done
+ - Run diamond-blastx Data/Output/Assemble/mintia_assemble.fasta against NR........done
+ - Run diamond-blastx Data/Output/Assemble/mintia_assemble.fasta against Uniprot...done
+ - Run diamond-blastx Data/Output/Annotate3/prokka.fasta against NR........done
+ - Run diamond-blastx Data/Output/Annotate3/prokka.fasta against Uniprot...done
 ## Run MEGAN
- - Run diamond-blastx MintiaAnnotate/prokka.fasta against NR........done
+ - Run diamond-blastx Data/Output/Annotate3/prokka.fasta against NR........done
  - Prepare inputs files: split FASTA and XML files by fosmid...done
- - Run MEGAN on bioindent1.C1a...done
- - Run MEGAN on bioindent2.C1...done
+ - Run MEGAN on BifidoAdolescentis.s2...done
+ - Run MEGAN on BifidoAdolescentis.s6...done
 ## Run rpsblast (COGs)...done
 ## Create HTML report.......done
 ## Remove temporary files...done

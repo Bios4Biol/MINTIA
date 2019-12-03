@@ -243,8 +243,9 @@ use Term::ANSIColor;
 use POSIX;
 use 5.010;  #for filesize
 
-#my $DIAMOND_NR_DB  = "/bank/diamonddb/nr.dmnd";
-#my $DIAMOND_UP_DB  = "/bank/diamonddb/uniprot_sprot.dmnd";
+## DB
+# /bank/diamonddb/nr.dmnd
+# /bank/diamonddb/uniprot_sprot.dmnd
 my $MINTIA_VERSION = "Mintia_v1.0";
 
 
@@ -2694,7 +2695,7 @@ sub annotate {
 				<th nowrap class="valn" style="text-align:center">T</th>
 				<th nowrap class="valn" style="text-align:center">G</th>
 				<th nowrap class="valn" style="text-align:center">C</th>
-				<th nowrap class="valn" style="text-align:center">Others</th>
+				<th nowrap class="valn" style="text-align:center">N</th>
 				<th nowrap class="valn" style="text-align:center">Prokka</th>
 	';
 	if($ncbi) {
@@ -2755,11 +2756,11 @@ sub annotate {
 					if($megan) {
 						print HTML "<td class='valn text-center' rowspan=$nbseq>"
 								.		"<button type='button' data-toggle='modal' data-target='#meganview' class='pop btn btn-sm btn-outline-secondary' style='padding:0 4px 0 4px'>"
-								.		"<img style='width:auto;height:24px' data-title='".$id."' src='./$i/megan.png'></button>"
+								.		"<img style='width:45px;height:auto' data-title='".$i."' src='./$i/megan.png'></button>"
 								.	"</td>";
 					}
 					if($cog) {
-						print HTML "<td class='valn textoverflow' rowspan=$nbseq>";
+						print HTML "<td class='valn textoverflow' rowspan=1>";
 						my $tmpCat = "";
 						my $tmpMax = 0;
 						foreach my $k (keys %{$h_nbOrfByCog{$id}}) {
@@ -2819,11 +2820,11 @@ sub annotate {
 		if($megan && $nbseq==1) {
 			print HTML "<td class='valn text-center' rowspan=$nbseq>"
 					.		"<button type='button' data-toggle='modal' data-target='#meganview' class='pop btn btn-sm btn-outline-secondary' style='padding:0 4px 0 4px'>"
-					.		"<img style='width:auto;height:24px' data-title='".$id."' src='./$i/megan.png'></button>"
+					.		"<img style='width:45px;height:auto' data-title='".$i."' src='./$i/megan.png'></button>"
 					.	"</td>";
 		}
 		if($cog) {
-			print HTML "<td class='valn textoverflow' rowspan=$nbseq>";
+			print HTML "<td class='valn textoverflow' rowspan=1>";
 			my $tmpCat = "";
 			my $tmpMax = 0;
 			foreach my $k (keys %{$h_nbOrfByCog{$id}}) {
