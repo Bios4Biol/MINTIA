@@ -2,17 +2,17 @@
 ## Run prokka
  - BifidoAdolescentis.s2#1#35132: 38 ORF(s) found
  - BifidoAdolescentis.s6#1#42067: 35 ORF(s) found
- ==> Create Data/Output/Annotate3/prokka.gff..........done
- ==> Create Data/Output/Annotate3/prokka.fasta........done
- ==> Create Data/Output/Annotate3/prokka-prot.fasta...done
+ ==> Create Data/Output/Annotate2//prokka.gff..........done
+ ==> Create Data/Output/Annotate2//prokka.fasta........done
+ ==> Create Data/Output/Annotate2//prokka-prot.fasta...done
  ==> Create submission file(s) by fosmid.......done
 ## Run functional and taxonomic annotation
  - Run diamond-blastx Data/Output/Assemble/mintia_assemble.fasta against NR........done
  - Run diamond-blastx Data/Output/Assemble/mintia_assemble.fasta against Uniprot...done
- - Run diamond-blastx Data/Output/Annotate3/prokka.fasta against NR........done
- - Run diamond-blastx Data/Output/Annotate3/prokka.fasta against Uniprot...done
+ - Run diamond-blastx Data/Output/Annotate2//prokka.fasta against NR........done
+ - Run diamond-blastx Data/Output/Annotate2//prokka.fasta against Uniprot...done
 ## Run MEGAN
- - Run diamond-blastx Data/Output/Annotate3/prokka.fasta against NR........done
+ - Run diamond-blastx Data/Output/Annotate2//prokka.fasta against NR........done
  - Prepare inputs files: split FASTA and XML files by fosmid...done
  - Run MEGAN on BifidoAdolescentis.s2...done
  - Run MEGAN on BifidoAdolescentis.s6...done
