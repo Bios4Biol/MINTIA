@@ -152,7 +152,7 @@ Assemble Options:
 ```
 Example based on test data:
 ```
-./mintia.pl assemble -t 1 --input Data/Input/Assemble/BifidoAdolescentis.s*gz --vectorSeq Data/Input/Assemble/pCC1FOS.fasta -len 40000 -c 300 -d Data/Output/Assemble/
+./mintia.pl assemble -t 1 -i Data/Input/Assemble/BifidoAdolescentis.s*gz -v Data/Input/Assemble/pCC1FOS.fasta -len 40000 -c 300 -d Data/Output/Assemble/
 ```
 <p align="center">
 	<a href="http://genoweb.toulouse.inra.fr/~sigenae/MINTIA/Assemble/mintia_assemble.html" target="_blank"><img style="border:1px solid lightgrey;border-radius:5px;padding:5px" src="./Data/Output/Assemble/mintia_assemble.png" width="400"></a>
