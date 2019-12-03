@@ -233,7 +233,11 @@ Annotate Options:
 ```
 Example based on test data:
 ```
-./mintia.pl annotate -t 1.......
+# Without Megan and COG annotations
+./mintia.pl annotate -F -i Data/Output/Assemble/mintia_assemble.fasta -d  Data/Output/Annotate2/ -t 1 -S -n Data/Input/Annotate/NR_subset4test.dmnd -u Data/Input/Annotate/UNIPROT-SP_subset4test.dmnd
+
+# With Megan and COG annotations
+./mintia.pl annotate -F -C PATH_TO_COG_DB/Cog.v3-28-17 -M PATH_TO_YOUR_LICENSE/MEGAN5-academic-license.txt - Data/Output/Assemble/mintia_assemble.fasta -d  Data/Output/Annotate2/ -t 1 -S -n Data/Input/Annotate/NR_subset4test.dmnd -u Data/Input/Annotate/UNIPROT-SP_subset4test.dmnd
 ```
 <p align="center">
 	<a href="http://genoweb.toulouse.inra.fr/~sigenae/MINTIA/Annotate/mintia_annotate.html" target="_blank"><img src="./Data/Output/Annotate/mintia_annotate.png" width="400"></a>
