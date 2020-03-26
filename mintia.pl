@@ -214,15 +214,15 @@
 
 =head1 AUTHORS
 
- Philippe   Bardou - INRA Toulouse - support.sigenae@inra.fr
- Christophe  Klopp - INRA Toulouse
- Sandrine Laguerre - INRA Toulouse
- Sarah       Maman - INRA Toulouse
- Sabrina Rodriguez - INRA Toulouse
+ Philippe   Bardou - INRAE Toulouse - support.sigenae@inra.fr
+ Christophe  Klopp - INRAE Toulouse
+ Sandrine Laguerre - INRAE Toulouse
+ Sarah       Maman - INRAE Toulouse
+ Sabrina Rodriguez - INRAE Toulouse
 
 =head1 COPYRIGHT
 
- 2018 INRA
+ 2020 INRAE
 
 =head1 LICENSE
 
@@ -386,9 +386,9 @@ my $HTML_HEADER = '<!doctype html>
 		###MENU###
 		<div style="text-align:center;font-size:smaller;color:darkgrey;margin-top:-25px">
 			Produced by '.$MINTIA_VERSION.'<br>
-			Copyright © 2018, <img src="http://www.inra.fr/extension/itkinra/design/inra/images/favicon.ico">
-			<a style="color:#212529;" href="http://inra.fr" target="_blank">INRA</a><br>
-			Designed by the <a style="color:#212529;" href="http://sigenae.org" target="_blank">Sigenae</a> team.
+			Copyright © 2020, <img style="width:18px;padding-bottom:2px" src="https://www.inrae.fr/themes/custom/inrae_socle/favicon.ico"><!--<img src="http://www.inra.fr/extension/itkinra/design/inra/images/favicon.ico">-->
+		    <a style="color:#212529;" href="https://inrae.fr" target="_blank">INRAE</a><br>
+		    Designed by the <a style="color:#212529;" href="http://sigenae.org" target="_blank">Sigenae</a> team.
 		</div>
 	</nav>
 	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
