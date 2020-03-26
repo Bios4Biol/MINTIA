@@ -247,7 +247,7 @@ Example based on test data:
 GNU GPL v3
 
 ## Copyright
-2020 INRA
+2020 INRAE
 
 ## Contact
 support.sigenae@inra.fr
