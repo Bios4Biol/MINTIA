@@ -7,8 +7,8 @@
 
 > The annotation module (annotate) aims at obtaining main gene functions and a functional classification. The pipeline launches at least prokka for ORF detection, generating fasta files for genes and proteins as well as a tabular file containing ORFs description. Depending on additional options selected, contigs and ORFs are aligned against NCBI NR (Non Redundant) as well as SP (SwissProt) and COGss databases. The produced HTML report includes all results and allow to explore annotations based on [igv.js](https://github.com/igvteam/igv.js) an embeddable interactive genome visualization component.
 
-<img style="border:1px solid lightgrey;border-radius:5px;padding:5px" src="./mintia_assemble_pipeline.png" width="400">
-<img style="border:1px solid lightgrey;border-radius:5px;padding:5px" src="./mintia_annotate_pipeline.png" width="400">
+<img align="center" src="./mintia_assemble_pipeline.png" width="400">
+<img align="center" src="./mintia_annotate_pipeline.png" width="400">
 
 ## Table of content
 - [Installation](#installation)
