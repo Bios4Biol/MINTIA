@@ -7,6 +7,8 @@
 
 > The annotation module (annotate) aims at obtaining main gene functions and a functional classification. The pipeline launches at least prokka for ORF detection, generating fasta files for genes and proteins as well as a tabular file containing ORFs description. Depending on additional options selected, contigs and ORFs are aligned against NCBI NR (Non Redundant) as well as SP (SwissProt) and COGss databases. The produced HTML report includes all results and allow to explore annotations based on [igv.js](https://github.com/igvteam/igv.js) an embeddable interactive genome visualization component.
 
+<img style="border:1px solid lightgrey;border-radius:5px;padding:5px" src="./mintia_assemble_pipeline.png" width="400">
+<img style="border:1px solid lightgrey;border-radius:5px;padding:5px" src="./mintia_annotate_pipeline.png" width="400">
 
 ## Table of content
 - [Installation](#installation)
@@ -64,11 +66,11 @@ $ ./mintia.pl check
 | Tools | Tested version || Tools | Tested version |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | **`cross_match`** | `1.090518` || **`bgzip`** | |
-| **`spades`** | `v3.13.0` || **`file`** | `file-5.04` |
-| **`prokka`** | `1.13.3` || **`grep`** | `GNU grep 2.6.3` |
-| **`diamond`** | `0.8.24` || **`which`** |  |
-| **`megan`** | `5.10.6` || **`xvfb-run`** | |
-| **`samtools`** | `1.3.1` || **`tabix`** | `0.2.5 (r964)` |
+| **`spades`** | `v3.13.1` || **`file`** | `file-5.04` |
+| **`prokka`** | `1.14.5` || **`grep`** | `GNU grep 2.6.3` |
+| **`diamond`** | `0.9.29` || **`which`** |  |
+| **`megan`** | `5.11.3` || **`xvfb-run`** | |
+| **`samtools`** | `1.9` || **`tabix`** | `1.9` |
 | **`rpsblast`** | `2.9.0` || | |
 
 #### Databanks
@@ -247,7 +249,7 @@ Example based on test data:
 GNU GPL v3
 
 ## Copyright
-2020 INRA
+2020 INRAE
 
 ## Contact
 support.sigenae@inra.fr
