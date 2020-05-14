@@ -98,12 +98,12 @@ $ makeprofiledb -title COG.3-28-17 -in Cog.pn -out Cog.v3-28-17 -threshold 9.82 
 #### Check tools dependencies
 
 ```
-$ ./mintia.pl check -h
+$ ./mintia check -h
 Name:
-     mintia.pl - Fosmid assembly and annotation pipeline.
+     mintia - Fosmid assembly and annotation pipeline.
 
 Check Synopsis:
-     mintia.pl check
+     mintia check
 
 Check Options:
     -h, --help
@@ -113,12 +113,12 @@ Check Options:
 #### Assemble
 
 ```
-$ ./mintia.pl assemble -h
+$ ./mintia assemble -h
 Name:
-     mintia.pl - Fosmid assembly and annotation pipeline.
+     mintia - Fosmid assembly and annotation pipeline.
 
 Assemble Synopsis:
-     mintia.pl assemble -i FASTQ_FILE[S] -v FASTA_FILE -d STR
+     mintia assemble -i FASTQ_FILE[S] -v FASTA_FILE -d STR
 
 Assemble Options:
     -i, --input FILE[S]
@@ -162,7 +162,7 @@ Assemble Options:
 ```
 Example based on test data:
 ```
-./mintia.pl assemble -t 1 -i Data/Input/Assemble/BifidoAdolescentis.s*gz -v Data/Input/Assemble/pCC1FOS.fasta -len 40000 -c 300 -d Data/Output/Assemble/
+./mintia assemble -t 1 -i Data/Input/Assemble/BifidoAdolescentis.s*gz -v Data/Input/Assemble/pCC1FOS.fasta -len 40000 -c 300 -d Data/Output/Assemble/
 ```
 <p align="center">
 	<a href="http://genoweb.toulouse.inra.fr/~sigenae/MINTIA/Assemble/mintia_assemble.html" target="_blank"><img style="border:1px solid lightgrey;border-radius:5px;padding:5px" src="./Data/Output/Assemble/mintia_assemble.png" width="400"></a>
@@ -171,12 +171,12 @@ Example based on test data:
 #### Annotate
 
 ```
-$ ./mintia.pl annotate -h
+$ ./mintia annotate -h
 Name:
-     mintia.pl - Fosmid assembly and annotation pipeline.
+     mintia - Fosmid assembly and annotation pipeline.
 
 Annotate Synopsis:
-     mintia.pl annotate -i FASTA_FILE -n NR_DMND_FILE -u UNIPROT_DMND_FILE -F -d STR
+     mintia annotate -i FASTA_FILE -n NR_DMND_FILE -u UNIPROT_DMND_FILE -F -d STR
 
 Annotate Options:
     -i, --input FILE
@@ -244,10 +244,10 @@ Annotate Options:
 Example based on test data:
 ```
 # Without Megan and COG annotations
-./mintia.pl annotate -F -i Data/Output/Assemble/mintia_assemble.fasta -d  Data/Output/Annotate2/ -t 1 -S -n Data/Input/Annotate/NR_subset4test.dmnd -u Data/Input/Annotate/UNIPROT-SP_subset4test.dmnd
+./mintia annotate -F -i Data/Output/Assemble/mintia_assemble.fasta -d  Data/Output/Annotate2/ -t 1 -S -n Data/Input/Annotate/NR_subset4test.dmnd -u Data/Input/Annotate/UNIPROT-SP_subset4test.dmnd
 
 # With Megan and COG annotations
-./mintia.pl annotate -F -C PATH_TO_COG_DB/Cog.v3-28-17 -M PATH_TO_YOUR_LICENSE/MEGAN5-academic-license.txt - Data/Output/Assemble/mintia_assemble.fasta -d  Data/Output/Annotate2/ -t 1 -S -n Data/Input/Annotate/NR_subset4test.dmnd -u Data/Input/Annotate/UNIPROT-SP_subset4test.dmnd
+./mintia annotate -F -C PATH_TO_COG_DB/Cog.v3-28-17 -M PATH_TO_YOUR_LICENSE/MEGAN5-academic-license.txt - Data/Output/Assemble/mintia_assemble.fasta -d  Data/Output/Annotate2/ -t 1 -S -n Data/Input/Annotate/NR_subset4test.dmnd -u Data/Input/Annotate/UNIPROT-SP_subset4test.dmnd
 ```
 <p align="center">
 	<a href="http://genoweb.toulouse.inra.fr/~sigenae/MINTIA/Annotate/mintia_annotate.html" target="_blank"><img src="./Data/Output/Annotate/mintia_annotate.png" width="400"></a>
