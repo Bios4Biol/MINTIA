@@ -4,25 +4,25 @@
 
 =head1 NAME
 
- mintia.pl - Fosmid assembly and annotation pipeline.
+ mintia - Fosmid assembly and annotation pipeline.
 
 =head1 SYNOPSIS
 
- mintia.pl check
- mintia.pl assemble -i FASTQ_FILE[S] -v FASTA_FILE -d STR
- mintia.pl annotate
+ mintia check
+ mintia assemble -i FASTQ_FILE[S] -v FASTA_FILE -d STR
+ mintia annotate
 
 =head1 CHECK SYNOPSIS
 
- mintia.pl check
+ mintia check
 
 =head1 ASSEMBLE SYNOPSIS
 
- mintia.pl assemble -i FASTQ_FILE[S] -v FASTA_FILE -d STR
+ mintia assemble -i FASTQ_FILE[S] -v FASTA_FILE -d STR
 
 =head1 ANNOTATE SYNOPSIS
 
- mintia.pl annotate -i FASTA_FILE -n NR_DMND_FILE -u UNIPROT_DMND_FILE -F -d STR
+ mintia annotate -i FASTA_FILE -n NR_DMND_FILE -u UNIPROT_DMND_FILE -F -d STR
 
 =head1 COMMANDS
 
