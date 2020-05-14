@@ -52,7 +52,7 @@ $ conda activate mintia
 
 Tools dependencies can be checked:
 ```sh
-$ ./mintia.pl check
+$ mintia check
 ##############################################
         Mintia_v1.0 check dependencies
 ##############################################
@@ -104,7 +104,7 @@ $ conda activate mintia
 #### Check tools dependencies
 
 ```
-$ ./mintia check -h
+$ mintia check -h
 Name:
      mintia - Fosmid assembly and annotation pipeline.
 
@@ -119,7 +119,7 @@ Check Options:
 #### Assemble
 
 ```
-$ ./mintia assemble -h
+$ mintia assemble -h
 Name:
      mintia - Fosmid assembly and annotation pipeline.
 
@@ -168,7 +168,7 @@ Assemble Options:
 ```
 Example based on test data:
 ```
-./mintia assemble -t 1 -i Data/Input/Assemble/BifidoAdolescentis.s*gz -v Data/Input/Assemble/pCC1FOS.fasta -len 40000 -c 300 -d Data/Output/Assemble/
+mintia assemble -t 1 -i Data/Input/Assemble/BifidoAdolescentis.s*gz -v Data/Input/Assemble/pCC1FOS.fasta -len 40000 -c 300 -d Data/Output/Assemble/
 ```
 <p align="center">
 	<a href="http://genoweb.toulouse.inra.fr/~sigenae/MINTIA/Assemble/mintia_assemble.html" target="_blank"><img style="border:1px solid lightgrey;border-radius:5px;padding:5px" src="./Data/Output/Assemble/mintia_assemble.png" width="400"></a>
@@ -177,7 +177,7 @@ Example based on test data:
 #### Annotate
 
 ```
-$ ./mintia annotate -h
+$ mintia annotate -h
 Name:
      mintia - Fosmid assembly and annotation pipeline.
 
@@ -250,10 +250,10 @@ Annotate Options:
 Example based on test data:
 ```
 # Without Megan and COG annotations
-./mintia annotate -F -i Data/Output/Assemble/mintia_assemble.fasta -d  Data/Output/Annotate2/ -t 1 -S -n Data/Input/Annotate/NR_subset4test.dmnd -u Data/Input/Annotate/UNIPROT-SP_subset4test.dmnd
+mintia annotate -F -i Data/Output/Assemble/mintia_assemble.fasta -d  Data/Output/Annotate2/ -t 1 -S -n Data/Input/Annotate/NR_subset4test.dmnd -u Data/Input/Annotate/UNIPROT-SP_subset4test.dmnd
 
 # With Megan and COG annotations
-./mintia annotate -F -C PATH_TO_COG_DB/Cog.v3-28-17 -M PATH_TO_YOUR_LICENSE/MEGAN5-academic-license.txt - Data/Output/Assemble/mintia_assemble.fasta -d  Data/Output/Annotate2/ -t 1 -S -n Data/Input/Annotate/NR_subset4test.dmnd -u Data/Input/Annotate/UNIPROT-SP_subset4test.dmnd
+mintia annotate -F -C PATH_TO_COG_DB/Cog.v3-28-17 -M PATH_TO_YOUR_LICENSE/MEGAN5-academic-license.txt - Data/Output/Assemble/mintia_assemble.fasta -d  Data/Output/Annotate2/ -t 1 -S -n Data/Input/Annotate/NR_subset4test.dmnd -u Data/Input/Annotate/UNIPROT-SP_subset4test.dmnd
 ```
 <p align="center">
 	<a href="http://genoweb.toulouse.inra.fr/~sigenae/MINTIA/Annotate/mintia_annotate.html" target="_blank"><img src="./Data/Output/Annotate/mintia_annotate.png" width="400"></a>
