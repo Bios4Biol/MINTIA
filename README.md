@@ -28,6 +28,10 @@
 ## Installation
 This MINITA repository is for command line user.
 
+For an easy install, conda environments is recommended. To install Miniconda, 
+follow [this tutorial](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) or,
+to install Ananconda, follow [this one](https://docs.anaconda.com/anaconda/install/).
+
 #### Install
 Clone this repository:
 ```sh
@@ -36,13 +40,16 @@ $ git clone --recursive https://github.com/Bios4Biol/MINTIA.git
 Use conda to install the third party software:
 ```sh
 $ cd MINTIA
-$ conda env create --file environment.yaml
-$ unset PERL5LIB
-$ conda activate mintia
+$ ./setup.sh
 ```
 Two dependencies will not be installed by conda and must be installed "manually":
 - cross_match **required** for the assemble module (step1): [cross_match](http://www.phrap.org/consed/consed.html#howToGet)
 - MEGAN5 (optional) for the annotate module (step2): [megan5](https://software-ab.informatik.uni-tuebingen.de/download/megan5/welcome.html)
+
+Activate the mintia environment:
+```sh
+$ conda activate mintia
+```
 
 Tools dependencies can be checked:
 ```sh
