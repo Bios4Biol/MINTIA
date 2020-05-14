@@ -95,6 +95,12 @@ $ makeprofiledb -title COG.3-28-17 -in Cog.pn -out Cog.v3-28-17 -threshold 9.82 
 
 ## Run MINTIA
 
+#### Activate the mintia environment
+
+```
+$ conda activate mintia
+```
+
 #### Check tools dependencies
 
 ```
