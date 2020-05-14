@@ -26,8 +26,7 @@
 - [Contact](#contact)
 
 ## Installation
-This MINITA repository is for command line user.
-
+This MINITA repository is for command line user.<br/>
 For an easy install, conda environments is recommended. To install Miniconda, 
 follow [this tutorial](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) or,
 to install Ananconda, follow [this one](https://docs.anaconda.com/anaconda/install/).
