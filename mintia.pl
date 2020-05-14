@@ -684,7 +684,7 @@ sub check {
 	print "##############################################\n";
 	# Step1 Assemble
 	print "\n- Step 1 - assemble:\n";
-	my $err = `which spades.py >& /dev/null`;
+	my $err = `which spades.py > /dev/null 2>&1`;
 	print "  => spades...........";
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   {
@@ -695,7 +695,7 @@ sub check {
 		print "...$version\n";
 	}
 	
-	$err = `which cross_match >& /dev/null`;
+	$err = `which cross_match > /dev/null 2>&1`;
 	print "  => cross_match......";
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   {
@@ -708,7 +708,7 @@ sub check {
 	
     # Step2 Annotate
     print "\n- Step 2 - annotate:\n";
-	$err = `which prokka >& /dev/null`;
+	$err = `which prokka > /dev/null 2>&1`;
 	print "  => prokka...........";
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   {
@@ -719,7 +719,7 @@ sub check {
 		print "...$version\n";
 	}
 	
-	$err = `which diamond >& /dev/null`;
+	$err = `which diamond > /dev/null 2>&1`;
 	print "  => diamond..........";
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   {
@@ -730,12 +730,12 @@ sub check {
 		print "...$version\n";
 	}
 	
-	$err = `which xvfb-run >& /dev/null`;
+	$err = `which xvfb-run > /dev/null 2>&1`;
 	print "  => xvfb-run.........";
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   { print colored(['bold green'], "ok\n"); }
 	
-	$err = `which MEGAN >& /dev/null`;
+	$err = `which MEGAN > /dev/null 2>&1`;
 	print "  => MEGAN............";
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   {
@@ -746,7 +746,7 @@ sub check {
 		print "...$version\n";
 	}
 	
-	$err = `which rpsblast >& /dev/null`;
+	$err = `which rpsblast > /dev/null 2>&1`;
 	print "  => rpsblast.........";
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   {
@@ -757,7 +757,7 @@ sub check {
 		print "...$version\n";
 	}
 	
-	$err = `which samtools >& /dev/null`;
+	$err = `which samtools > /dev/null 2>&1`;
 	print "  => samtools.........";
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   {
@@ -768,7 +768,7 @@ sub check {
 		print "...$version\n";
 	}
 	
-	$err = `which tabix >& /dev/null`;
+	$err = `which tabix > /dev/null 2>&1`;
 	print "  => tabix............";
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   {
