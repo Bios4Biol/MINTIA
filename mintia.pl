@@ -495,7 +495,7 @@ sub run_crossmatch {
   close(TMP2);
 
   # Processing the sequences
-  `(cross_match $tmp1 $tmp2 -minmatch 10 -minscore 20 > $resC) >& /dev/null`;
+  `(cross_match $tmp1 $tmp2 -minmatch 10 -minscore 20 > $resC) 2> /dev/null`;
   my @a_res = read_crossmatch($resC);
 
   # Processing crossmatch result
@@ -993,7 +993,7 @@ sub assemble {
   print LOG "\n## Run Crossmatch\n";
   foreach my $k (sort keys(%h_sample)) {
     print LOG " - $k...";
-    `(cross_match $outputDir/$k/scaffolds.fasta $vectorSeq -minmatch 9 -minscore 30 -screen > $outputDir/$k/crossmatch-scaffolds.stdout) >& $outputDir/$k/crossmatch-scaffolds.stderr`;
+    `(cross_match $outputDir/$k/scaffolds.fasta $vectorSeq -minmatch 9 -minscore 30 -screen > $outputDir/$k/crossmatch-scaffolds.stdout) 2> $outputDir/$k/crossmatch-scaffolds.stderr`;
     print LOG "done\n";
   }
 
@@ -2080,7 +2080,7 @@ sub annotate {
 	my %h_orf = ();
 	
 	print LOG "## Run prokka\n";
-	`prokka $inputSeq --outDir $outputDir --cpu $threads --prefix prokka_tmp_ --locustag "##TEMPLATE##" --force >& $outputDir/prokka_tmp_.stderr`;
+	`prokka $inputSeq --outDir $outputDir --cpu $threads --prefix prokka_tmp_ --locustag "##TEMPLATE##" --force 2> $outputDir/prokka_tmp_.stderr`;
 	my $orfcmp      = 1;
 	my $name        = "";
 	my $prokkagff   = "";
@@ -2198,16 +2198,16 @@ sub annotate {
 	if($funAndTaxo) {
 		print LOG "## Run functional and taxonomic annotation\n";
 		print LOG " - Run diamond-blastx $inputSeq against NR........";
-		`diamond blastx --db $dbNR --query $inputSeq --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 -e $diamond_evalue --out $outputDir/contigs-nr.diamond.tsv >& $outputDir/contigs-nr.diamond_tmp_.stderr`;
+		`diamond blastx --db $dbNR --query $inputSeq --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 -e $diamond_evalue --out $outputDir/contigs-nr.diamond.tsv 2> $outputDir/contigs-nr.diamond_tmp_.stderr`;
 
 		print LOG "done\n - Run diamond-blastx $inputSeq against Uniprot...";
-		`diamond blastx --db $dbUniP --query $inputSeq --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 -e $diamond_evalue --out $outputDir/contigs-uniprot.diamond.tsv >& $outputDir/contigs-uniprot.diamond_tmp_.stderr`;
+		`diamond blastx --db $dbUniP --query $inputSeq --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 -e $diamond_evalue --out $outputDir/contigs-uniprot.diamond.tsv 2> $outputDir/contigs-uniprot.diamond_tmp_.stderr`;
 		
 		print LOG "done\n - Run diamond-blastx $prokkaTFA against NR........";
-		`diamond blastx --db $dbNR --query $prokkaTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-nr.diamond.tsv >& $outputDir/prokka-nr.diamond_tmp_.stderr`;
+		`diamond blastx --db $dbNR --query $prokkaTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-nr.diamond.tsv 2> $outputDir/prokka-nr.diamond_tmp_.stderr`;
 		
 		print LOG "done\n - Run diamond-blastx $prokkaTFA against Uniprot...";
-		`diamond blastx --db $dbUniP --query $prokkaTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-uniprot.diamond.tsv >& $outputDir/prokka-uniprot.diamond_tmp_.stderr`;
+		`diamond blastx --db $dbUniP --query $prokkaTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-uniprot.diamond.tsv 2> $outputDir/prokka-uniprot.diamond_tmp_.stderr`;
 		print LOG "done\n";
 	}
 	
@@ -2223,14 +2223,14 @@ sub annotate {
 	if($megan) {
 		print LOG "## Run MEGAN\n";
 		print LOG " - Run diamond-blastx $prokkaTFA against NR........";
-		`diamond blastx --db $dbNR --query $prokkaTFA --threads $threads --outfmt 5 -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-nr.diamond.xml >& $outputDir/prokka-nr.diamond_tmp_.stderr`;
+		`diamond blastx --db $dbNR --query $prokkaTFA --threads $threads --outfmt 5 -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/prokka-nr.diamond.xml 2> $outputDir/prokka-nr.diamond_tmp_.stderr`;
 		print LOG "done\n";
 				
 		# Split fasta and xml by fosmid to run MEGAN by fosmid
 		print LOG " - Prepare inputs files: split FASTA and XML files by fosmid...";
 		my @a_fosmidFromDiamondXml  = split_xml_by_id("$outputDir/prokka-nr.diamond.xml", $separator, $outputDir, "diamond-prokkaVSnr_tmp_.xml");
 			
-		### TODO valider que les tableaux sont identiques !!!!
+		### Valider que les tableaux sont identiques
 		print LOG "done\n";
 		
 		for(my $i=0;$i<=$#a_fosmid;$i++) {
@@ -2253,9 +2253,9 @@ sub annotate {
 						. "quit;\n";
 			close MEGCFG;
 			print LOG " - Run MEGAN on $a_fosmid[$i]...";
-			`(xvfb-run MEGAN -g -E -L $megan -c $path/megan_tmp_.cfg) >& $path/megan_tmp_.log`;
+			`(xvfb-run MEGAN -g -E -L $megan -c $path/megan_tmp_.cfg) 2> $path/megan_tmp_.log`;
 			if(-e "$path/megan.png") {}
-			else {`(xvfb-run MEGAN -g -E -L $megan -c $path/megan_tmp_.cfg) >& $path/megan_tmp_.log`;}
+			else {`(xvfb-run MEGAN -g -E -L $megan -c $path/megan_tmp_.cfg) 2> $path/megan_tmp_.log`;}
 			
 			print LOG "done\n";
 		}
@@ -2272,7 +2272,7 @@ sub annotate {
 	my %h_nbOrfByCog = ();
 	if($cog) {
 		print LOG "## Run rpsblast (COGs)...";
-		`(rpsblast -query $prokkaPRO -db $cog -num_threads $threads -evalue $cog_cMaxEvalue -out $outputDir/cogs_$cog_cMaxEvalue.rpsblast) >& $outputDir/cogs_$cog_cMaxEvalue.rpsblast_tmp_.stderr`;
+		`(rpsblast -query $prokkaPRO -db $cog -num_threads $threads -evalue $cog_cMaxEvalue -out $outputDir/cogs_$cog_cMaxEvalue.rpsblast) 2> $outputDir/cogs_$cog_cMaxEvalue.rpsblast_tmp_.stderr`;
 		
 		my $curFosId = "";
 		my $curOrfId = "";
@@ -2326,8 +2326,8 @@ sub annotate {
 	
 	if($diamond) {
 		print LOG "## Run diamond against your own fasta file...";
-		`diamond makedb --in $diamond --db $outputDir/private_tmp_ >& $outputDir/private.diamond_makedb_tmp_.stderr`;
-		`diamond blastx --db $outputDir/private_tmp_ --query $prokkaTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp  -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/private.diamond.tsv >& $outputDir/private.diamond_tmp_.stderr`;
+		`diamond makedb --in $diamond --db $outputDir/private_tmp_ 2> $outputDir/private.diamond_makedb_tmp_.stderr`;
+		`diamond blastx --db $outputDir/private_tmp_ --query $prokkaTFA --threads $threads --outfmt 6 qseqid sseqid pident nident length mismatch gaps gapopen qstart qend sstart send evalue bitscore stitle qcovhsp  -k 1000 --query-cover $diamond_queryCover -e $diamond_evalue --out $outputDir/private.diamond.tsv 2> $outputDir/private.diamond_tmp_.stderr`;
 		# Valid output ?
 		my $error = `grep Error $outputDir/private.diamond_tmp_.stderr`;
 		if($error) {
