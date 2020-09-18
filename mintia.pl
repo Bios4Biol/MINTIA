@@ -740,8 +740,8 @@ sub check {
 	if($?) { print colored(['bold red'], 'unavailable in the PATH!', "\n"); }
 	else   {
 		print colored(['bold green'], "ok");
-		my $version = `xvfb-run MEGAN -g --version | head -n1`;
-		$version =~ s/^.*version\s([\d\.]+).*$/version:$1/;
+		my $version = `xvfb-run MEGAN --help | tail -n2`;
+		$version =~ s/.*version\s([\d\.]+).*\n.*/version:$1/;
 		chomp($version);
 		print "...$version\n";
 	}
