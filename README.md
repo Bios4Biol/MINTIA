@@ -77,12 +77,13 @@ $ mintia check
 | Tools | Tested version || Tools | Tested version |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | **`cross_match`** | `1.090518` || **`bgzip`** | |
-| **`spades`** | `v3.13.1` || **`file`** | `file-5.04` |
-| **`prokka`** | `1.14.5` || **`grep`** | `GNU grep 2.6.3` |
+| **`spades`** | `v3.14.1` || **`file`** | `file-5.04` |
+| **`prokka`** | `1.14.6` || **`grep`** | `GNU grep 2.6.3` |
 | **`diamond`** | `0.9.29` || **`which`** |  |
 | **`megan`** | `5.11.3` || **`xvfb-run`** | |
 | **`samtools`** | `1.9` || **`tabix`** | `1.9` |
 | **`rpsblast`** | `2.9.0` || | |
+| **`cutadapt`** | `2.10` || | |
 
 #### Databanks
 Reference databases are required for the "annotate" module.
