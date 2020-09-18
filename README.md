@@ -25,7 +25,7 @@
 - [Copyright](#copyright)
 - [Contact](#contact)
 
-## <a id="installation">Installation</a> 
+## Installation
 This MINITA repository is for command line user.<br/>
 For an easy install, conda environment is recommended. To install Miniconda, 
 follow [this tutorial](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) or,
