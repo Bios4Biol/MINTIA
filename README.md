@@ -44,8 +44,8 @@ $ ./setup.sh
 Two dependencies will not be installed by conda and must be installed "manually":
 - cross_match **required** for the assemble module (step1): [cross_match](http://www.phrap.org/consed/consed.html#howToGet)
 - MEGAN5 (optional) for the annotate module (step2):
--- xvfb-run 
--- [megan5](https://software-ab.informatik.uni-tuebingen.de/download/megan5/welcome.html)
+	- xvfb-run 
+	- [megan5](https://software-ab.informatik.uni-tuebingen.de/download/megan5/welcome.html)
 
 Activate the mintia environment:
 ```sh
