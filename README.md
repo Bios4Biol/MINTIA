@@ -60,11 +60,12 @@ $ mintia check
 ##############################################
 
 - Step 1 - assemble:
-  => spades...........ok...version:v3.13.1
+  => cutadpt..........ok...version:2.10
+  => spades...........ok...version:v3.14.1
   => cross_match......ok...version:1.090518
 
 - Step 2 - annotate:
-  => prokka...........ok...version:1.14.5
+  => prokka...........ok...version:1.14.6
   => diamond..........ok...version:0.9.29
   => xvfb-run.........ok
   => MEGAN............ok...version:5.11.3
