@@ -1,4 +1,4 @@
-# MINTIA - Metagenomic INsertT BIoinformatic Annotation
+# MINTIA - Metagenomic INserT BIoinformatic Annotation
 
 ## Description
 > Functional metagenomics is used to understand who is doing what in microbial ecosystems. DNA sequencing can be prioritized by activity-based screening of libraries obtained by cloning and expressing metagenomic DNA fragments in an heterologous host. When large insert libraries are used, allowing a direct access to the functions encoded by entire metagenomic loci sizing several dozens of kbp, NGS is required to identify the genes that are responsible for the screened function. MINTIA is an easy to use pipeline assembling and annotating metagenomic inserts.
