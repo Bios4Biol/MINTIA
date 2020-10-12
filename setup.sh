@@ -6,7 +6,7 @@ echo -e "\n### Begin installing mintia...\n"
 HERE=$(dirname $(realpath $0))
 
 # Export the conda functions in the subshell
-source activate
+source activate >& /dev/null
 source $CONDA_PREFIX/etc/profile.d/conda.sh
 
 # Conda environment installing
