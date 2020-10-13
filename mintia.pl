@@ -923,10 +923,10 @@ sub assemble {
 		$h_sample{$k}{"R1_C"} = "$outputDir/$k"."_removeAdapt_R1.fq.gz";
         if(exists($h_sample{$k}{'R2'})) {
     		$h_sample{$k}{"R2_C"} = "$outputDir/$k"."_removeAdapt_R2.fq.gz";
-			`cutadapt --minimum-length 30 -o $h_sample{$k}{"R1_C"} -p $h_sample{$k}{"R2_C"} $h_sample{$k}{'R1'} $h_sample{$k}{'R2'} 2> /dev/null`;
+			`(cutadapt --minimum-length 30 -q 20,20 -o $h_sample{$k}{"R1_C"} -p $h_sample{$k}{"R2_C"} $h_sample{$k}{'R1'} $h_sample{$k}{'R2'}) 2> /dev/null`;
 		}
 		else {
-    		`cutadapt --minimum-length 30 -o $h_sample{$k}{"R1_C"} $h_sample{$k}{'R1'} 2> /dev/null`;
+    		`(cutadapt --minimum-length 30 -q 20,20 -o $h_sample{$k}{"R1_C"} $h_sample{$k}{'R1'}) 2> /dev/null`;
 		}
 		print LOG "done\n";
 	}
