@@ -386,7 +386,7 @@ my $HTML_HEADER = '<!doctype html>
 		###MENU###
 		<div style="text-align:center;font-size:smaller;color:darkgrey;margin-top:-25px">
 			Produced by '.$MINTIA_VERSION.'<br>
-			Copyright © 2020, <img style="width:18px;padding-bottom:2px" src="https://www.inrae.fr/themes/custom/inrae_socle/favicon.ico"><!--<img src="http://www.inra.fr/extension/itkinra/design/inra/images/favicon.ico">-->
+			Copyright © 2023, <img style="width:18px;padding-bottom:2px" src="https://www.inrae.fr/themes/custom/inrae_socle/favicon.ico">
 		    <a style="color:#212529;" href="https://inrae.fr" target="_blank">INRAE</a><br>
 		    Designed by the <a style="color:#212529;" href="http://sigenae.org" target="_blank">Sigenae</a> team.
 		</div>
@@ -819,7 +819,7 @@ sub assemble {
 	#    samplename1 => {
 	#          R1 => 'PATH_TO_R1_INPUT_FQ_FILE',
 	#          R2 => 'PATH_TO_R2_INPUT_FQ_FILE',      # if paired
-    #          R1_C => 'PATH_TO_R1_CUTADAPT_FQ_FILE',
+	#          R1_C => 'PATH_TO_R1_CUTADAPT_FQ_FILE',
 	#          R2_C => 'PATH_TO_R2_CUTADAPT_FQ_FILE', # if paired
 	#          R1_F => 'PATH_TO_R1_FILTERED_FQ_FILE',
 	#          R2_F => 'PATH_TO_R2_FILTERED_FQ_FILE', # if paired
@@ -1284,7 +1284,7 @@ sub assemble {
           </div>';
 	print HTML "<div style=\"text-align:center;font-size:smaller;color:darkgrey;margin-top:-25px\">
 		Produced by $MINTIA_VERSION<br>
-		Copyright © 2018, <img src=\"http://www.inra.fr/extension/itkinra/design/inra/images/favicon.ico\">
+		Copyright © 2023, <img style=\"width:18px;padding-bottom:2px\" src=\"https://www.inrae.fr/themes/custom/inrae_socle/favicon.ico\">
 		<a style=\"color:#212529;\" href=\"http://inra.fr\" target=\"_blank\">INRA</a><br>
 		Designed by the <a style=\"color:#212529;\" href=\"http://sigenae.org\" target=\"_blank\">Sigenae</a> team.</div>";
 	print HTML '
@@ -1570,7 +1570,7 @@ sub assemble {
 				},
 				stops: [
 					[0, color],
-					[1, Highcharts.Color(color).brighten(-0.4).get(\'rgb\')] // darken
+					[1, new Highcharts.Color(color).brighten(-0.4).get(\'rgb\')] // darken
 				]
 			};
 		})
@@ -3067,7 +3067,7 @@ sub annotate {
 								for (i = 0; i < 10; i += 0.75) {
 									// Start out with a darkened base color (negative brighten), and end
 									// up with a much brighter color
-									colors.push(Highcharts.Color(base).brighten((i - 3) / 7).get());
+									colors.push(new Highcharts.Color(base).brighten((i - 3) / 7).get());
 								}
 								return colors;
 							}());
