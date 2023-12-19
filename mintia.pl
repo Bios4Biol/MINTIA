@@ -246,7 +246,7 @@ use 5.010;  #for filesize
 ## DB
 # /bank/diamonddb/nr.dmnd
 # /bank/diamonddb/uniprot_sprot.dmnd
-my $MINTIA_VERSION = "Mintia_v1.0";
+my $MINTIA_VERSION = "Mintia_v2.0";
 
 
 ########################################################################
@@ -893,27 +893,27 @@ sub assemble {
 	#Check input fastq file(s)
 	print LOG "## Inputs...";
 	foreach my $i (@a_inputSeq) {
-    	#Find sample name
+    #Find sample name
 		my $sn = basename($i);
 		if($sn =~ /^(.*)R[12].f[ast]*q[.gz]*$/) { $sn = $1; $sn =~s/[\.\_]$//; }
     	elsif($sn =~/^(.*).f[ast]*q[.gz]*$/)    { $sn = $1; }
 		else {
-    	  pod2usage("Error: enable to extract sample name from $i (must contain .f[ast]q[.gz]).")
-	    }
+    	pod2usage("Error: enable to extract sample name from $i (must contain .f[ast]q[.gz]).")
+	  }
 		#Build $h_sample
 		if(exists($h_sample{$sn}{"R1"})) {
 			if(exists($h_sample{$sn}{"R2"})) {
-			     pod2usage("Error: more than 2 fastq files related to $sn.");
+		    pod2usage("Error: more than 2 fastq files related to $sn.");
 			}
-		else { $h_sample{$sn}{"R2"} = $i; }
+			else { $h_sample{$sn}{"R2"} = $i; }
 		}
 		else { $h_sample{$sn}{"R1"} = $i; }
 	}
 	print LOG (keys %h_sample) . " sample(s) found:\n";
 	foreach my $k (sort keys(%h_sample)) {
-    	print LOG " - $k: ";
-    	if(exists($h_sample{$k}{"R2"})) { print LOG "paired-end\n" }
-    	else                            { print LOG "single-read\n" }
+   	print LOG " - $k: ";
+   	if(exists($h_sample{$k}{"R2"})) { print LOG "paired-end\n" }
+   	else                            { print LOG "single-read\n" }
 	}
 
 	#Remove adapter sequences: cutadapt
@@ -921,12 +921,12 @@ sub assemble {
 	foreach my $k (sort keys(%h_sample)) {
 		print LOG " - $k...";
 		$h_sample{$k}{"R1_C"} = "$outputDir/$k"."_removeAdapt_R1.fq.gz";
-        if(exists($h_sample{$k}{'R2'})) {
-    		$h_sample{$k}{"R2_C"} = "$outputDir/$k"."_removeAdapt_R2.fq.gz";
+    if(exists($h_sample{$k}{'R2'})) {
+   		$h_sample{$k}{"R2_C"} = "$outputDir/$k"."_removeAdapt_R2.fq.gz";
 			`(cutadapt --minimum-length 30 -q 20,20 -o $h_sample{$k}{"R1_C"} -p $h_sample{$k}{"R2_C"} $h_sample{$k}{'R1'} $h_sample{$k}{'R2'}) 2> /dev/null`;
 		}
 		else {
-    		`(cutadapt --minimum-length 30 -q 20,20 -o $h_sample{$k}{"R1_C"} $h_sample{$k}{'R1'}) 2> /dev/null`;
+   		`(cutadapt --minimum-length 30 -q 20,20 -o $h_sample{$k}{"R1_C"} $h_sample{$k}{'R1'}) 2> /dev/null`;
 		}
 		print LOG "done\n";
 	}
@@ -937,7 +937,7 @@ sub assemble {
 	foreach my $k (sort keys(%h_sample)) {
 		my $zip = "cat ";
 		my $filetype = `file -bsiL $h_sample{$k}{"R1_C"}`;
-	   	if($filetype =~ /application\/x\-gzip/) { $zip = "gunzip -c "; }
+	 	if($filetype =~ /application\/x\-gzip/) { $zip = "gunzip -c "; }
 		open(READ1, "$zip $h_sample{$k}{'R1_C'} |") || die "Error: Unabled to open $h_sample{$k}{'R1_C'}.";
 
 		if(exists($h_sample{$k}{"R2"})) {
@@ -978,7 +978,7 @@ sub assemble {
 			if($curLen<$maxLen) {
 				$nbFragment++;
 				$curLen+=length($r1seq)-1;
-	    		print READ1FILTER "$r1head$r1seq$r1sep$r1qual";
+	   		print READ1FILTER "$r1head$r1seq$r1sep$r1qual";
 				if(exists($h_sample{$k}{'R2_C'})) {
 					$curLen+=length($r2seq)-1;
 					print READ2FILTER "$r2head$r2seq$r2sep$r2qual";
@@ -988,20 +988,20 @@ sub assemble {
 			$totalLen+=length($r1seq)-1;
 			$totalLen+=length($r2seq)-1 if(exists($h_sample{$k}{'R2_C'}));
 		}
-    	close READ1;
-    	close READ1FILTER ;
-    	if(exists($h_sample{$k}{'R2_C'})) {
-      		close READ2;
-     		close READ2FILTER;
-    	}
-    	print LOG " - $k: $nbFragment/$nbFragmentTotal reads take into account\n";
+    close READ1;
+    close READ1FILTER ;
+    if(exists($h_sample{$k}{'R2_C'})) {
+    	close READ2;
+    	close READ2FILTER;
+    }
+    print LOG " - $k: $nbFragment/$nbFragmentTotal reads take into account\n";
 		$h_sample{$k}{'nbFragment'} = $nbFragmentTotal;
 		$h_sample{$k}{'totalLen'}   = $totalLen;
 		if($curLen != $totalLen) {
 			$h_sample{$k}{'nbFragment_F'} = $nbFragment;
 			$h_sample{$k}{'totalLen_F'}   = $curLen;
 		}
-  	}
+  }
 
 	#SPADES
 	print LOG "\n## Run SPADES\n";
