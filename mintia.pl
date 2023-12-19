@@ -810,6 +810,7 @@ sub check {
 sub assemble {
 	# Parameters
 	my @a_inputSeq  = ();
+	my @a_assemblySeq  = ();
 	my $fosmidLen   = 40000;
 	my $minCtgLen   = 1000;
 	my $minCtgDepth = 8;
