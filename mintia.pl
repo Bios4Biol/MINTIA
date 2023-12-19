@@ -19,6 +19,8 @@
 =head1 ASSEMBLE SYNOPSIS
 
  mintia assemble -i FASTQ_FILE[S] -v FASTA_FILE -d STR
+ or
+ mintia assemble -a FASTA_FILE[S] -v FASTA_FILE -d STR
 
 =head1 ANNOTATE SYNOPSIS
 
@@ -27,14 +29,14 @@
 =head1 COMMANDS
 
  check    - step 0 to check the dependencies
- assemble - step 1 to assemble raw reads...
+ assemble - step 1 to assemble raw reads OR filter and clean scaffold(s)
  annotate - step 2 to annotate filtered and cleaned scaffold(s)
 
 =head1 DESCRIPTION
 
  Step 0: check the dependencies
 
- Step 1: assembles raw  reads, looks  for and removes the  cloning vector,  and
+ Step 1: [assembles raw  reads,] looks  for and removes the  cloning vector,  and
  extracts the longest and the most covered contigs. It has been build to handle
  two  types of  raw  reads  as inputs:  single (454, ion torrent reads, ...) or
  paired (Illumina,...) reads.
@@ -79,6 +81,11 @@
        sampleName2_R1.fq.gz sampleName2_R2.fq.gz
  - Single data
    Ex: sampleName.f[ast]q[.gz]
+
+=item B<-a, --assembly> FILE[S]
+
+ Fasta file(s)
+ One FASTA per sample from a assembly stage.
 
 =item B<-v, --vectorSeq> FILE
 
@@ -841,6 +848,7 @@ sub assemble {
 
 	GetOptions(
 		'i|input=s{1,}'         => \@a_inputSeq,
+		'a|assembly=s{1,}'      => \@a_assemblySeq,
 		'length=i'              => \$fosmidLen,
 		'minimalContigLength=i' => \$minCtgLen,
 		'minimalContigDepth=i'  => \$minCtgDepth,
@@ -857,9 +865,9 @@ sub assemble {
 		-sections => "NAME|ASSEMBLE SYNOPSIS|ASSEMBLE OPTIONS"
 	) if($help);
 	pod2usage(
-		-message => "$0 assemble: '-i, --input' is required.\n",
+		-message => "$0 assemble: '-i, --input' or -a, --assembly is required.\n",
 		-verbose => 99,
-		-sections => "NAME|ASSEMBLE SYNOPSIS|ASSEMBLE OPTIONS") if($#a_inputSeq == -1);
+		-sections => "NAME|ASSEMBLE SYNOPSIS|ASSEMBLE OPTIONS") if($#a_inputSeq == -1 && $#a_assemblySeq == -1);
 	foreach my $i (@a_inputSeq) {
 		pod2usage(
 			-message => "$0 assemble: $i doesn't exist.\n",
