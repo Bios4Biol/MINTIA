@@ -835,7 +835,7 @@ sub assemble {
 	#          R2_C => 'PATH_TO_R2_CUTADAPT_FQ_FILE', # if paired
 	#          R1_F => 'PATH_TO_R1_FILTERED_FQ_FILE',
 	#          R2_F => 'PATH_TO_R2_FILTERED_FQ_FILE', # if paired
-	#          fasta => 'PATH_TO_FASTA' # from SPADES or provided by user
+	#          assembly => 'PATH_TO_FASTA' # if provided by user (no spades)
 	#          nbScaffold => int,
 	#          scaffold => {
 	#            ID1 => {
@@ -1029,7 +1029,6 @@ sub assemble {
 			else {
 				`spades.py -s $h_sample{$k}{'R1_F'} -t $threads --careful -o $outputDir/$k`;
 			}
-			$h_sample{$k}{'fasta'} = "$outputDir/$k/scaffolds.fasta";
 			print LOG "done\n";
 		}
 	}
@@ -1046,15 +1045,16 @@ sub assemble {
 				pod2usage("Error: enable to extract sample name from $i (must have .fasta extension).")
 			}
 			#Build $h_sample
-			if(exists($h_sample{$sn}{"fasta"})) {
+			if(exists($h_sample{$sn}{"assembly"})) {
 				pod2usage("Error: more than 2 fasta files related to $sn.");
 			}
-			else { $h_sample{$sn}{"fasta"} = $i; }
+			else { $h_sample{$sn}{"assembly"} = $i; }
 		}
 		print LOG (keys %h_sample) . " sample(s) found:\n";
 		foreach my $k (sort keys(%h_sample)) {
 			print LOG " - $k\n";
 			if(! -e $outputDir."/".$k) { mkdir $outputDir."/".$k || die "Error: Unabled to create output dir $outputDir"."/"."$k."; }
+			copy($h_sample{$k}{'assembly'}, $outputDir."/".$k."scaffolds.fasta")
 		}
 	}
 
@@ -1062,7 +1062,7 @@ sub assemble {
   print LOG "\n## Run Crossmatch\n";
   foreach my $k (sort keys(%h_sample)) {
     print LOG " - $k...";
-    `(cross_match $h_sample{$k}{'fasta'} $vectorSeq -minmatch 9 -minscore 30 -screen > $outputDir/$k/crossmatch-scaffolds.stdout) 2> $outputDir/$k/crossmatch-scaffolds.stderr`;
+    `(cross_match $outputDir/$k/scaffolds.fasta $vectorSeq -minmatch 9 -minscore 30 -screen > $outputDir/$k/crossmatch-scaffolds.stdout) 2> $outputDir/$k/crossmatch-scaffolds.stderr`;
     print LOG "done\n";
   }
 
