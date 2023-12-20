@@ -1054,7 +1054,7 @@ sub assemble {
 		foreach my $k (sort keys(%h_sample)) {
 			print LOG " - $k\n";
 			if(! -e $outputDir."/".$k) { mkdir $outputDir."/".$k || die "Error: Unabled to create output dir $outputDir"."/"."$k."; }
-			copy($h_sample{$k}{'assembly'}, $outputDir."/".$k."scaffolds.fasta")
+			copy($h_sample{$k}{'assembly'}, $outputDir."/".$k."/scaffolds.fasta")
 		}
 	}
 
