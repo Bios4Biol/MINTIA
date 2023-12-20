@@ -9,7 +9,11 @@
 =head1 SYNOPSIS
 
  mintia check
+
  mintia assemble -i FASTQ_FILE[S] -v FASTA_FILE -d STR
+ or	
+ mintia assemble -a FASTA_FILE[S] -v FASTA_FILE -d STR
+
  mintia annotate
 
 =head1 CHECK SYNOPSIS
@@ -217,7 +221,7 @@
 
 =head1 VERSION
 
- Mintia_v1.0
+ Mintia_v2.0
 
 =head1 AUTHORS
 
@@ -1039,7 +1043,7 @@ sub assemble {
 			my $sn = basename($i);
 			if($sn =~ /.fasta$/) { $sn =~s/.fasta$//; }
 			else {
-				pod2usage("Error: enable to extract sample name from $i (must have .fasta extension.")
+				pod2usage("Error: enable to extract sample name from $i (must have .fasta extension).")
 			}
 			#Build $h_sample
 			if(exists($h_sample{$sn}{"fasta"})) {
@@ -1383,7 +1387,10 @@ sub assemble {
 							</div>
 						</div>
 					</div>
+	';
 
+	if($#a_inputSeq != -1) {
+		print HTML '
 					<h5 class="mt-4">Fastq files</h5>
 					<span class="anchor" id="fastq-files"></span>
 					<table class="table table-striped table-bordered mb-0" style="width:100%;">
@@ -1400,29 +1407,31 @@ sub assemble {
             	</tr>
         		</thead>
         		<tbody>';
-	foreach my $k1 (sort keys(%h_sample)) {
-		my $class = "class=\"valn text-right\"";
-		print HTML "<tr><td class=\'valn\'>$k1</td>";
-		if(exists($h_sample{$k1}{"R2"})) { print HTML "<td class=\'valn\'>Yes</td>"; }
-		else                             { print HTML "<td class=\'valn\'>No</td>";  }
-		print HTML "<td $class>".$h_sample{$k1}{"nbFragment"}."</td>";
-		print HTML "<td $class>".$h_sample{$k1}{"totalLen"}."</td>";
-		printf HTML "<td $class>%d</td>", ($h_sample{$k1}{"totalLen"}/$fosmidLen);
-		if(exists($h_sample{$k1}{"nbFragment_F"})) {
-			print HTML "<td $class>".$h_sample{$k1}{"nbFragment_F"}."</td>";
-			print HTML "<td $class>".$h_sample{$k1}{"totalLen_F"}."</td>";
-			printf HTML "<td $class>%d</td>", ($h_sample{$k1}{"totalLen_F"}/$fosmidLen);
+		foreach my $k1 (sort keys(%h_sample)) {
+			my $class = "class=\"valn text-right\"";
+			print HTML "<tr><td class=\'valn\'>$k1</td>";
+			if(exists($h_sample{$k1}{"R2"})) { print HTML "<td class=\'valn\'>Yes</td>"; }
+			else                             { print HTML "<td class=\'valn\'>No</td>";  }
+			print HTML "<td $class>".$h_sample{$k1}{"nbFragment"}."</td>";
+			print HTML "<td $class>".$h_sample{$k1}{"totalLen"}."</td>";
+			printf HTML "<td $class>%d</td>", ($h_sample{$k1}{"totalLen"}/$fosmidLen);
+			if(exists($h_sample{$k1}{"nbFragment_F"})) {
+				print HTML "<td $class>".$h_sample{$k1}{"nbFragment_F"}."</td>";
+				print HTML "<td $class>".$h_sample{$k1}{"totalLen_F"}."</td>";
+				printf HTML "<td $class>%d</td>", ($h_sample{$k1}{"totalLen_F"}/$fosmidLen);
+			}
+			else {
+				print HTML "<td $class>-</td><td $class>-</td><td $class>-</td>";
+			}
+			print HTML "</tr>";
 		}
-		else {
-			print HTML "<td $class>-</td><td $class>-</td><td $class>-</td>";
-		}
-		print HTML "</tr>";
+		print HTML '
+							</tbody>
+						</table>
+		';
 	}
-	print HTML '
-						</tbody>
-					</table>
 
-					<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mt-5 pb-2 border-bottom">
+	print HTML '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mt-5 pb-2 border-bottom">
 						<h1 class="h4">Assemble and vector detection</h1>
 						<span class="anchor" id="assembly-detection"></span>
           </div>
