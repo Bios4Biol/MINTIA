@@ -1034,7 +1034,7 @@ sub assemble {
 	if($#a_assemblySeq != -1) {
 		#Check input fastq file(s)
 		print LOG "## Inputs...";
-		foreach my $i (@a_inputSeq) {
+		foreach my $i (@a_assemblySeq) {
 			#Find sample name
 			my $sn = basename($i);
 			if($sn =~ /.fasta$/) { $sn =~s/.fasta$//; }
@@ -1042,10 +1042,10 @@ sub assemble {
 				pod2usage("Error: enable to extract sample name from $i (must have .fasta extension.")
 			}
 			#Build $h_sample
-			if(exists($h_sample{$sn}{"assembly"})) {
+			if(exists($h_sample{$sn}{"fasta"})) {
 				pod2usage("Error: more than 2 fasta files related to $sn.");
 			}
-			else { $h_sample{$sn}{"assembly"} = $i; }
+			else { $h_sample{$sn}{"fasta"} = $i; }
 		}
 		print LOG (keys %h_sample) . " sample(s) found:\n";
 		foreach my $k (sort keys(%h_sample)) {
