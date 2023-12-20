@@ -1054,6 +1054,7 @@ sub assemble {
 		print LOG (keys %h_sample) . " sample(s) found:\n";
 		foreach my $k (sort keys(%h_sample)) {
 			print LOG " - $k\n";
+			if(! -e $outputDir/$k) { mkdir $outputDir/$k || die "Error: Unabled to create output dir $outputDir/$k."; }
 		}
 	}
 
