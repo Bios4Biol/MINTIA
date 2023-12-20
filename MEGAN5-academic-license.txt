@@ -1,0 +1,10 @@
+License certificate:
+User: Rodriguez
+Email: sabrina.legoueix@inra.fr
+Organization: INRA
+Address: Ch. de Borde Rouge
+City: Castanet tolosan
+Country: France
+LicenseType: Academic - academic research, publication and teaching only.
+ExpireDate: 2020-Nov-06
+Signature: 302D021500895DE491A9FEA5BD364F7A805E5ED4251CD4086902141C7FD13A6B98B6D3C54FCE7AD1EC8D1A8B1D5E04

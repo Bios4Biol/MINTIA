@@ -831,6 +831,7 @@ sub assemble {
 	#          R2_C => 'PATH_TO_R2_CUTADAPT_FQ_FILE', # if paired
 	#          R1_F => 'PATH_TO_R1_FILTERED_FQ_FILE',
 	#          R2_F => 'PATH_TO_R2_FILTERED_FQ_FILE', # if paired
+	#          fasta => 'PATH_TO_FASTA' # from SPADES or provided by user
 	#          nbScaffold => int,
 	#          scaffold => {
 	#            ID1 => {
@@ -866,9 +867,9 @@ sub assemble {
 		-sections => "NAME|ASSEMBLE SYNOPSIS|ASSEMBLE OPTIONS"
 	) if($help);
 	pod2usage(
-		-message => "$0 assemble: '-i, --input' or -a, --assembly is required.\n",
+		-message => "$0 assemble: '-i, --input' OR -a, --assembly is required.\n",
 		-verbose => 99,
-		-sections => "NAME|ASSEMBLE SYNOPSIS|ASSEMBLE OPTIONS") if($#a_inputSeq == -1 && $#a_assemblySeq == -1);
+		-sections => "NAME|ASSEMBLE SYNOPSIS|ASSEMBLE OPTIONS") if(($#a_inputSeq == -1 && $#a_assemblySeq == -1) || ($#a_inputSeq != -1 && $#a_assemblySeq != -1));
 	foreach my $i (@a_inputSeq) {
 		pod2usage(
 			-message => "$0 assemble: $i doesn't exist.\n",
@@ -899,137 +900,164 @@ sub assemble {
 	if(! -e $outputDir) { mkdir $outputDir || die "Error: Unabled to create output dir $outputDir."; }
 	open(LOG, ">$outputDir/$outputLog")    || die "Error: Unabled to create $outputDir/$outputLog";
 
-	#Check input fastq file(s)
-	print LOG "## Inputs...";
-	foreach my $i (@a_inputSeq) {
-    #Find sample name
-		my $sn = basename($i);
-		if($sn =~ /^(.*)R[12].f[ast]*q[.gz]*$/) { $sn = $1; $sn =~s/[\.\_]$//; }
-    	elsif($sn =~/^(.*).f[ast]*q[.gz]*$/)    { $sn = $1; }
-		else {
-    	pod2usage("Error: enable to extract sample name from $i (must contain .f[ast]q[.gz]).")
-	  }
-		#Build $h_sample
-		if(exists($h_sample{$sn}{"R1"})) {
-			if(exists($h_sample{$sn}{"R2"})) {
-		    pod2usage("Error: more than 2 fastq files related to $sn.");
+	### INPUT *fastq (-i)
+	if($#a_inputSeq != -1) {
+		#Check input fastq file(s)
+		print LOG "## Inputs...";
+		foreach my $i (@a_inputSeq) {
+			#Find sample name
+			my $sn = basename($i);
+			if($sn =~ /^(.*)R[12].f[ast]*q[.gz]*$/) { $sn = $1; $sn =~s/[\.\_]$//; }
+				elsif($sn =~/^(.*).f[ast]*q[.gz]*$/)    { $sn = $1; }
+			else {
+				pod2usage("Error: enable to extract sample name from $i (must contain .f[ast]q[.gz]).")
 			}
-			else { $h_sample{$sn}{"R2"} = $i; }
-		}
-		else { $h_sample{$sn}{"R1"} = $i; }
-	}
-	print LOG (keys %h_sample) . " sample(s) found:\n";
-	foreach my $k (sort keys(%h_sample)) {
-   	print LOG " - $k: ";
-   	if(exists($h_sample{$k}{"R2"})) { print LOG "paired-end\n" }
-   	else                            { print LOG "single-read\n" }
-	}
-
-	#Remove adapter sequences: cutadapt
-	print LOG "\n## Remove adapter sequences\n";
-	foreach my $k (sort keys(%h_sample)) {
-		print LOG " - $k...";
-		$h_sample{$k}{"R1_C"} = "$outputDir/$k"."_removeAdapt_R1.fq.gz";
-    if(exists($h_sample{$k}{'R2'})) {
-   		$h_sample{$k}{"R2_C"} = "$outputDir/$k"."_removeAdapt_R2.fq.gz";
-			`(cutadapt --minimum-length 30 -q 20,20 -o $h_sample{$k}{"R1_C"} -p $h_sample{$k}{"R2_C"} $h_sample{$k}{'R1'} $h_sample{$k}{'R2'}) 2> /dev/null`;
-		}
-		else {
-   		`(cutadapt --minimum-length 30 -q 20,20 -o $h_sample{$k}{"R1_C"} $h_sample{$k}{'R1'}) 2> /dev/null`;
-		}
-		print LOG "done\n";
-	}
-
-	#Filter using Max depth by sample
-	print LOG "\n## Read filter using max depth ($coverage)\n";
-	my $maxLen = $coverage*$fosmidLen;
-	foreach my $k (sort keys(%h_sample)) {
-		my $zip = "cat ";
-		my $filetype = `file -bsiL $h_sample{$k}{"R1_C"}`;
-	 	if($filetype =~ /application\/x\-gzip/) { $zip = "gunzip -c "; }
-		open(READ1, "$zip $h_sample{$k}{'R1_C'} |") || die "Error: Unabled to open $h_sample{$k}{'R1_C'}.";
-
-		if(exists($h_sample{$k}{"R2"})) {
-		  $zip = "cat ";
-		  $filetype = `file -bsiL $h_sample{$k}{'R2_C'}`;
-		  if($filetype =~ /application\/x\-gzip/) { $zip = "gunzip -c "; }
-		  open(READ2, "$zip $h_sample{$k}{'R2_C'} |") || die "Error: Unabled to open $h_sample{$k}{'R2_C'}.";
-		}
-
-		#outputDir
-		open(READ1FILTER, ">$outputDir/$k"."_filter_R1.fq") || die "Error: Unabled to create $outputDir/$k"."_filter_R1.fq";
-		$h_sample{$k}{"R1_F"} = "$outputDir/$k"."_filter_R1.fq";
-		if(exists($h_sample{$k}{"R2"})) {
-		  open(READ2FILTER, ">$outputDir/$k"."_filter_R2.fq") || die "Error: Unabled to create $outputDir/$k"."_filter_R2.fq";
-		  $h_sample{$k}{"R2_F"} = "$outputDir/$k"."_filter_R2.fq";
-		}
-
-		my $curLen          = 0;
-		my $totalLen        = 0;
-		my $nbFragment      = 0;
-		my $nbFragmentTotal = 0;
-		my ($r1head, $r1seq, $r1sep, $r1qual);
-		my ($r2head, $r2seq, $r2sep, $r2qual);
-		while(! eof READ1) {
-			$r1head = <READ1>; $r1seq = <READ1>; $r1sep = <READ1>; $r1qual = <READ1>;
-			#Validate Fastq R1
-			if($r1head!~/^@/ || $r1seq!~/^[ATGCNatgcn]*$/ || $r1sep!~/^\+/) {
-				print "$r1head\n$r1seq\n$r1sep\n";
-				pod2usage("Error: $h_sample{$k}{'R1_C'} is not a valid fastq file.")
-			}
-			if(exists($h_sample{$k}{'R2_C'})) {
-				$r2head = <READ2>; $r2seq = <READ2>; $r2sep = <READ2>; $r2qual = <READ2>;
-				#Validate Fastq R2
-				if($r2head!~/^@/ || $r2seq!~/^[ATGCNatgcn]+$/ || $r2sep!~/^\+/) {
-					pod2usage("Error: $h_sample{$k}{'R2_C'} is not a valid fastq file.")
+			#Build $h_sample
+			if(exists($h_sample{$sn}{"R1"})) {
+				if(exists($h_sample{$sn}{"R2"})) {
+					pod2usage("Error: more than 2 fastq files related to $sn.");
 				}
+				else { $h_sample{$sn}{"R2"} = $i; }
 			}
-			if($curLen<$maxLen) {
-				$nbFragment++;
-				$curLen+=length($r1seq)-1;
-	   		print READ1FILTER "$r1head$r1seq$r1sep$r1qual";
+			else { $h_sample{$sn}{"R1"} = $i; }
+		}
+		print LOG (keys %h_sample) . " sample(s) found:\n";
+		foreach my $k (sort keys(%h_sample)) {
+			print LOG " - $k: ";
+			if(exists($h_sample{$k}{"R2"})) { print LOG "paired-end\n" }
+			else                            { print LOG "single-read\n" }
+		}
+
+		#Remove adapter sequences: cutadapt
+		print LOG "\n## Remove adapter sequences\n";
+		foreach my $k (sort keys(%h_sample)) {
+			print LOG " - $k...";
+			$h_sample{$k}{"R1_C"} = "$outputDir/$k"."_removeAdapt_R1.fq.gz";
+			if(exists($h_sample{$k}{'R2'})) {
+				$h_sample{$k}{"R2_C"} = "$outputDir/$k"."_removeAdapt_R2.fq.gz";
+				`(cutadapt --minimum-length 30 -q 20,20 -o $h_sample{$k}{"R1_C"} -p $h_sample{$k}{"R2_C"} $h_sample{$k}{'R1'} $h_sample{$k}{'R2'}) 2> /dev/null`;
+			}
+			else {
+				`(cutadapt --minimum-length 30 -q 20,20 -o $h_sample{$k}{"R1_C"} $h_sample{$k}{'R1'}) 2> /dev/null`;
+			}
+			print LOG "done\n";
+		}
+
+		#Filter using Max depth by sample
+		print LOG "\n## Read filter using max depth ($coverage)\n";
+		my $maxLen = $coverage*$fosmidLen;
+		foreach my $k (sort keys(%h_sample)) {
+			my $zip = "cat ";
+			my $filetype = `file -bsiL $h_sample{$k}{"R1_C"}`;
+			if($filetype =~ /application\/x\-gzip/) { $zip = "gunzip -c "; }
+			open(READ1, "$zip $h_sample{$k}{'R1_C'} |") || die "Error: Unabled to open $h_sample{$k}{'R1_C'}.";
+
+			if(exists($h_sample{$k}{"R2"})) {
+				$zip = "cat ";
+				$filetype = `file -bsiL $h_sample{$k}{'R2_C'}`;
+				if($filetype =~ /application\/x\-gzip/) { $zip = "gunzip -c "; }
+				open(READ2, "$zip $h_sample{$k}{'R2_C'} |") || die "Error: Unabled to open $h_sample{$k}{'R2_C'}.";
+			}
+
+			#outputDir
+			open(READ1FILTER, ">$outputDir/$k"."_filter_R1.fq") || die "Error: Unabled to create $outputDir/$k"."_filter_R1.fq";
+			$h_sample{$k}{"R1_F"} = "$outputDir/$k"."_filter_R1.fq";
+			if(exists($h_sample{$k}{"R2"})) {
+				open(READ2FILTER, ">$outputDir/$k"."_filter_R2.fq") || die "Error: Unabled to create $outputDir/$k"."_filter_R2.fq";
+				$h_sample{$k}{"R2_F"} = "$outputDir/$k"."_filter_R2.fq";
+			}
+
+			my $curLen          = 0;
+			my $totalLen        = 0;
+			my $nbFragment      = 0;
+			my $nbFragmentTotal = 0;
+			my ($r1head, $r1seq, $r1sep, $r1qual);
+			my ($r2head, $r2seq, $r2sep, $r2qual);
+			while(! eof READ1) {
+				$r1head = <READ1>; $r1seq = <READ1>; $r1sep = <READ1>; $r1qual = <READ1>;
+				#Validate Fastq R1
+				if($r1head!~/^@/ || $r1seq!~/^[ATGCNatgcn]*$/ || $r1sep!~/^\+/) {
+					print "$r1head\n$r1seq\n$r1sep\n";
+					pod2usage("Error: $h_sample{$k}{'R1_C'} is not a valid fastq file.")
+				}
 				if(exists($h_sample{$k}{'R2_C'})) {
-					$curLen+=length($r2seq)-1;
-					print READ2FILTER "$r2head$r2seq$r2sep$r2qual";
+					$r2head = <READ2>; $r2seq = <READ2>; $r2sep = <READ2>; $r2qual = <READ2>;
+					#Validate Fastq R2
+					if($r2head!~/^@/ || $r2seq!~/^[ATGCNatgcn]+$/ || $r2sep!~/^\+/) {
+						pod2usage("Error: $h_sample{$k}{'R2_C'} is not a valid fastq file.")
+					}
 				}
+				if($curLen<$maxLen) {
+					$nbFragment++;
+					$curLen+=length($r1seq)-1;
+					print READ1FILTER "$r1head$r1seq$r1sep$r1qual";
+					if(exists($h_sample{$k}{'R2_C'})) {
+						$curLen+=length($r2seq)-1;
+						print READ2FILTER "$r2head$r2seq$r2sep$r2qual";
+					}
+				}
+				$nbFragmentTotal++;
+				$totalLen+=length($r1seq)-1;
+				$totalLen+=length($r2seq)-1 if(exists($h_sample{$k}{'R2_C'}));
 			}
-			$nbFragmentTotal++;
-			$totalLen+=length($r1seq)-1;
-			$totalLen+=length($r2seq)-1 if(exists($h_sample{$k}{'R2_C'}));
+			close READ1;
+			close READ1FILTER ;
+			if(exists($h_sample{$k}{'R2_C'})) {
+				close READ2;
+				close READ2FILTER;
+			}
+			print LOG " - $k: $nbFragment/$nbFragmentTotal reads take into account\n";
+			$h_sample{$k}{'nbFragment'} = $nbFragmentTotal;
+			$h_sample{$k}{'totalLen'}   = $totalLen;
+			if($curLen != $totalLen) {
+				$h_sample{$k}{'nbFragment_F'} = $nbFragment;
+				$h_sample{$k}{'totalLen_F'}   = $curLen;
+			}
 		}
-    close READ1;
-    close READ1FILTER ;
-    if(exists($h_sample{$k}{'R2_C'})) {
-    	close READ2;
-    	close READ2FILTER;
-    }
-    print LOG " - $k: $nbFragment/$nbFragmentTotal reads take into account\n";
-		$h_sample{$k}{'nbFragment'} = $nbFragmentTotal;
-		$h_sample{$k}{'totalLen'}   = $totalLen;
-		if($curLen != $totalLen) {
-			$h_sample{$k}{'nbFragment_F'} = $nbFragment;
-			$h_sample{$k}{'totalLen_F'}   = $curLen;
-		}
-  }
 
-	#SPADES
-	print LOG "\n## Run SPADES\n";
-	foreach my $k (sort keys(%h_sample)) {
-		print LOG " - $k...";
-		if(exists($h_sample{$k}{'R2_F'})) {
-			`spades.py -1 $h_sample{$k}{'R1_F'} -2 $h_sample{$k}{'R2_F'} -t $threads --careful -o $outputDir/$k`;
+		#SPADES
+		print LOG "\n## Run SPADES\n";
+		foreach my $k (sort keys(%h_sample)) {
+			print LOG " - $k...";
+			if(exists($h_sample{$k}{'R2_F'})) {
+				`spades.py -1 $h_sample{$k}{'R1_F'} -2 $h_sample{$k}{'R2_F'} -t $threads --careful -o $outputDir/$k`;
+			}
+			else {
+				`spades.py -s $h_sample{$k}{'R1_F'} -t $threads --careful -o $outputDir/$k`;
+			}
+			$h_sample{$k}{'fasta'} = "$outputDir/$k/scaffolds.fasta";
+			print LOG "done\n";
 		}
-		else {
-			`spades.py -s $h_sample{$k}{'R1_F'} -t $threads --careful -o $outputDir/$k`;
+	}
+
+	### INPUT *fasta (-a)
+	if($#a_assemblySeq != -1) {
+		#Check input fastq file(s)
+		print LOG "## Inputs...";
+		foreach my $i (@a_inputSeq) {
+			#Find sample name
+			my $sn = basename($i);
+			if($sn =~ /.fasta$/) { $sn =~s/.fasta$//; }
+			else {
+				pod2usage("Error: enable to extract sample name from $i (must have .fasta extension.")
+			}
+			#Build $h_sample
+			if(exists($h_sample{$sn}{"assembly"})) {
+				pod2usage("Error: more than 2 fasta files related to $sn.");
+			}
+			else { $h_sample{$sn}{"assembly"} = $i; }
 		}
-		print LOG "done\n";
+		print LOG (keys %h_sample) . " sample(s) found:\n";
+		foreach my $k (sort keys(%h_sample)) {
+			print LOG " - $k\n";
+		}
 	}
 
   #CROSS MATCH (on the scaffolds.fasta generated by SPADES)
   print LOG "\n## Run Crossmatch\n";
   foreach my $k (sort keys(%h_sample)) {
     print LOG " - $k...";
-    `(cross_match $outputDir/$k/scaffolds.fasta $vectorSeq -minmatch 9 -minscore 30 -screen > $outputDir/$k/crossmatch-scaffolds.stdout) 2> $outputDir/$k/crossmatch-scaffolds.stderr`;
+    `(cross_match $h_sample{$k}{'fasta'} $vectorSeq -minmatch 9 -minscore 30 -screen > $outputDir/$k/crossmatch-scaffolds.stdout) 2> $outputDir/$k/crossmatch-scaffolds.stderr`;
     print LOG "done\n";
   }
 
