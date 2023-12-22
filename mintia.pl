@@ -1057,7 +1057,7 @@ sub assemble {
 			
 			open(FASTA, "$k") || die "Error: Unabled to open $k\n";
 			open(OUTFASTA, ">$outputDir"."/".$k."/scaffolds.fasta") || die "Error: Unabled to create $outputDir"."/".$k."/scaffolds.fasta";
-			my $out = ""
+			my $out = "";
 			$/="\n>";
 			while (my $entry=<FASTA>) {
     		chomp $entry;
