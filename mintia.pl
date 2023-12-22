@@ -1091,7 +1091,7 @@ sub assemble {
     my $nbscaffold = 0;
     while(my $line = <SCAF>) {
       next if($line=~/^\s*$/);
-      if($line=~/^>/ && $len>$minCtgLen && $cov>$minCtgDepth) {
+      if($line=~/^>/ && $len>$minCtgLen && ($cov>$minCtgDepth || $#a_assemblySeq != -1)) {
         $h_sample{$k}{"scaffolds"}{$id}{"len"} = $len;
         $h_sample{$k}{"scaffolds"}{$id}{"cov"} = sprintf("%.2f", $cov);
         $h_sample{$k}{"scaffolds"}{$id}{"seq"} = $seq;
@@ -1100,7 +1100,7 @@ sub assemble {
 				$h_sampleR{$k}{"scaffolds"}{$id}{"len"} = $len;
       	$h_sampleR{$k}{"scaffolds"}{$id}{"cov"} = sprintf("%.2f", $cov);
 			}
-      if($line=~/^>[a-zA-Z\.]\_(\d+)\_length\_(\d+)\_cov\_([\d\.]+)\s+$/) {
+      if($line=~/^>[a-zA-Z\.]+\_(\d+)\_length\_(\d+)\_cov\_([\d\.]+)\s+$/) {
         $id  = $1;
         $len = $2;
         $cov = $3;
@@ -1117,7 +1117,7 @@ sub assemble {
       }
     }
 		# Last scaffold
-    if($len>$minCtgLen && $cov>$minCtgDepth) {
+    if($len>$minCtgLen && $cov>$minCtgDepth && ($cov>$minCtgDepth || $#a_assemblySeq != -1)) {
       $h_sample{$k}{"scaffolds"}{$id}{"len"} = $len;
       $h_sample{$k}{"scaffolds"}{$id}{"cov"} = sprintf("%.2f", $cov);
       $h_sample{$k}{"scaffolds"}{$id}{"seq"} = $seq;
