@@ -1117,7 +1117,7 @@ sub assemble {
       }
     }
 		# Last scaffold
-    if($len>$minCtgLen && $cov>$minCtgDepth && ($cov>$minCtgDepth || $#a_assemblySeq != -1)) {
+    if($len>$minCtgLen && ($cov>$minCtgDepth || $#a_assemblySeq != -1)) {
       $h_sample{$k}{"scaffolds"}{$id}{"len"} = $len;
       $h_sample{$k}{"scaffolds"}{$id}{"cov"} = sprintf("%.2f", $cov);
       $h_sample{$k}{"scaffolds"}{$id}{"seq"} = $seq;
