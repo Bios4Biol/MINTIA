@@ -1055,7 +1055,7 @@ sub assemble {
 			print LOG " - $k\n";
 			if(! -e $outputDir."/".$k) { mkdir $outputDir."/".$k || die "Error: Unabled to create output dir $outputDir"."/"."$k."; }
 			
-			open(FASTA, "$k") || die "Error: Unabled to open $k\n";
+			open(FASTA, "$k{'assembly'}") || die "Error: Unabled to open $k{'assembly'}\n";
 			open(OUTFASTA, ">$outputDir"."/".$k."/scaffolds.fasta") || die "Error: Unabled to create $outputDir"."/".$k."/scaffolds.fasta";
 			my $out = "";
 			$/="\n>";
