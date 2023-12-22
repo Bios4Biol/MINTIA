@@ -1064,7 +1064,7 @@ sub assemble {
     		$entry=~s/^>//;
     		$entry=~s/(\S+).*?\n//;
     		my $name=">".$1;
-				$entry=~s/\n//g;NODE_1_length_43266_cov_135.265554
+				$entry=~s/\n//g;
 				print OUTFASTA $name."_length_".length($entry)."_cov_0\n$entry\n";
   		}
 			$/="\n";
