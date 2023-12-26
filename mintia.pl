@@ -1274,13 +1274,17 @@ sub assemble {
       }
       .border-top { border-top: 1px solid #e5e5e5; }
       .border-bottom { border-bottom: 1px solid #e5e5e5; }
-	  .valn { vertical-align: middle !important; }
-	  .anchor{
+	  	.valn { vertical-align: middle !important; }
+	  	.anchor{
   			display: block;
   			height: 83px; /*same height as header*/
   			margin-top: -83px; /*same height as header*/
   			visibility: hidden;
-	  }
+	  	}';
+		if($#a_assemblySeq != -1) {
+			print HTML '.assembly {	text-decoration: line-through; }'
+		}
+		print HTML '
     </style>
 
     <title>Mintia assemble report</title>
@@ -1358,10 +1362,10 @@ sub assemble {
 							<h5>Parameters</h5>
 							<span class="anchor" id="parameters"></span>
 				    	<ul class="list-group">';
-	print HTML "<li class=\"list-group-item d-flex justify-content-between align-items-center\">Fosmid\'s expected length <span class=\"badge badge-danger badge-pill ml-4\">$fosmidLen"."bp</span></li>";
-	print HTML "<li class=\"list-group-item d-flex justify-content-between align-items-center\">Maximum coverage <span class=\"badge badge-danger badge-pill ml-4\">$coverage</span></li>";
+	print HTML "<li class=\"list-group-item d-flex justify-content-between align-items-center assembly\">Fosmid\'s expected length <span class=\"badge badge-danger badge-pill ml-4\">$fosmidLen"."bp</span></li>";
+	print HTML "<li class=\"list-group-item d-flex justify-content-between align-items-center assembly\">Maximum coverage <span class=\"badge badge-danger badge-pill ml-4\">$coverage</span></li>";
 	print HTML "<li class=\"list-group-item d-flex justify-content-between align-items-center\">Contig\'s minimum length <span class=\"badge badge-danger badge-pill ml-4\">$minCtgLen"."bp</span></li>";
-	print HTML "<li class=\"list-group-item d-flex justify-content-between align-items-center\">Contig\'s minimum depth <span class=\"badge badge-danger badge-pill ml-4\">$minCtgDepth</span></li>";
+	print HTML "<li class=\"list-group-item d-flex justify-content-between align-items-center assembly\">Contig\'s minimum depth <span class=\"badge badge-danger badge-pill ml-4\">$minCtgDepth</span></li>";
 	print HTML	'
 					    </ul>
 						</div>
