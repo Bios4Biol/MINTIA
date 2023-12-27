@@ -1463,7 +1463,7 @@ sub assemble {
 								<th nowrap style="text-align:center">Filtered</th>
                 <th nowrap style="text-align:center">ID</th>';
 	print HTML "<th nowrap style='text-align:center'>Length (>$minCtgLen)</th>\n";
-	print HTML "<th nowrap style='text-align:center'>Coverage (>$minCtgDepth)</th>\n";
+	print HTML "<th nowrap style='text-align:center' class='assembly'>Coverage (>$minCtgDepth)</th>\n";
 	print HTML '
 								<th nowrap style="text-align:center;width:275px;">Vector position</th>
 								<th nowrap style="text-align:center">Clean length</th>
