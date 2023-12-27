@@ -1080,7 +1080,6 @@ sub assemble {
     `(cross_match $outputDir/$k/scaffolds.fasta $vectorSeq -minmatch 9 -minscore 30 -screen > $outputDir/$k/crossmatch-scaffolds.stdout) 2> $outputDir/$k/crossmatch-scaffolds.stderr`;
     print LOG "done\n";
   }
-	unlink glob "$outputDir/tmp_*.fa.log";
 
   #Find longuest scaffold and
   #Filter scaffold using --minimalContigLength [1000] and (if -i) minimalContigDepth [8]
@@ -1162,6 +1161,7 @@ sub assemble {
       }
     }
   }
+	unlink glob "$outputDir/tmp_*.fa.log";
 
   # Result on stdout AND create output file (cleaned scaffolds input of annotate module)
   open (CLEAN, ">$outputDir/mintia_assemble.fasta") || die "Error: Unabled to create $outputDir/mintia_assemble.fasta\n";
