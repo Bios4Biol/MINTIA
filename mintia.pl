@@ -1161,7 +1161,7 @@ sub assemble {
       }
     }
   }
-	unlink glob "$outputDir/tmp_*.fa.log";
+	unlink glob "$outputDir/tmp*.fa.log";
 
   # Result on stdout AND create output file (cleaned scaffolds input of annotate module)
   open (CLEAN, ">$outputDir/mintia_assemble.fasta") || die "Error: Unabled to create $outputDir/mintia_assemble.fasta\n";
